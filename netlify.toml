@@ -65,9 +65,10 @@
   node_bundler = "esbuild"
 
 # Edge functions configuration (if you need edge functions)
-[edge_functions]
-  # Directory for edge functions (if you add any)
-  directory = "netlify/edge-functions"
+# Note: Uncomment and configure individual edge functions as needed
+# [[edge_functions]]
+#   path = "/api/edge-function"
+#   function = "edge-function"
 
 # Development configuration
 [dev]
