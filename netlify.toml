@@ -1,6 +1,6 @@
 [build]
-  # Build command - using the existing build script from package.json
-  command = "npm run build"
+  # Build command - using a more robust build script
+  command = "npm run build-netlify"
   
   # Publish directory - Vite outputs to 'dist' by default
   publish = "dist"

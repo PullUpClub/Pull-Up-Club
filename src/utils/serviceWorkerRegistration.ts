@@ -12,7 +12,7 @@ type Config = {
 
 export function register(config?: Config) {
   if ('serviceWorker' in navigator) {
-    const publicUrl = new URL(import.meta.env.BASE_URL, window.location.href);
+    const publicUrl = new URL(import.meta.env.BASE_URL || '/', window.location.href);
     if (publicUrl.origin !== window.location.origin) {
       return;
     }
