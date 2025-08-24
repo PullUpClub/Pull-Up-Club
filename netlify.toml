@@ -1,6 +1,6 @@
 [build]
-  # Build command - using a more robust build script
-  command = "npm run build-netlify"
+  # Build command - standard npm install and build
+  command = "npm install && npm run build"
   
   # Publish directory - Vite outputs to 'dist' by default
   publish = "dist"
@@ -21,6 +21,9 @@
     
     # Disable TypeScript strict mode during build to prevent build failures
     TS_NODE_COMPILER_OPTIONS = '{"module":"commonjs"}'
+    
+    # Ensure proper npm installation
+    NPM_FLAGS = "--legacy-peer-deps"
 
 # Redirects for SPA routing and API handling
 [[redirects]]

@@ -8,7 +8,7 @@
     "vercel-dev": "vercel dev",
     "dev:vite-only": "vite",
     "build": "tsc --noEmit && vite build",
-    "build-netlify": "npx vite build",
+    "build-netlify": "vite build",
     "build:strict": "tsc && vite build",
     "build:check": "tsc --noEmit",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
