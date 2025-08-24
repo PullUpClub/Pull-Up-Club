@@ -8,7 +8,7 @@ import { supabase } from "../../lib/supabase";
 import { useTranslation } from 'react-i18next';
 import Head from "../../components/Layout/Head";
 import toast from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const LOGO_PATH = "/PUClogo-optimized.webp";
 
@@ -26,6 +26,7 @@ const ITEMS_PER_PAGE = 50;
 
 const AdminDashboardPage: React.FC = () => {
   const { t } = useTranslation('admin');
+  const location = useLocation();
   const [submissions, setSubmissions] = useState<any[]>([]);
   const [filteredSubmissions, setFilteredSubmissions] = useState<any[]>([]);
   const [selectedSubmission, setSelectedSubmission] = useState<any | null>(null);
@@ -40,6 +41,9 @@ const AdminDashboardPage: React.FC = () => {
     status: "All Status",
     search: ""
   });
+
+  // Determine if we're on the payouts page
+  const isPayoutsPage = location.pathname === '/admin-payouts';
 
   // Fetch submissions (paginated)
   const fetchSubmissions = async () => {
@@ -524,6 +528,40 @@ const AdminDashboardPage: React.FC = () => {
             // Don't fail the approval if earnings processing fails
           } else if (earningsResult?.success) {
             console.log('Earnings processed successfully:', earningsResult);
+            
+            // Show success notification with earnings info
+            const earnedAmount = earningsResult.dollars_earned || verifiedCount;
+            const poolRemaining = earningsResult.pool_remaining_after || 'Unknown';
+            const poolDepleted = earningsResult.pool_depleted || false;
+            const monthlyCapReached = earningsResult.monthly_cap_reached || false;
+            const monthlyTotalSpent = earningsResult.monthly_total_spent || 0;
+            
+            let message = `✅ ${submission.fullName} approved! Earned $${earnedAmount} from weekly pool.`;
+            
+            if (monthlyCapReached) {
+              message += ' 🚫 Monthly cap reached!';
+            } else if (poolDepleted) {
+              message += ' Pool depleted!';
+            } else {
+              message += ` Pool: $${poolRemaining} remaining`;
+            }
+            
+            if (monthlyTotalSpent > 0) {
+              message += ` | Monthly: $${monthlyTotalSpent}/$1000`;
+            }
+            
+            toast.success(message, {
+              duration: 5000,
+              style: {
+                background: '#1f2937',
+                color: '#ffffff',
+                border: '1px solid #9b9b6f',
+              },
+              iconTheme: {
+                primary: '#9b9b6f',
+                secondary: '#ffffff',
+              },
+            });
           }
         } catch (earningsErr) {
           console.error('Error processing earnings:', earningsErr);
@@ -653,30 +691,54 @@ const AdminDashboardPage: React.FC = () => {
         {/* Toggle Navigation */}
         <div className="flex justify-center mb-8">
           <div className="bg-[#18181b] rounded-lg border border-[#23231f] p-1">
-            <span className="px-6 py-2 rounded-md bg-[#9b9b6f] text-black font-semibold">
+            <Link
+              to="/admin-dashboard"
+              className={`px-6 py-2 rounded-md transition-colors ${
+                !isPayoutsPage 
+                  ? 'bg-[#9b9b6f] text-black font-semibold' 
+                  : 'text-[#9a9871] hover:text-[#ededed]'
+              }`}
+            >
               Submission Center
-            </span>
+            </Link>
             <Link
               to="/admin-payouts"
-              className="px-6 py-2 rounded-md text-[#9a9871] hover:text-[#ededed] transition-colors"
+              className={`px-6 py-2 rounded-md transition-colors ${
+                isPayoutsPage 
+                  ? 'bg-[#9b9b6f] text-black font-semibold' 
+                  : 'text-[#9a9871] hover:text-[#ededed]'
+              }`}
             >
               Monthly Payouts
             </Link>
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="bg-[#18181b] rounded-lg shadow-sm border border-[#23231f] p-4 mb-6">
-          <div className="flex items-center mb-2 justify-between">
-            <div className="flex items-center">
-            <Filter className="h-5 w-5 text-[#9a9871] mr-2" />
-            <span className="font-medium text-[#ededed]">{t('submissions.filterTitle')}</span>
-            </div>
-            <Button variant="outline" size="sm" onClick={() => setFilters({ month: t('submissions.allMonths'), status: t('submissions.allStatuses'), search: "" })}>
-              {t('submissions.resetFilters')}
-            </Button>
+        {/* Conditional Content */}
+        {isPayoutsPage ? (
+          <div className="text-center py-8">
+            <p className="text-[#ededed] mb-4">Redirecting to Monthly Payouts...</p>
+            <Link 
+              to="/admin-payouts" 
+              className="bg-[#9b9b6f] hover:bg-[#a5a575] text-black font-semibold py-2 px-4 rounded-lg transition-colors"
+            >
+              Go to Monthly Payouts
+            </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+        ) : (
+          <>
+            {/* Filters */}
+            <div className="bg-[#18181b] rounded-lg shadow-sm border border-[#23231f] p-4 mb-6">
+              <div className="flex items-center mb-2 justify-between">
+                <div className="flex items-center">
+                <Filter className="h-5 w-5 text-[#9a9871] mr-2" />
+                <span className="font-medium text-[#ededed]">{t('submissions.filterTitle')}</span>
+                </div>
+                <Button variant="outline" size="sm" onClick={() => setFilters({ month: t('submissions.allMonths'), status: t('submissions.allStatuses'), search: "" })}>
+                  {t('submissions.resetFilters')}
+                </Button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
             {/* Month Filter */}
             <div>
               <label className="block text-xs font-medium text-[#ededed] mb-1">{t('submissions.filterMonth')}</label>
@@ -932,6 +994,8 @@ const AdminDashboardPage: React.FC = () => {
             <Button variant="outline" size="sm" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages}>{t('submissions.pagination.next')}</Button>
           </div>
         </div>
+          </>
+        )}
       </div>
     </Layout>
   );

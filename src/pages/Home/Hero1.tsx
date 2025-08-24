@@ -71,33 +71,32 @@ const Hero1: React.FC = () => {
   const { t } = useTranslation('home');
   const { trackEvent } = useMetaTracking();
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [displayedActiveUsers, setDisplayedActiveUsers] = useState(0);
+  const [displayedUserCount, setDisplayedUserCount] = useState(0);
   const [currentPullUps] = useState(368);
-  const [totalSubmissions, setTotalSubmissions] = useState(0);
+  const [totalUsers, setTotalUsers] = useState(0);
   
   const heroRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [headlineVisible, setHeadlineVisible] = useState(false);
   const [subtitleVisible, setSubtitleVisible] = useState(false);
 
-  // Fetch total approved submissions count
+  // Fetch total user count from profiles table
   useEffect(() => {
-    const fetchSubmissionCount = async () => {
+    const fetchUserCount = async () => {
       try {
         const { count } = await supabase
-          .from('submissions')
-          .select('*', { count: 'exact', head: true })
-          .eq('status', 'approved');
+          .from('profiles')
+          .select('*', { count: 'exact', head: true });
         
         if (count !== null) {
-          setTotalSubmissions(count);
+          setTotalUsers(count);
         }
       } catch (error) {
-        console.error('Error fetching submission count:', error);
+        console.error('Error fetching user count:', error);
       }
     };
     
-    fetchSubmissionCount();
+    fetchUserCount();
   }, []);
 
   // Intersection Observer for animations
@@ -146,29 +145,29 @@ const Hero1: React.FC = () => {
 
   // Updated counter animation to animate from 0 to real total
   useEffect(() => {
-    if (isVisible && totalSubmissions > 0) {
+    if (isVisible && totalUsers > 0) {
       let start = 0; // Start from 0
-      const end = totalSubmissions; // Go to real count
+      const end = totalUsers; // Go to real count
       const duration = 1800;
       const stepTime = 30;
       const steps = Math.ceil(duration / stepTime);
       const increment = Math.max(1, Math.round((end - start) / steps));
       let current = start;
-      setDisplayedActiveUsers(start);
+      setDisplayedUserCount(start);
       
       const interval = setInterval(() => {
         current += increment;
         if (current >= end) {
-          setDisplayedActiveUsers(end);
+          setDisplayedUserCount(end);
           clearInterval(interval);
         } else {
-          setDisplayedActiveUsers(current);
+          setDisplayedUserCount(current);
         }
       }, stepTime);
       
       return () => clearInterval(interval);
     }
-  }, [isVisible, totalSubmissions]);
+  }, [isVisible, totalUsers]);
 
   const handleSignUpClick = async () => {
     // Track Lead event when user clicks Sign Up
@@ -222,7 +221,7 @@ const Hero1: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 text-center">
           <div className={`transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
             <span className="block text-lg font-medium tracking-wide uppercase">
-              <span className="text-white">{displayedActiveUsers.toLocaleString()}+</span> <span className="text-[#9b9b6f]">warriors joined</span>
+              <span className="text-white">{displayedUserCount.toLocaleString()}+</span> <span className="text-[#9b9b6f]">warriors joined</span>
             </span>
           </div>
         </div>
@@ -275,7 +274,7 @@ const Hero1: React.FC = () => {
         {/* Animated Warriors Joined Counter */}
         <div className={`mb-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
           <span className="block text-2xl md:text-3xl font-bold tracking-tight text-white">
-            {displayedActiveUsers.toLocaleString()}+ <span className="text-[#9b9b6f]">{t('hero.warriorsJoined')}</span>
+            {displayedUserCount.toLocaleString()}+ <span className="text-[#9b9b6f]">{t('hero.warriorsJoined')}</span>
           </span>
         </div>
         

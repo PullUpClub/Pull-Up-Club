@@ -36,7 +36,7 @@ export const validateProfileCompletion = (profile: Profile | null): ProfileValid
     const isEmpty = value === null || 
                    value === undefined || 
                    value === '' || 
-                   (field.key === 'age' && (value === 0 || value < 1));
+                   (field.key === 'age' && (typeof value === 'number' && (value === 0 || value < 1)));
 
     if (isEmpty) {
       missingFields.push(field.label);

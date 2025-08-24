@@ -133,16 +133,10 @@ const LeaderboardPage: React.FC = () => {
         const pullUps = s.actualPullUpCount ?? s.pullUpCount;
         const badges = getBadgesForSubmission(pullUps, s.gender);
         
-        // Parse the badge filter (format: "badgeName-gender")
-        const [badgeId, badgeGender] = filters.badge.split('-');
+        // Check if the user has earned this specific badge (gender-specific criteria is built into getBadgesForSubmission)
+        const hasBadge = badges.some(badge => badge.id === filters.badge);
         
-        // Check if the submission's gender matches the badge filter gender
-        const genderMatches = badgeGender === s.gender.toLowerCase();
-        
-        // Check if the user has earned this specific badge
-        const hasBadge = badges.some(badge => badge.id === badgeId);
-        
-        return genderMatches && hasBadge;
+        return hasBadge;
       });
     }
   }

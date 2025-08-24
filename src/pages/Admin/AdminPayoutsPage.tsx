@@ -28,11 +28,14 @@ interface MonthData {
   payout_count: number;
 }
 
+
+
 const AdminPayoutsPage: React.FC = () => {
   const [payouts, setPayouts] = useState<Payout[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
   const [availableMonths, setAvailableMonths] = useState<MonthData[]>([]);
+
   const [summary, setSummary] = useState({
     total: 0,
     readyToPay: 0,
@@ -58,6 +61,8 @@ const AdminPayoutsPage: React.FC = () => {
       console.error('Error fetching available months:', error);
     }
   };
+
+
 
   const fetchPayouts = async (month: string) => {
     setIsLoading(true);
@@ -98,6 +103,17 @@ const AdminPayoutsPage: React.FC = () => {
     if (selectedMonth) {
       fetchPayouts(selectedMonth);
     }
+  }, [selectedMonth]);
+
+  // Auto-refresh every 30 seconds for real-time updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (selectedMonth) {
+        fetchPayouts(selectedMonth);
+      }
+    }, 30000);
+
+    return () => clearInterval(interval);
   }, [selectedMonth]);
 
   const downloadCSV = () => {
@@ -146,16 +162,66 @@ const AdminPayoutsPage: React.FC = () => {
 
   const sendPayPalReminders = async () => {
     try {
+      // Show loading state
+      toast.loading('Sending PayPal reminders...', { id: 'paypal-reminders' });
+      
       const { data, error } = await supabase.functions.invoke('send-paypal-reminders', {
         body: { target_month: selectedMonth }
       });
 
-      if (error) throw error;
-      toast.success(`✅ Sent ${data.emails_sent} PayPal reminder emails`);
+      if (error) {
+        console.error('Error sending reminders:', error);
+        toast.error('Failed to send PayPal reminders - function may not be deployed', { id: 'paypal-reminders' });
+        return;
+      }
+
+      // Show success with detailed information
+      const message = data?.emails_sent > 0 
+        ? `✅ Sent ${data.emails_sent} PayPal reminder emails for ${selectedMonth}`
+        : `✅ No users need PayPal reminders for ${selectedMonth}`;
+      
+      toast.success(message, { id: 'paypal-reminders' });
+      
+      // Log detailed response for debugging
+      console.log('PayPal reminders response:', data);
       
     } catch (error) {
       console.error('Error sending reminders:', error);
-      toast.error('Failed to send PayPal reminders');
+      toast.error('Failed to send PayPal reminders - check function deployment', { id: 'paypal-reminders' });
+    }
+  };
+
+  const sendPayPalRemindersTest = async () => {
+    try {
+      // Get current user's email for test
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user?.email) {
+        toast.error('No user email found for test');
+        return;
+      }
+
+      // Show loading state
+      toast.loading('Sending test PayPal reminder...', { id: 'paypal-reminders-test' });
+      
+      const { data, error } = await supabase.functions.invoke('send-paypal-reminders', {
+        body: { 
+          target_month: selectedMonth,
+          test_email: user.email 
+        }
+      });
+
+      if (error) {
+        console.error('Error sending test reminder:', error);
+        toast.error('Failed to send test PayPal reminder', { id: 'paypal-reminders-test' });
+        return;
+      }
+
+      toast.success(`✅ Test PayPal reminder sent to ${user.email}`, { id: 'paypal-reminders-test' });
+      console.log('Test PayPal reminder response:', data);
+      
+    } catch (error) {
+      console.error('Error sending test reminder:', error);
+      toast.error('Failed to send test PayPal reminder', { id: 'paypal-reminders-test' });
     }
   };
 
@@ -189,11 +255,23 @@ const AdminPayoutsPage: React.FC = () => {
       <div className="min-h-screen bg-black py-8 px-2 md:px-8">
         {/* Email notification banner */}
         <div className="bg-[#918f6f]/10 border border-[#918f6f] text-white p-4 rounded-lg mb-6">
-          <p className="text-sm">
-            📧 <strong className="text-[#918f6f]">Monthly Payout System Active:</strong> PayPal reminder emails are automatically sent to users who need to set up their PayPal email. Users can add their PayPal email in their profile settings.
-            <br />
-            <span className="text-[#918f6f]/80">Make sure the send-paypal-reminders Edge Function is deployed and configured.</span>
-          </p>
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <p className="text-sm">
+                📧 <strong className="text-[#918f6f]">Monthly Payout System Active:</strong> PayPal reminder emails are automatically sent to users who need to set up their PayPal email. Users can add their PayPal email in their profile settings.
+                <br />
+                <span className="text-[#918f6f]/80">Make sure the send-paypal-reminders Edge Function is deployed and configured.</span>
+              </p>
+            </div>
+            <div className="ml-4">
+              <button
+                onClick={sendPayPalReminders}
+                className="bg-[#918f6f] hover:bg-[#7a7a5a] text-black px-4 py-2 rounded-md text-sm font-semibold transition-colors flex items-center gap-2"
+              >
+                📧 Send PayPal Reminders
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Header */}
@@ -260,6 +338,8 @@ const AdminPayoutsPage: React.FC = () => {
               </div>
             </div>
           </div>
+
+
 
           {/* Content */}
           <div className="p-6 space-y-6">

@@ -51,31 +51,13 @@ const LeaderboardFilters: React.FC<LeaderboardFiltersProps> = ({ filters, onFilt
     return Array.from(clubSet).sort();
   }, [leaderboardData]);
 
-  // Generate badge options that include both male and female versions
+  // Generate badge options - just the 5 badge names
   const badgeOptions = useMemo(() => {
-    const options: Array<{id: string, name: string, gender: string, pullUps: number}> = [];
-    
-    // Add male badges
-    badges.forEach(badge => {
-      options.push({
-        id: `${badge.id}-male`,
-        name: `${badge.name} (Male: ${badge.criteria.value}+ pull-ups)`,
-        gender: 'Male',
-        pullUps: badge.criteria.value
-      });
-    });
-    
-    // Add female badges
-    femaleBadges.forEach(badge => {
-      options.push({
-        id: `${badge.id}-female`,
-        name: `${badge.name} (Female: ${badge.criteria.value}+ pull-ups)`,
-        gender: 'Female',
-        pullUps: badge.criteria.value
-      });
-    });
-    
-    return options;
+    // Use the male badges array to get the 5 badge names (both arrays have same names)
+    return badges.map(badge => ({
+      id: badge.id,
+      name: badge.name
+    }));
   }, []);
 
   return (

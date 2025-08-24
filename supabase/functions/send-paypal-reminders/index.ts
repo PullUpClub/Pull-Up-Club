@@ -12,6 +12,8 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS'
 };
 
+// CORS headers for PayPal reminders function
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
