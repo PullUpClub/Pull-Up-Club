@@ -1,6 +1,6 @@
 [build]
-  # Build command - skip TypeScript check for Netlify to avoid type issues
-  command = "npm install && npm run build-netlify"
+  # Build command - optimized for Netlify deployment
+  command = "npm ci && npm run build-netlify"
   
   # Publish directory - Vite outputs to 'dist' by default
   publish = "dist"
