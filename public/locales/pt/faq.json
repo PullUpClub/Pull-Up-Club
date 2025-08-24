@@ -1,0 +1,63 @@
+{
+  "title": "Perguntas Frequentes",
+  "meta": {
+    "title": "FAQ | Pull-Up Club",
+    "description": "Encontre respostas para as perguntas mais frequentes sobre o Battle Bunker Pull-Up Club, incluindo o processo de submissão, assinatura e regras."
+  },
+  "q1": {
+    "q": "Como o Pull-Up Club paga o dinheiro do prêmio?",
+    "a": "Usamos o Stripe Connect para enviar os pagamentos dos prêmios diretamente para os vencedores. É rápido, seguro e global. Assim que você ganhar, solicitaremos que você crie uma conta gratuita do Stripe Express (se ainda não tiver), e a partir daí, podemos transferir o dinheiro do prêmio diretamente para sua conta bancária."
+  },
+  "q2": {
+    "q": "Que tipo de coisas podem me fazer ganhar dinheiro?",
+    "a": "Adoramos criatividade, compromisso e comunidade. Além das vitórias baseadas no quadro de líderes, recompensamos inscrições de destaque em todos os tipos de categorias. Aqui estão alguns exemplos: 🎽 Usar equipamento Battle Bunker, 🏋️‍♂️ Usar equipamentos Battle Bunker, 🎶 Melhor seleção de músicas, 👕 Melhor fantasia ou tema, 🎬 Melhor introdução e/ou final de vídeo, 🤯 A surpresa mais louca ou reviravolta inesperada, 💥 A energia mais animada, 🧼 As repetições mais limpas. Se o seu vídeo nos fizer parar, rir ou repetir - você provavelmente será pago."
+  },
+  "q3": {
+    "q": "Preciso vencer o desafio para receber o prêmio em dinheiro?",
+    "a": "Não! Vencer não é tudo aqui. Recompensamos a criatividade, o esforço e o espírito de comunidade. Você pode não estar no topo do quadro de líderes, mas se sua inscrição se destacar, há uma boa chance de você receber um prêmio em dinheiro surpresa."
+  },
+  "q4": {
+    "q": "Existem restrições de conteúdo, como nudez?",
+    "a": "❌ Qualquer forma de nudez resultará na rejeição imediata do vídeo. Os participantes devem estar vestidos adequadamente, como se estivessem se exercitando em uma academia pública."
+  },
+  "q5": {
+    "q": "Posso enviar um vídeo gravado no início deste ano?",
+    "a": "Sim, desde que siga todas as regras: visão clara, amplitude total de movimento, filmagem contínua e não editada e acessibilidade pública."
+  },
+  "q6": {
+    "q": "Posso editar a parte antes ou depois das repetições para encurtar o vídeo?",
+    "a": "Não. O vídeo deve ser uma gravação contínua e sem cortes, desde antes da sua primeira repetição até depois da sua repetição final. Qualquer corte, corte ou edição resultará em desqualificação."
+  },
+  "q7": {
+    "q": "Posso usar filtros ou melhorar a iluminação?",
+    "a": "Não. Para manter a integridade, os vídeos devem ser enviados como foram capturados. Sem filtros, melhorias de iluminação ou ajustes orientados por IA de qualquer tipo."
+  },
+  "q8": {
+    "q": "O que acontece se eu esquecer de mostrar o movimento completo ou se meu queixo não estiver claramente acima da barra?",
+    "a": "A repetição pode ser desqualificada ou a submissão inteira pode ser negada. Recomendamos fortemente que você revise sua filmagem antes de enviar para garantir que ela atenda a todos os padrões de movimento."
+  },
+  "q9": {
+    "q": "Posso acelerar ou desacelerar o vídeo?",
+    "a": "Não. Os vídeos devem ser enviados em velocidade normal, sem aceleração, câmera lenta или efeitos de tempo."
+  },
+  "q10": {
+    "q": "Quais plataformas posso usar para enviar meu vídeo?",
+    "a": "Você pode enviar seu vídeo para qualquer plataforma pública, como YouTube, Instagram ou TikTok. Apenas certifique-se de que suas configurações de privacidade nos permitam visualizá-lo sem fazer login ou solicitar acesso."
+  },
+  "q11": {
+    "q": "Meu vídeo está muito escuro / embaçado / instável - ainda assim contará?",
+    "a": "Se não pudermos verificar claramente cada repetição e o padrão de forma, o vídeo poderá ser negado. Use boa iluminação, uma câmera estável e um ângulo claro para garantir que seu desempenho seja visível."
+  },
+  "q12": {
+    "q": "Posso ter música tocando ao fundo?",
+    "a": "Sim, desde que não interfira na visibilidade ou na revisão de áudio. Apenas evite qualquer coisa ofensiva ou que distraia, este ainda é um evento da comunidade!"
+  },
+  "q13": {
+    "q": "Como vocês verificam vídeos gerados por IA ou em loop?",
+    "a": "Nossa equipe analisa todas as filmagens em busca de sinais de manipulação, incluindo envolvimento de IA, loop visual ou repetições suspeitamente consistentes. Qualquer inscrição suspeita de edição ou falsificação de repetições será negada automaticamente e poderá ser banida de eventos futuros."
+  },
+  "q14": {
+    "q": "Posso enviar mais de um vídeo por mês?",
+    "a": "Se você estiver inscrito no plano mensal, pode enviar UMA INSCRIÇÃO por mês!"
+  }
+} 

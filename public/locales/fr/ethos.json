@@ -1,0 +1,36 @@
+{
+  "hero": {
+    "title": "La Légende Derrière Notre Mission",
+    "subtitle": "Chaque répétition est un sauvetage. Chaque membre est un leveur. C'est l'Ethos du Pull-Up Club."
+  },
+  "legend": {
+    "title": "La Légende d'Alkeios",
+    "quote1": "Aux premiers jours de Battle Bunker, il y avait un soldat nommé <1>Alkeios</1>. Au cours d'une mission brutale en territoire ennemi profond, son unité a été piégée - 100 hommes et femmes, enterrés vivants dans un bunker souterrain effondré. La seule issue était verticale, un puits de 60 pieds sans échelle, sans cordes et sans plan de sortie.",
+    "quote2": "Un par un, Alkeios les a sortis avec rien d'autre que ses mains nues et sa volonté de fer - 100 sauvetages, chacun lui coûtant du sang, de la douleur et du souffle. Lorsque le dernier soldat a atteint la sécurité, Alkeios s'est effondré. Son corps était brisé, mais personne n'a été laissé pour compte.",
+    "summary": "Cet acte d'endurance, de sacrifice et de résolution inébranlable est devenu connu comme l'origine du Pull-Up Club - où chaque traction est un clin d'œil au guerrier qui a sorti les autres de l'abîme quand tout espoir était perdu."
+  },
+  "purpose": {
+    "title": "Le But du Pull-Up Club",
+    "intro": "Les tractions ne sont pas seulement du fitness - elles sont un entraînement à la préparation, au sauvetage, au service. Chaque répétition est une mission personnelle :",
+    "pillars": {
+      "trainToSave": {
+        "title": "S'entraîner pour Sauver",
+        "desc": "Chaque traction est une répétition pour un sauvetage. Nous nous entraînons non seulement pour nous-mêmes, mais pour être prêts à soulever les autres quand cela compte le plus."
+      },
+      "strengthToLift": {
+        "title": "La Force de Soulever les Autres",
+        "desc": "Notre force se mesure au nombre de personnes que nous pouvons aider. Le Pull-Up Club est une communauté bâtie sur le service, le soutien et l'entraide."
+      },
+      "disciplineToOvercome": {
+        "title": "La Discipline pour Vaincre",
+        "desc": "La discipline se forge dans l'adversité. Nous surmontons les obstacles, répétition par répétition, en développant la force mentale pour faire face à n'importe quel défi."
+      }
+    }
+  },
+  "cta": {
+    "title": "Rejoignez la Mission",
+    "subtitle": "Chaque répétition compte. Faites partie d'une communauté mondiale où la force se mesure au service, et chaque traction est une histoire de sauvetage.",
+    "signup": "S'inscrire",
+    "leaderboard": "Voir le Classement"
+  }
+} 

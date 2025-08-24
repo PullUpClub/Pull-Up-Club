@@ -1,0 +1,97 @@
+{
+  "meta": {
+    "title": "Pull-Up Club | La Competición Definitiva de Dominadas",
+    "description": "Únete al Battle Bunker Pull-Up Club, la competición de dominadas online definitiva. Envía tus vídeos, sé juzgado y escala en la clasificación mundial para ganar insignias y premios.",
+    "ogTitle": "Pull-Up Club | La Competición Definitiva de Dominadas",
+    "ogDescription": "Compite con atletas de todo el mundo en la prueba de fuerza definitiva. ¿Puedes encabezar la clasificación?"
+  },
+  "hero": {
+    "title": "Bienvenido al Pull-Up Club",
+    "subtitle": "Gana $1 por repetición. Primera Entrega es gratis.",
+    "cta": "Regístrate Ahora",
+    "secondaryCta": "Ver Clasificación",
+    "liveActivity": "<0>{{name}}</0> de {{location}} completó <1>{{pullUps}}</1> dominadas",
+    "live": "EN VIVO",
+    "justNow": "Ahora mismo",
+    "warriorsJoined": "Guerreros Unidos",
+    "price": "$9.99/mes",
+    "cancelAnytime": "Cancela en cualquier momento",
+    "global": "Global",
+    "leaderboard": "Clasificación",
+    "badgeTypes": "Tipos de Insignias",
+    "pullUpsToday": "<0>{{count}}</0> dominadas completadas en las últimas 24 horas",
+    "alt_athlete": "Atleta haciendo dominadas"
+  },
+  "howItWorks": {
+    "title": "Cómo Funciona",
+    "subtitle": "Únete al Battle Bunker Pull-Up Challenge en tres sencillos pasos. Demuestra tu fuerza y compite con atletas de todo el mundo.",
+    "step1": {
+      "title": "1. Graba y Envía",
+      "description": "Graba tu mejor rendimiento en dominadas, publícalo y envía el enlace del video junto con una tarifa."
+    },
+    "step2": {
+      "title": "2. Sé Revisado",
+      "description": "Nuestro equipo revisará tu envío para verificar la forma correcta y contar tus dominadas."
+    },
+    "step3": {
+      "title": "3. Únete a la Clasificación",
+      "description": "Una vez verificado, tu rendimiento aparecerá en nuestra clasificación mundial."
+    }
+  },
+  "perks": {
+    "title": "Ventajas del Battle Bunker Pull-Up Club",
+    "subtitle": "Cuando te alistas, no solo te unes a un club. Te unes a un movimiento. Esto es lo que obtienes:",
+    "perk1": {
+      "title": "PARCHE DE ENTRADA OFICIAL",
+      "description": "Gana tu primera raya. Cada miembro recibe un parche exclusivo del Battle Bunker Pull-Up Club enviado directamente a su puerta. Esta es tu insignia de honor — sin repeticiones, no hay parche."
+    },
+    "perk2": {
+      "title": "PARCHE DE COLECCIONISTA TRIMESTRAL",
+      "description": "Cada trimestre lanzamos un parche nuevo de edición limitada — los miembros del club de dominadas recibirán el parche en su puerta. ¿Te lo perdiste? Nunca lo volverás a ver."
+    },
+    "perk3": {
+      "title": "SISTEMA DE CLASIFICACIÓN POR NIVELES",
+      "description": "Se te clasifica según tu rendimiento — Recluta, Probado, Endurecido, Operador, Élite. Esto no es participación. Ganas tu ascenso, y la comunidad lo ve."
+    },
+    "perk4": {
+      "title": "CLASIFICACIÓN OFICIAL",
+      "description": "Una vez verificado, tu nombre queda registrado. Compite con los mejores, sigue tu ascenso y deja que los números hablen por sí mismos. La clasificación solo muestra a los miembros activos del club de dominadas."
+    },
+    "perk5": {
+      "title": "ACCESO A EQUIPO RESTRINGIDO POR NIVEL",
+      "description": "¿Quieres el equipo? Gánatelo. El merchandising exclusivo se desbloquea solo en ciertos niveles. Sin atajos, sin excusas — luces lo que has demostrado."
+    },
+    "perk6": {
+      "title": "DESTACADO SOCIAL",
+      "description": "Etiquétanos en tus videos de envío, fotos de parches e historias de superación y sé destacado. Compartimos el 100% de la comunidad."
+    }
+  },
+  "leaderboardPreview": {
+    "title": "Mejores Competidores",
+    "subtitle": "Echa un vistazo a nuestros campeones actuales de la clasificación. ¿Estará tu nombre en esta lista?",
+    "viewFull": "Ver Clasificación Completa"
+  },
+  "testimonials": {
+    "title": "Lo que dicen los participantes",
+    "testimonial1": {
+      "quote": "El Desafío de Dominadas de Battle Bunker me llevó al límite. ¡Pasé de 15 a 25 dominadas en solo dos meses!",
+      "author": "Mike Johnson",
+      "role": "Atleta de CrossFit"
+    },
+    "testimonial2": {
+      "quote": "La clasificación me mantiene motivado. Ver mi nombre subir cada semana es increíblemente satisfactorio.",
+      "author": "Sarah Williams",
+      "role": "Miembro Élite de Battle Bunker"
+    },
+    "testimonial3": {
+      "quote": "Esta plataforma creó una competencia amistosa entre mis miembros. ¡Todos entrenan más duro!",
+      "author": "Dave Rodriguez",
+      "role": "Dueño, Iron Warriors Gym"
+    }
+  },
+  "ctaSection": {
+    "title": "¿Listo para Poner a Prueba tu Fuerza?",
+    "subtitle": "Únete a cientos de atletas que ya compiten en el Battle Bunker Pull-Up Challenge. ¡Muéstrale al mundo de lo que eres capaz!",
+    "cta": "Regístrate"
+  }
+} 

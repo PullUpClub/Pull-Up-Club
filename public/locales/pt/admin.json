@@ -1,0 +1,99 @@
+{
+  "title": "Painel do Administrador",
+  "meta": {
+    "title": "Admin | Pull-Up Club",
+    "description": "Painel do administrador para gerenciar envios, usuários e configurações do site."
+  },
+  "nav": {
+    "dashboard": "Painel",
+    "submissions": "Envios",
+    "users": "Gerenciamento de Usuários"
+  },
+  "stats": {
+    "title": "Estatísticas do Site",
+    "totalUsers": "Total de Usuários",
+    "activeSubscriptions": "Assinaturas Ativas",
+    "pendingSubmissions": "Envios Pendentes",
+    "totalSubmissions": "Total de Envios"
+  },
+  "submissions": {
+    "title": "Revisar Envios",
+    "newSubmissions": "Novos envios para revisar",
+    "noSubmissions": "Nenhum envio pendente para revisar.",
+    "filterTitle": "Filtros",
+    "filterMonth": "Mês",
+    "allMonths": "Todos os Meses",
+    "filterStatus": "Status",
+    "allStatuses": "Todos os Status",
+    "search": "Buscar",
+    "searchPlaceholder": "Buscar...",
+    "resetFilters": "Redefinir Filtros",
+    "loading": "Carregando envios...",
+    "table": {
+      "user": "Usuário",
+      "date": "Data de Envio",
+      "status": "Status",
+      "actions": "Ações"
+    },
+    "actions": {
+      "viewVideo": "Ver Vídeo",
+      "approve": "Aprovar",
+      "reject": "Rejeitar",
+      "feature": "Destacar",
+      "unfeature": "Remover Destaque",
+      "watchVideo": "Assistir Vídeo",
+      "infoTitle": "Informações do Envio",
+      "claimed": "Reivindicado:",
+      "verified": "Verificado:",
+      "pending": "Pendente",
+      "countPlaceholder": "Contagem"
+    },
+    "pagination": {
+      "showing": "Mostrando {{count}} de {{total}} envios",
+      "previous": "Anterior",
+      "next": "Próximo",
+      "page": "Página {{current}} de {{total}}"
+    },
+    "emailBanner": {
+      "title": "Sistema de Envio Mensal Ativo:",
+      "text": "E-mails de rejeição são enviados automaticamente aos usuários quando você rejeita os envios. Usuários rejeitados podem reenviar imediatamente. Usuários aprovados devem esperar até o próximo mês.",
+      "warning": "Certifique-se de que a Função de Borda send-rejection-email esteja implantada e configurada."
+    },
+    "updateSuccess": "Envio {{status}} com sucesso",
+    "updateError": "Falha ao atualizar o envio"
+  },
+  "users": {
+    "title": "Gerenciamento de Usuários",
+    "back": "Voltar para o Painel",
+    "refresh": "Atualizar Usuários",
+    "error": "Erro",
+    "loading": "Carregando usuários...",
+    "noUsers": "Nenhum usuário encontrado",
+    "table": {
+      "email": "E-mail",
+      "name": "Nome",
+      "role": "Função",
+      "paid": "Pago",
+      "createdAt": "Criado em",
+      "actions": "Ações"
+    },
+    "role_user": "Usuário",
+    "role_admin": "Admin",
+    "paid_yes": "Sim",
+    "paid_no": "Não",
+    "actions": {
+      "makeAdmin": "Tornar Admin",
+      "removeAdmin": "Remover Admin",
+      "delete": "Excluir",
+      "deleting": "Excluindo...",
+      "processing": "Processando...",
+      "confirmDelete": "Tem certeza de que deseja excluir este usuário? Esta ação não pode ser desfeita.",
+      "status": {
+        "error": "Erro: {{message}}",
+        "addSuccess": "Sucesso: Função de administrador adicionada",
+        "removeSuccess": "Sucesso: Função de administrador removida",
+        "deleteSuccess": "Sucesso: Usuário excluído"
+      }
+    }
+  }
+} 

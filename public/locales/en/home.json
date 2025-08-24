@@ -1,0 +1,97 @@
+{
+  "meta": {
+    "title": "Pull-Up Club | The Ultimate Pull-Up Competition",
+    "description": "Join the Battle Bunker Pull-Up Club, the ultimate online pull-up competition. Submit your videos, get judged, and climb the global leaderboard to earn badges and prizes.",
+    "ogTitle": "Pull-Up Club | The Ultimate Pull-Up Competition",
+    "ogDescription": "Compete with athletes worldwide in the ultimate test of strength. Can you top the leaderboard?"
+  },
+  "hero": {
+    "title": "Welcome to Pull-Up Club",
+    "subtitle": "One Submission a Month. $1 Per Rep. Your First Month is Free!",
+    "cta": "Sign Up Now",
+    "secondaryCta": "View Leaderboard",
+    "liveActivity": "<0>{{name}}</0> from {{location}} completed <1>{{pullUps}}</1> pull-ups",
+    "live": "LIVE",
+    "justNow": "Just now",
+    "warriorsJoined": "Warriors Joined",
+    "price": "$9.99/mo",
+    "cancelAnytime": "Cancel Anytime",
+    "global": "Global",
+    "leaderboard": "Leaderboard",
+    "badgeTypes": "Badge Types",
+    "pullUpsToday": "<0>{{count}}</0> pull-ups completed in the last 24 hours",
+    "alt_athlete": "Athlete doing pull-ups"
+  },
+  "howItWorks": {
+    "title": "How It Works",
+    "subtitle": "Join the Battle Bunker Pull-Up Challenge in three simple steps. Show your strength and compete with athletes worldwide.",
+    "step1": {
+      "title": "1. Record & Submit",
+      "description": "Record your best pull-up performance, post it publicly and submit the video link along with a fee."
+    },
+    "step2": {
+      "title": "2. Get Reviewed",
+      "description": "Our team will review your submission for proper form and count your pull-ups."
+    },
+    "step3": {
+      "title": "3. Join the Leaderboard",
+      "description": "Once verified, your performance will be featured on our global leaderboard."
+    }
+  },
+  "perks": {
+    "title": "Battle Bunker Pull-Up Club Perks",
+    "subtitle": "When you enlist, you don't just join a club. You join a movement. Here's what you get:",
+    "perk1": {
+      "title": "OFFICIAL ENTRY PATCH",
+      "description": "Earn your first stripe. Every member receives an exclusive Battle Bunker Pull-Up Club patch shipped directly to their doorstep. This is your badge of honor — no reps, no patch."
+    },
+    "perk2": {
+      "title": "QUARTERLY COLLECTOR'S PATCH",
+      "description": "Each quarter we drop a brand-new, limited-edition patch — pull-up club members will receive the patch shipped to their doorstep. Miss it? You'll never see it again."
+    },
+    "perk3": {
+      "title": "TIER RANKING SYSTEM",
+      "description": "You're ranked based on performance — Recruit, Proven, Hardened, Operator, Elite. This isn't participation. You earn your way up, and the community sees it."
+    },
+    "perk4": {
+      "title": "OFFICIAL LEADERBOARD",
+      "description": "Once verified, your name is locked in. Compete with the best, track your climb, and let the numbers speak for themselves. Leaderboard only displays active pull-up club members."
+    },
+    "perk5": {
+      "title": "TIER-RESTRICTED GEAR ACCESS",
+      "description": "Want the gear? Earn it. Exclusive merch unlocks only at certain tiers. No shortcuts, no excuses — you rock what you've proven."
+    },
+    "perk6": {
+      "title": "SOCIAL SPOTLIGHT",
+      "description": "Tag us in your submission videos, patch photos and comeback stories and get featured. We share 100% of the community."
+    }
+  },
+  "leaderboardPreview": {
+    "title": "Top Competitors",
+    "subtitle": "Check out our current leaderboard champions. Will your name be on this list?",
+    "viewFull": "View Full Leaderboard"
+  },
+  "testimonials": {
+    "title": "What Participants Say",
+    "testimonial1": {
+      "quote": "Battle Bunker's Pull-Up Challenge pushed me to my limits. I went from 15 to 25 pull-ups in just two months!",
+      "author": "Mike Johnson",
+      "role": "CrossFit Athlete"
+    },
+    "testimonial2": {
+      "quote": "The leaderboard keeps me motivated. Seeing my name climb each week is incredibly satisfying.",
+      "author": "Sarah Williams",
+      "role": "Battle Bunker Elite Member"
+    },
+    "testimonial3": {
+      "quote": "This platform created friendly competition among my members. Everyone's training harder!",
+      "author": "Dave Rodriguez",
+      "role": "Owner, Iron Warriors Gym"
+    }
+  },
+  "ctaSection": {
+    "title": "Ready to Test Your Strength?",
+    "subtitle": "Join hundreds of athletes already competing in the Battle Bunker Pull-Up Challenge. Show the world what you're capable of!",
+    "cta": "Sign Up"
+  }
+} 

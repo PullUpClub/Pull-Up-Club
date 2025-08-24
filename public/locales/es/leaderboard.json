@@ -1,0 +1,86 @@
+{
+  "title": "Clasificación",
+  "meta": {
+    "title": "Clasificación | Pull-Up Club",
+    "description": "Mira tu posición en la clasificación global oficial del Pull-Up Club. Filtra por fecha, categoría y ubicación para ver a los mejores."
+  },
+  "filters": {
+    "title": "Filtrar Clasificación",
+    "clear": "Limpiar Filtros",
+    "searchPlaceholder": "Buscar por nombre...",
+    "pullUps": "Dominadas",
+    "allPullUps": "Todas las Dominadas",
+    "pullUpsUnit": "{{range}} Dominadas",
+    "club": "Club",
+    "allClubs": "Todos los Clubes",
+    "region": "Región",
+    "allRegions": "Todas las Regiones",
+    "ageGroup": "Grupo de Edad",
+    "allAges": "Todas las Edades",
+    "gender": "Género",
+    "allGenders": "Todos los Géneros",
+    "male": "Masculino",
+    "female": "Femenino",
+    "other": "Otro",
+    "badge": "Insignia",
+    "allBadges": "Todas las Insignias",
+    "sortBy": "Ordenar por",
+    "relevance": "Relevancia",
+    "pullUpsDesc": "Dominadas (de mayor a menor)",
+    "pullUpsAsc": "Dominadas (de menor a mayor)",
+    "dateNewest": "Fecha (más reciente primero)",
+    "dateOldest": "Fecha (más antiguo primero)",
+    "reset": "Restablecer Filtros",
+    "recruit": "Recluta (0-9 reps)",
+    "proven": "Probado (10-19 reps)",
+    "hardened": "Endurecido (20-29 reps)",
+    "operator": "Operador (30-39 reps)",
+    "elite": "Élite (40+ reps)",
+    "pullUpsRequired": "{{count}}+ Dominadas Requeridas"
+  },
+  "table": {
+    "rank": "Puesto",
+    "athlete": "Atleta",
+    "pullUps": "Dominadas",
+    "badge": "Insignia",
+    "date": "Fecha",
+    "video": "Video",
+    "noResults": "No se encontraron resultados. Intenta ajustar tus filtros.",
+    "loading": "Cargando clasificación..."
+  },
+  "badgeLegend": {
+    "title": "Leyenda de Insignias",
+    "recruit": "Recluta (0-9 reps)",
+    "proven": "Probado (10-19 reps)",
+    "hardened": "Endurecido (20-29 reps)",
+    "operator": "Operador (30-39 reps)",
+    "elite": "Élite (40+ reps)",
+    "pullUpsRequired": "{{count}}+ Dominadas Requeridas",
+    "menPullUps": "Hombres <0>{{count}}</0>+ Dominadas",
+    "womenPullUps": "Mujeres <0>{{count}}</0>+ Dominadas"
+  },
+  "subtitle": "Mira cómo te comparas con la competencia. Nuestra clasificación muestra a los mejores en el Pull-Up Club Challenge.",
+  "error": "Error al cargar los datos de la clasificación",
+  "pagination": {
+    "previous": "Anterior",
+    "next": "Siguiente"
+  },
+  "mobile": {
+    "showBadgeLegend": "Ver Leyenda de Insignias",
+    "hideBadgeLegend": "Ocultar Leyenda de Insignias",
+    "showFilters": "Filtrar Resultados",
+    "hideFilters": "Ocultar Filtros"
+  },
+  "pucBank": {
+    "title": "P.U.C Bank",
+    "drain": "Vacíe el banco — se repone semanalmente.",
+    "payouts": "Todos los pagos se realizan a fin de mes.",
+    "poolDepleted": "Fondo agotado"
+  },
+  "dev": {
+    "cacheDebug": "Información de depuración de caché",
+    "cacheSize": "Tamaño de caché: {{size}}KB",
+    "cachedKeys": "Claves en caché: {{count}}",
+    "clearCache": "Limpiar todo el caché"
+  }
+} 

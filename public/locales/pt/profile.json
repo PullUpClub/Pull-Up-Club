@@ -1,0 +1,149 @@
+{
+  "title": "Meu Perfil",
+  "meta": {
+    "title": "Perfil | Pull-Up Club",
+    "description": "Veja seu perfil, acompanhe seu histórico de envios, gerencie sua assinatura e veja suas conquistas."
+  },
+  "sidebar": {
+    "dashboard": "Painel",
+    "settings": "Configurações de Perfil",
+    "subscription": "Assinatura",
+    "paymentHistory": "Histórico de Pagamentos",
+    "submissions": "Envios",
+    "subscriptionAndRewards": "Assinatura e Recompensas"
+  },
+  "dashboard": {
+    "title": "Painel de Envios",
+    "welcome": "Bem-vindo de volta, {{name}}!",
+    "noSubmissions": "Você ainda não fez nenhum envio.",
+    "noSubmissionsCTA": "Seu histórico de envios aparecerá aqui assim que você enviar seu primeiro vídeo.",
+    "submitButton": "Enviar Vídeo",
+    "submitFirstButton": "Enviar seu Primeiro Vídeo",
+    "submitNewButton": "Enviar Novo Vídeo",
+    "countdown": {
+      "title": "Competição Mensal",
+      "remaining": "tempo restante para enviar"
+    },
+    "status": {
+      "title": "Status do Envio",
+      "ready": "Pronto para Enviar!",
+      "thisMonth": "Envio deste mês",
+      "onLeaderboard": "✓ No Quadro de Líderes",
+      "rejected": "Seu envio foi rejeitado",
+      "rejectedCTA": "Você pode enviar um novo vídeo imediatamente!",
+      "competeCTA": "Envie seu vídeo de barra fixa para competir este mês",
+      "pullUps": "{{count}} barras"
+    },
+    "best": {
+      "title": "Melhor Desempenho",
+      "unit": "barras"
+    },
+    "thisMonth": {
+      "title": "Este Mês",
+      "submitted": "barras enviadas",
+      "status": "Status: {{status}}",
+      "submittedOn": "Enviado em: {{date}}"
+    },
+    "history": {
+      "title": "Histórico de Envios",
+      "loading": "Carregando envios...",
+      "andMore": "E mais {{count}} envios...",
+      "viewVideo": "Ver Vídeo"
+    }
+  },
+  "settings": {
+    "title": "Configurações de Perfil",
+    "subtitle": "Atualize as informações do seu perfil aqui. Esta informação será exibida no quadro de líderes quando você tiver um envio aprovado.",
+    "updateSuccess": "Perfil atualizado com sucesso!",
+    "updateError": "Falha ao atualizar o perfil. Por favor, tente novamente.",
+    "avatar": "Foto de Perfil",
+    "avatarChange": "Mudar Foto",
+    "fullName": "Nome Completo *",
+    "fullNamePlaceholder": "Digite seu nome completo",
+    "fullNameDesc": "Isso será exibido no quadro de líderes",
+    "socialMedia": "Usuário de Mídia Social",
+    "socialMediaPlaceholder": "seuusuario",
+    "socialMediaDesc": "Não inclua o símbolo @, apenas seu nome de usuário. Exibido no quadro de líderes para conexões sociais",
+    "age": "Idade *",
+    "agePlaceholder": "25",
+    "gender": "Gênero *",
+    "selectGender": "Selecione o Gênero",
+    "male": "Masculino",
+    "female": "Feminino",
+    "other": "Outro",
+    "organization": "Clube/Organização",
+    "organizationPlaceholder": "Wisloka Chicago",
+    "region": "Região *",
+    "selectRegion": "Selecione a Região",
+    "phone": "Número de Telefone (Opcional)",
+    "phonePlaceholder": "+55 (11) 99999-9999",
+    "saveButton": "Salvar Alterações",
+    "savingButton": "Salvando Alterações..."
+  },
+  "subscription": {
+    "title": "Detalhes da Assinatura",
+    "status": "Status",
+    "plan": "Plano",
+    "price": "Preço",
+    "renewalDate": "Próxima Data de Renovação",
+    "manageButton": "Gerenciar Assinatura no Stripe"
+  },
+  "paymentHistory": {
+    "title": "Histórico de Pagamentos",
+    "noHistory": "Nenhum histórico de pagamentos encontrado.",
+    "date": "Data",
+    "amount": "Valor",
+    "status": "Status",
+    "invoice": "Fatura"
+  },
+  "rewards": {
+    "shippingNotice": "Envio apenas para os EUA. Usuários internacionais não são elegíveis para o patch ou recompensas físicas no momento.",
+    "subscription": {
+      "title": "Assinatura",
+      "subtitle": "Gerencie sua assinatura mensal",
+      "button": "Gerenciar Assinatura"
+    },
+    "patch": {
+      "title": "Reivindique seu Patch",
+      "subtitle": "Receba seu patch conquistado",
+      "button": "Reivindicar seu Patch"
+    },
+    "progress": {
+      "title": "Progresso do Próximo Patch",
+      "progress": "{{percent}}% de Progresso",
+      "remaining": "{{days}} dias",
+      "untilNext": "até o envio do próximo patch"
+    },
+    "gear": {
+      "title": "Comprar Equipamento",
+      "subtitle": "Adquira seu equipamento de treino",
+      "button": "Comprar Equipamento"
+    },
+    "payouts": {
+      "title": "Pagamentos da Competição",
+      "loading": "Carregando...",
+      "available": "Disponível para saque",
+      "pending": "Solicitação Pendente",
+      "noEarnings": "Nenhum ganho ainda",
+      "requestButton": "Solicitar Pagamento",
+      "processing": "Processando..."
+    },
+    "earningsHistory": {
+      "title": "Histórico de Ganhos",
+      "andMore": "E mais {{count}} ganhos...",
+      "paid": "Pago",
+      "available": "Disponível"
+    },
+    "payoutHistory": {
+      "title": "Solicitações de Pagamento",
+      "request": "solicitação de pagamento de {{amount}}",
+      "requestedOn": "Solicitado em: {{date}}",
+      "processedOn": "Processado em: {{date}}"
+    },
+    "noEarnings": {
+      "title": "Nenhum ganho ainda",
+      "description": "Participe de competições para começar a ganhar dinheiro! Verifique novamente após o anúncio dos vencedores mensais."
+    },
+    "payoutSuccess": "Solicitação de pagamento de {{amount}} enviada com sucesso!"
+  }
+} 

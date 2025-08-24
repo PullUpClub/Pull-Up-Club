@@ -1,0 +1,100 @@
+[build]
+  # Build command - using the existing build script from package.json
+  command = "npm run build"
+  
+  # Publish directory - Vite outputs to 'dist' by default
+  publish = "dist"
+  
+  # Environment variables for the build process
+  [build.environment]
+    # Node.js version for Netlify
+    NODE_VERSION = "18"
+    
+    # Build environment
+    NODE_ENV = "production"
+    
+    # Disable telemetry for faster builds
+    DISABLE_ESLINT_PLUGIN = "true"
+
+# Redirects for SPA routing and API handling
+[[redirects]]
+  # Handle client-side routing for React Router
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers for security and performance
+[[headers]]
+  # Apply to all routes
+  for = "/*"
+  
+  [headers.values]
+    # Security headers
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+    # Cache static assets
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  # Apply to HTML files
+  for = "*.html"
+  
+  [headers.values]
+    # Don't cache HTML files
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  # Apply to API routes (if you have serverless functions)
+  for = "/api/*"
+  
+  [headers.values]
+    # Don't cache API responses
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Pragma = "no-cache"
+    Expires = "0"
+
+# Functions configuration (if you need serverless functions)
+[functions]
+  # Directory for Netlify functions (if you add any)
+  directory = "netlify/functions"
+  
+  # Node.js version for functions
+  node_bundler = "esbuild"
+
+# Edge functions configuration (if you need edge functions)
+[edge_functions]
+  # Directory for edge functions (if you add any)
+  directory = "netlify/edge-functions"
+
+# Development configuration
+[dev]
+  # Development server command
+  command = "npm run dev"
+  
+  # Development server port
+  port = 5173
+  
+  # Publish directory for development
+  publish = "dist"
+  
+  # Framework detection
+  framework = "vite"
+
+# Context-specific configurations
+[context.production]
+  # Production-specific environment variables
+  [context.production.environment]
+    NODE_ENV = "production"
+
+[context.deploy-preview]
+  # Preview-specific environment variables
+  [context.deploy-preview.environment]
+    NODE_ENV = "preview"
+
+[context.branch-deploy]
+  # Branch-specific environment variables
+  [context.branch-deploy.environment]
+    NODE_ENV = "development"

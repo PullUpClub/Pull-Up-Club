@@ -1,0 +1,36 @@
+{
+  "hero": {
+    "title": "La Leyenda Detrás de Nuestra Misión",
+    "subtitle": "Cada repetición es un rescate. Cada miembro es un levantador. Este es el Ethos del Pull-Up Club."
+  },
+  "legend": {
+    "title": "La Leyenda de Alkeios",
+    "quote1": "En los primeros días de Battle Bunker, había un soldado llamado <1>Alkeios</1>. Durante una misión brutal en lo profundo de las líneas enemigas, su unidad quedó atrapada: 100 hombres y mujeres, enterrados vivos en un búnker subterráneo derrumbado. La única salida era vertical, un pozo de 60 pies sin escalera, sin cuerdas y sin plan de escape.",
+    "quote2": "Uno por uno, Alkeios los sacó con nada más que sus propias manos y su voluntad de hierro: 100 rescates, cada uno costándole sangre, dolor y aliento. Cuando el último soldado llegó a un lugar seguro, Alkeios se derrumbó. Su cuerpo estaba roto, pero nadie quedó atrás.",
+    "summary": "Ese acto de resistencia, sacrificio y resolución inquebrantable se conoció como el origen del Pull-Up Club, donde cada dominada es un guiño al guerrero que levantó a otros del abismo cuando toda esperanza se había perdido."
+  },
+  "purpose": {
+    "title": "El Propósito del Pull-Up Club",
+    "intro": "Las dominadas no son solo fitness, son entrenamiento para la preparación, para el rescate, para el servicio. Cada repetición es una misión personal:",
+    "pillars": {
+      "trainToSave": {
+        "title": "Entrenar para Salvar",
+        "desc": "Cada dominada es un ensayo para un rescate. Entrenamos no solo para nosotros mismos, sino para estar listos para levantar a otros cuando más importa."
+      },
+      "strengthToLift": {
+        "title": "Fuerza para Levantar a Otros",
+        "desc": "Nuestra fuerza se mide por cuántos podemos ayudar. El Pull-Up Club es una comunidad construida sobre el servicio, el apoyo y el levantarnos unos a otros."
+      },
+      "disciplineToOvercome": {
+        "title": "Disciplina para Superar",
+        "desc": "La disciplina se forja en la adversidad. Superamos obstáculos, repetición por repetición, construyendo la fortaleza mental para enfrentar cualquier desafío."
+      }
+    }
+  },
+  "cta": {
+    "title": "Únete a la Misión",
+    "subtitle": "Cada repetición importa. Forma parte de una comunidad global donde la fuerza se mide por el servicio, y cada dominada es una historia de rescate.",
+    "signup": "Regístrate",
+    "leaderboard": "Ver Clasificación"
+  }
+} 

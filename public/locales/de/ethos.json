@@ -1,0 +1,36 @@
+{
+  "hero": {
+    "title": "Die Legende hinter unserer Mission",
+    "subtitle": "Jede Wiederholung ist eine Rettung. Jedes Mitglied ist ein Helfer. Das ist das Ethos des Pull-Up Clubs."
+  },
+  "legend": {
+    "title": "Die Legende von Alkeios",
+    "quote1": "In den frühen Tagen von Battle Bunker gab es einen Soldaten namens <1>Alkeios</1>. Während einer brutalen Mission tief hinter den feindlichen Linien wurde seine Einheit eingeschlossen – 100 Männer und Frauen, lebendig begraben in einem eingestürzten unterirdischen Bunker. Der einzige Ausweg war vertikal, ein 60 Fuß tiefer Schacht ohne Leiter, ohne Seile und ohne Fluchtplan.",
+    "quote2": "Einer nach dem anderen zog Alkeios sie mit bloßen Händen und eisernem Willen heraus – 100 Rettungen, jede kostete ihn Blut, Schmerz und Atem. Als der letzte Soldat in Sicherheit war, brach Alkeios zusammen. Sein Körper war gebrochen, aber niemand wurde zurückgelassen.",
+    "summary": "Dieser Akt der Ausdauer, des Opfers und des unzerbrechlichen Willens wurde als der Ursprung des Pull-Up Clubs bekannt – wo jeder Klimmzug eine Hommage an den Krieger ist, der andere aus der Grube hob, als alle Hoffnung verloren war."
+  },
+  "purpose": {
+    "title": "Der Zweck des Pull-Up Clubs",
+    "intro": "Klimmzüge sind nicht nur Fitness – sie sind Training für Bereitschaft, für Rettung, für den Dienst. Jede Wiederholung ist eine persönliche Mission:",
+    "pillars": {
+      "trainToSave": {
+        "title": "Trainieren um zu Retten",
+        "desc": "Jeder Klimmzug ist eine Probe für die Rettung. Wir trainieren nicht nur für uns selbst, sondern um bereit zu sein, andere zu heben, wenn es am wichtigsten ist."
+      },
+      "strengthToLift": {
+        "title": "Stärke, um Andere zu Heben",
+        "desc": "Unsere Stärke wird daran gemessen, wie vielen wir helfen können. Der Pull-Up Club ist eine Gemeinschaft, die auf Dienst, Unterstützung und gegenseitigem Helfen aufbaut."
+      },
+      "disciplineToOvercome": {
+        "title": "Disziplin zum Überwinden",
+        "desc": "Disziplin wird im Unglück geschmiedet. Wir überwinden Hindernisse, Wiederholung für Wiederholung, und bauen die mentale Stärke auf, um jeder Herausforderung zu begegnen."
+      }
+    }
+  },
+  "cta": {
+    "title": "Tritt der Mission bei",
+    "subtitle": "Jede Wiederholung zählt. Werde Teil einer globalen Gemeinschaft, in der Stärke durch Dienst gemessen wird und jeder Klimmzug eine Geschichte der Rettung ist.",
+    "signup": "Anmelden",
+    "leaderboard": "Bestenliste ansehen"
+  }
+} 

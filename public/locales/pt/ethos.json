@@ -1,0 +1,36 @@
+{
+  "hero": {
+    "title": "A Lenda por Trás da Nossa Missão",
+    "subtitle": "Cada repetição é um resgate. Cada membro é um socorrista. Este é o Ethos do Pull-Up Club."
+  },
+  "legend": {
+    "title": "A Lenda de Alkeios",
+    "quote1": "Nos primórdios do Battle Bunker, havia um soldado chamado <1>Alkeios</1>. Durante uma missão brutal nas profundezas das linhas inimigas, sua unidade ficou presa - 100 homens e mulheres, enterrados vivos em um bunker subterrâneo desmoronado. A única saída era vertical, um poço de 60 pés sem escada, sem cordas e sem plano de fuga.",
+    "quote2": "Um por um, Alkeios os tirou com nada além de suas próprias mãos e sua vontade de ferro - 100 resgates, cada um custando-lhe sangue, dor e fôlego. Quando o último soldado alcançou a segurança, Alkeios desmoronou. Seu corpo estava quebrado, mas ninguém foi deixado para trás.",
+    "summary": "Esse ato de resistência, sacrifício e determinação inabalável ficou conhecido como a origem do Pull-Up Club - onde cada barra fixa é uma homenagem ao guerreiro que ergueu os outros do abismo quando toda a esperança se foi."
+  },
+  "purpose": {
+    "title": "O Propósito do Pull-Up Club",
+    "intro": "As barras fixas não são apenas fitness - são treinamento para prontidão, para resgate, para serviço. Cada repetição é uma missão pessoal:",
+    "pillars": {
+      "trainToSave": {
+        "title": "Treinar para Salvar",
+        "desc": "Cada barra fixa é um ensaio para o resgate. Treinamos не только для себя, mas para estarmos prontos para erguer os outros quando for mais importante."
+      },
+      "strengthToLift": {
+        "title": "Força para Erguer os Outros",
+        "desc": "Nossa força é medida por quantos podemos ajudar. O Pull-Up Club é uma comunidade construída sobre serviço, apoio e ajuda mútua."
+      },
+      "disciplineToOvercome": {
+        "title": "Disciplina para Superar",
+        "desc": "A disciplina é forjada na adversidade. Superamos obstáculos, repetição por repetição, construindo a resistência mental para enfrentar qualquer desafio."
+      }
+    }
+  },
+  "cta": {
+    "title": "Junte-se à Missão",
+    "subtitle": "Cada repetição importa. Faça parte de uma comunidade global onde a força é medida pelo serviço, e cada barra fixa é uma história de resgate.",
+    "signup": "Inscreva-se",
+    "leaderboard": "Ver Quadro de Líderes"
+  }
+} 

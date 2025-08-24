@@ -1,0 +1,99 @@
+{
+  "title": "Admin Dashboard",
+  "meta": {
+    "title": "Admin | Pull-Up Club",
+    "description": "Admin dashboard for managing submissions, users, and site settings."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "submissions": "Submissions",
+    "users": "User Management"
+  },
+  "stats": {
+    "title": "Site Statistics",
+    "totalUsers": "Total Users",
+    "activeSubscriptions": "Active Subscriptions",
+    "pendingSubmissions": "Pending Submissions",
+    "totalSubmissions": "Total Submissions"
+  },
+  "submissions": {
+    "title": "Review Submissions",
+    "newSubmissions": "New submissions to review",
+    "noSubmissions": "No pending submissions to review.",
+    "filterTitle": "Filters",
+    "filterMonth": "Month",
+    "allMonths": "All Months",
+    "filterStatus": "Status",
+    "allStatuses": "All Status",
+    "search": "Search",
+    "searchPlaceholder": "Search...",
+    "resetFilters": "Reset Filters",
+    "loading": "Loading submissions...",
+    "table": {
+      "user": "User",
+      "date": "Submission Date",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "actions": {
+      "viewVideo": "View Video",
+      "approve": "Approve",
+      "reject": "Reject",
+      "feature": "Feature",
+      "unfeature": "Unfeature",
+      "watchVideo": "Watch Video",
+      "infoTitle": "Submission Info",
+      "claimed": "Claimed:",
+      "verified": "Verified:",
+      "pending": "Pending",
+      "countPlaceholder": "Count"
+    },
+    "pagination": {
+      "showing": "Showing {{count}} of {{total}} submissions",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {{current}} of {{total}}"
+    },
+    "emailBanner": {
+      "title": "Monthly Submission System Active:",
+      "text": "Rejection emails are automatically sent to users when you reject submissions. Rejected users can resubmit immediately. Approved users must wait until next month.",
+      "warning": "Make sure the send-rejection-email Edge Function is deployed and configured."
+    },
+    "updateSuccess": "Submission {{status}} successfully",
+    "updateError": "Failed to update submission"
+  },
+  "users": {
+    "title": "User Management",
+    "back": "Back to Dashboard",
+    "refresh": "Refresh Users",
+    "error": "Error",
+    "loading": "Loading users...",
+    "noUsers": "No users found",
+    "table": {
+      "email": "Email",
+      "name": "Name",
+      "role": "Role",
+      "paid": "Paid",
+      "createdAt": "Created At",
+      "actions": "Actions"
+    },
+    "role_user": "User",
+    "role_admin": "Admin",
+    "paid_yes": "Yes",
+    "paid_no": "No",
+    "actions": {
+      "makeAdmin": "Make Admin",
+      "removeAdmin": "Remove Admin",
+      "delete": "Delete",
+      "deleting": "Deleting...",
+      "processing": "Processing...",
+      "confirmDelete": "Are you sure you want to delete this user? This action cannot be undone.",
+      "status": {
+        "error": "Error: {{message}}",
+        "addSuccess": "Success: Admin role added",
+        "removeSuccess": "Success: Admin role removed",
+        "deleteSuccess": "Success: User deleted"
+      }
+    }
+  }
+} 

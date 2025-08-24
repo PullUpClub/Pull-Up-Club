@@ -1,0 +1,81 @@
+{
+  "navigation": {
+    "home": "홈",
+    "leaderboard": "리더보드",
+    "profile": "프로필",
+    "submit": "비디오 제출",
+    "rules": "규칙",
+    "faq": "자주 묻는 질문",
+    "ethos": "우리의 정신",
+    "login": "로그인",
+    "logout": "로그아웃",
+    "adminDashboard": "관리자 대시보드",
+    "adminUsers": "사용자 관리"
+  },
+  "buttons": {
+    "submit": "제출",
+    "cancel": "취소",
+    "save": "저장",
+    "edit": "편집",
+    "delete": "삭제",
+    "confirm": "확인",
+    "retry": "재시도",
+    "close": "닫기",
+    "view": "보기",
+    "upload": "업로드",
+    "approve": "승인",
+    "reject": "거절",
+    "manage": "관리",
+    "subscribe": "구독",
+    "signUp": "가입하기",
+    "createAccount": "계정 만들기"
+  },
+  "footer": {
+    "title": "풀업 클럽",
+    "description": "풀업 대회와 피트니스 챌린지를 위한 최고의 장소. 당신의 힘을 시험하고, 다른 사람들과 경쟁하며, 리더보드에 오르세요.",
+    "quickLinks": "빠른 링크",
+    "submitVideo": "비디오 제출하기",
+    "leaderboard": "리더보드",
+    "rules": "대회 규칙",
+    "faq": "자주 묻는 질문",
+    "privacy": "개인정보 처리방침",
+    "cookies": "쿠키 정책",
+    "contactUs": "문의하기",
+    "email": "이메일: support@pullupclub.com",
+    "phone": "전화: (619) 363-4597",
+    "address": "주소: 871 Harold Pl, San Diego, CA 91914",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "youtube": "YouTube",
+    "copyright": "© {{year}} Pull-Up Club. 모든 권리 보유."
+  },
+  "labels": {
+    "email": "이메일 주소",
+    "password": "비밀번호",
+    "fullName": "전체 이름",
+    "username": "사용자 이름",
+    "confirmPassword": "비밀번호 확인",
+    "videoUrl": "비디오 URL",
+    "pullUpCount": "풀업 횟수",
+    "notes": "메모"
+  },
+  "status": {
+    "loading": "로드 중...",
+    "error": "오류",
+    "success": "성공",
+    "pending": "대기 중",
+    "approved": "승인됨",
+    "rejected": "거절됨",
+    "active": "활성",
+    "inactive": "비활성",
+    "connecting": "연결 중...",
+    "connected": "연결됨"
+  },
+  "misc": {
+    "or": "또는",
+    "logoAlt": "풀업 클럽 로고"
+  },
+  "errors": {
+    "generic": "예상치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요."
+  }
+} 

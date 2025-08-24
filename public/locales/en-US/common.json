@@ -1,0 +1,45 @@
+{
+  "navigation": {
+    "home": "Home",
+    "leaderboard": "Leaderboard",
+    "profile": "Profile",
+    "submit": "Submit Video",
+    "rules": "Rules",
+    "faq": "FAQ",
+    "ethos": "Our Ethos",
+    "login": "Login",
+    "logout": "Logout",
+    "adminDashboard": "Admin Dashboard",
+    "adminUsers": "Manage Users"
+  },
+  "buttons": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "retry": "Retry",
+    "close": "Close",
+    "view": "View",
+    "upload": "Upload",
+    "approve": "Approve",
+    "reject": "Reject",
+    "manage": "Manage",
+    "subscribe": "Subscribe",
+    "signUp": "Sign Up",
+    "createAccount": "Create Account"
+  },
+  "status": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "active": "Active",
+    "inactive": "Inactive",
+    "connecting": "Connecting...",
+    "connected": "Connected"
+  }
+} 

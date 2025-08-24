@@ -1,0 +1,87 @@
+{
+  "title": "Envía tu video de dominadas",
+  "meta": {
+    "title": "Enviar Video | Pull-Up Club",
+    "description": "Envía tu video de dominadas para la competición mensual. Sigue las reglas y entra en la clasificación."
+  },
+  "subtitle": "Envía tu video de dominadas para competir en la clasificación",
+  "eligibility": {
+    "checking": "Comprobando elegibilidad de envío...",
+    "error": "No se puede comprobar la elegibilidad de envío. Por favor, inténtalo de nuevo.",
+    "retry": "Reintentar",
+    "eligible": {
+      "title": "✅ ¡Listo para Enviar!",
+      "message": "Eres elegible para enviar un nuevo video para la competición de este mes.",
+      "deadline": "Fecha Límite Mensual:",
+      "remaining": "{{days}} días, {{hours}} horas, {{minutes}} minutos restantes"
+    },
+    "rejected": {
+      "title": "🔄 Reenvío Disponible",
+      "message": "Tu envío anterior fue rechazado.",
+      "feedback": "Recibiste un correo electrónico con comentarios. ¡Corrige los problemas y envía de nuevo!"
+    },
+    "pending": {
+      "title": "⏳ En Revisión",
+      "message": "Tu envío para este mes está actualmente en revisión.",
+      "notify": "Te notificaremos por correo electrónico una vez que se revise tu envío."
+    },
+    "approved": {
+      "title": "🎉 ¡Envío Aprobado!",
+      "message": "¡Felicidades! Tu envío fue aprobado y está en la clasificación.",
+      "next": "Próximo envío disponible en:",
+      "countdown": "{{days}} días, {{hours}} horas, {{minutes}} minutos"
+    },
+    "notAvailable": {
+      "title": "Envío no Disponible",
+      "message": "No puedes enviar un video en este momento. Comprueba tu estado de elegibilidad arriba.",
+      "viewLeaderboard": "Ver Clasificación"
+    }
+  },
+  "form": {
+    "pullUpCount": "Número de Dominadas",
+    "pullUpCountDesc": "Introduce el número de dominadas consecutivas que completaste en el video.",
+    "gender": "Género",
+    "male": "Masculino",
+    "female": "Femenino",
+    "other": "Otro",
+    "region": "Región",
+    "selectRegion": "Selecciona tu región",
+    "club": "Afiliación a Club",
+    "selectClub": "Selecciona un club (opcional)",
+    "none": "Ninguno",
+    "otherClub": "Otro",
+    "otherClubPlaceholder": "Introduce el nombre de tu club",
+    "videoUrl": "URL del Video",
+    "videoUrlPlaceholder": "https://youtube.com/watch?v=...",
+    "videoUrlDesc": "Por favor, sube tu video a YouTube, Instagram o TikTok y pega el enlace público aquí. Asegúrate de que tu video sea de acceso público.",
+    "requirementsTitle": "Requisitos del Video",
+    "req1": "Vista clara y sin obstrucciones del movimiento completo",
+    "req2": "La barbilla debe pasar la barra en cada repetición",
+    "req3": "Extensión completa del brazo en la parte inferior de cada repetición",
+    "req4": "Las manos deben estar separadas al ancho de los hombros; el agarre no debe exceder 1.2 metros de ancho",
+    "req5": "Grabación continua sin cortes ni ediciones",
+    "req6": "El video debe ser de acceso público",
+    "checkbox1": "Confirmo que el enlace de mi video es correcto y se puede ver públicamente sin necesidad de iniciar sesión o tener un acceso especial. Entiendo que los enlaces inaccesibles pueden llevar a la descalificación y que las tarifas de envío no son reembolsables.",
+    "checkbox2": "Confirmo que este video es auténtico y no está editado, sin IA ni efectos utilizados para alterar mi rendimiento. Cualquier manipulación o tergiversación resultará en la descalificación y la pérdida de cualquier tarifa, clasificación o recompensa.",
+    "checkbox3": "Otorgo permiso al Pull-Up Club para usar mis videos enviados en esfuerzos de marketing actuales y futuros, tanto de marca como sin marca, en todas las plataformas, a perpetuidad, sin limitación ni compensación adicional.",
+    "checkbox4": "Al enviar este formulario, acepto inscribirme automáticamente en las comunicaciones por correo electrónico y SMS del Pull-Up Club. Entiendo que puedo darme de baja de cualquiera de los canales en cualquier momento siguiendo las instrucciones para darse de baja incluidas en cada mensaje.",
+    "reviewTime": "Por favor, permite hasta 15 días para que nuestro equipo revise y asigne correctamente tu envío al mes en que fue enviado.",
+    "submitButton": "Enviar Ahora",
+    "submittingButton": "Enviando..."
+  },
+  "noAuth": {
+    "title": "Se Requiere Autenticación",
+    "description": "Necesitas iniciar sesión para enviar videos. Por favor, inicia sesión o crea una cuenta para continuar.",
+    "login": "Iniciar Sesión",
+    "createAccount": "Crear Cuenta"
+  },
+  "recentSubmissions": {
+    "title": "Envíos Recientes",
+    "verified": "(Verificado: {{count}})",
+    "submittedOn": "Enviado el {{date}}",
+    "reviewNotes": "Notas de Revisión:",
+    "viewVideo": "Ver Video",
+    "viewAll": "Ver Todos los Envíos"
+  },
+  "successToast": "¡Video enviado con éxito!"
+} 

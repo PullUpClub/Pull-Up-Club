@@ -1,0 +1,82 @@
+{
+  "title": "Leaderboard",
+  "meta": {
+    "title": "Leaderboard | Pull-Up Club",
+    "description": "See where you rank on the official Pull-Up Club global leaderboard. Filter by date, category, and location to see the top performers."
+  },
+  "filters": {
+    "title": "Filter Leaderboard",
+    "clear": "Clear Filters",
+    "searchPlaceholder": "Search by name...",
+    "pullUps": "Pull-Ups",
+    "allPullUps": "All Pull-Ups",
+    "pullUpsUnit": "{{range}} Pull-Ups",
+    "club": "Club",
+    "allClubs": "All Clubs",
+    "region": "Region",
+    "allRegions": "All Regions",
+    "ageGroup": "Age Group",
+    "allAges": "All Ages",
+    "gender": "Gender",
+    "allGenders": "All Genders",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "badge": "Badge",
+    "allBadges": "All Badges",
+    "sortBy": "Sort By",
+    "relevance": "Relevance",
+    "pullUpsDesc": "Pull-ups (High to Low)",
+    "pullUpsAsc": "Pull-ups (Low to High)",
+    "dateNewest": "Date (Newest First)",
+    "dateOldest": "Date (Oldest First)",
+    "reset": "Reset Filters",
+    "showFilters": "Filter Results",
+    "hideFilters": "Hide Filters"
+  },
+  "table": {
+    "rank": "Rank",
+    "athlete": "Athlete",
+    "pullUps": "Pull-ups",
+    "badge": "Badge",
+    "date": "Date",
+    "video": "Video",
+    "noResults": "No results found. Try adjusting your filters.",
+    "loading": "Loading leaderboard..."
+  },
+  "badgeLegend": {
+    "title": "Badge Legend",
+    "recruit": "Recruit (0-9 reps)",
+    "proven": "Proven (10-19 reps)",
+    "hardened": "Hardened (20-29 reps)",
+    "operator": "Operator (30-39 reps)",
+    "elite": "Elite (40+ reps)",
+    "pullUpsRequired": "<0>{{count}}</0>+ Pull-Ups Required",
+    "menPullUps": "Men <0>{{count}}</0>+ Pull-Ups",
+    "womenPullUps": "Women <0>{{count}}</0>+ Pull-Ups"
+  },
+  "subtitle": "See how you stack up against the competition. Our leaderboard shows the top performers in the Pull-Up Club Challenge.",
+  "error": "Failed to load leaderboard data",
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "mobile": {
+    "showBadgeLegend": "View Badge Legend",
+    "hideBadgeLegend": "Hide Badge Legend",
+    "showFilters": "Filter Results",
+    "hideFilters": "Hide Filters"
+  },
+  "pucBank": {
+    "title": "P.U.C Bank",
+    "drain": "Drain the bank — replenished weekly.",
+    "payouts": "All payouts happen at month end.",
+    "poolDepleted": "Pool Depleted"
+  },
+  "dev": {
+    "cacheDebug": "Cache Debug Info",
+    "cacheSize": "Cache Size: {{size}}KB",
+    "cachedKeys": "Cached Keys: {{count}}",
+    "clearCache": "Clear All Cache"
+  }
+} 

@@ -1,0 +1,108 @@
+{
+  "title": "Reglas de la Competición",
+  "meta": {
+    "title": "Reglas de la Competición | Pull-Up Club",
+    "description": "Reglas oficiales para la competición del Battle Bunker Pull-Up Club. Lee las directrices para la presentación de videos, los estándares de las dominadas y los criterios de evaluación."
+  },
+  "mainTitle": "Reglas Oficiales de la Competición",
+  "subtitle": "Directrices completas para participar en el desafío mensual del Battle Bunker Pull-Up Club",
+  "downloadRulebook": "Descargar Reglamento Oficial",
+  "whatIs": {
+    "title": "¿Qué es Pull-Up Club?",
+    "description": "Pull-Up Club es un desafío y clasificación global mensual. Te unes, envías tus dominadas estrictas, ganas tu parche, ganas $1 por cada repetición y te clasificas. Simple. Sin tonterías — solo repeticiones limpias y comunidad.",
+    "step1": {
+      "title": "Únete",
+      "description": "$9.99/mes. Primer mes gratis. Desbloquea tu primer parche. Recibe un nuevo parche cada 3 meses mientras estés activo."
+    },
+    "step2": {
+      "title": "Graba tus Repeticiones",
+      "description": "Envía tu video sin cortes. Debe ser publicado públicamente en IG, YT, FB o TikTok. Etiqueta @battlebunkerpullupclub. Envía en: www.pullupclub.com/profile"
+    },
+    "step3": {
+      "title": "Obtén Verificación",
+      "description": "El juez principal Shannon revisa manualmente todas las repeticiones. Si tu envío es rechazado, recibirás un correo de seguimiento explicando por qué. Puedes volver a grabar y reenviar tu video en cualquier momento."
+    }
+  },
+  "pullUpStandards": {
+    "title": "Estándares de Dominadas",
+    "requirements": {
+      "title": "Requisitos de Forma",
+      "grip": "Agarre: Solo agarre supino — no agarre prono (dominadas) o agarres neutros",
+      "chin": "Barbilla: Debe romper claramente el plano horizontal de la barra",
+      "lockout": "Bloqueo: Bloqueo completo de codo en la parte inferior de cada repetición",
+      "form": "Forma: Sin kipping, balanceo u obvio momentum",
+      "speed": "Velocidad: Tocar y continuar está bien si cada repetición cumple los estándares",
+      "feet": "Pies: Cualquier posición está bien, siempre que no hagas trampa en el movimiento"
+    },
+    "equipment": {
+      "title": "Reglas de Equipamiento",
+      "notAllowed": {
+        "title": "NO Permitido",
+        "description": "Tiras de levantamiento o cualquier equipo que toque o envuelva la barra"
+      },
+      "allowed": {
+        "title": "Permitido",
+        "description": "Tiza, guantes, vendas de muñeca, cinturones de levantamiento"
+      }
+    }
+  },
+  "videoSubmission": {
+    "title": "Reglas de Envío de Video",
+    "fullBody": "Vista completa del cuerpo requerida (desde colgada muerta hasta la parte superior de cada repetición)",
+    "unbroken": "El video debe ser sin cortes - sin cortes, ediciones o saltos de tiempo",
+    "deadHang": "Debe mostrar tu primera repetición comenzando desde una colgada muerta",
+    "straightBar": "La barra debe ser recta (sin agarres angulados, medias barras o multi-agarres)",
+    "chinVisible": "Debemos ver claramente tu barbilla cruzar la parte superior de la barra",
+    "publicUpload": "Sube públicamente en redes sociales (no privado o no listado)",
+    "tagRequired": "Debe etiquetar @battlebunkerpullupclub en la descripción o video"
+  },
+  "tierSystem": {
+    "title": "Sistema de Niveles",
+    "men": {
+      "title": "Hombres",
+      "recruit": "5+ dominadas",
+      "proven": "10+ dominadas",
+      "hardened": "15+ dominadas",
+      "operator": "20+ dominadas",
+      "elite": "25+ dominadas"
+    },
+    "women": {
+      "title": "Mujeres",
+      "recruit": "3+ dominadas",
+      "proven": "7+ dominadas",
+      "hardened": "12+ dominadas",
+      "operator": "15+ dominadas",
+      "elite": "20+ dominadas"
+    }
+  },
+  "pucBank": {
+    "title": "Banco PUC",
+    "description": "Cada semana, el Banco PUC se abastece con $250, repuesto semanalmente. Cada repetición verificada te gana $1. Si envías 20 repeticiones y verificamos 20 repeticiones, recibirás $20",
+    "payoutInfo": "Los pagos se otorgan a todos con repeticiones verificadas, mientras el banco PUC esté activo. Todos los pagos se entregan a tu cuenta del Banco PUC al final de cada mes"
+  },
+  "leaderboard": {
+    "title": "Reglas de Clasificación",
+    "verifiedOnly": "Solo cuentan las repeticiones verificadas",
+    "weeklyUpdates": "La clasificación se actualiza semanalmente",
+    "resubmitAllowed": "Si es rechazado, puedes reenviar en cualquier momento",
+    "onePerMonth": "Solo se permite 1 entrada aprobada por mes",
+    "monthlyFeature": "La repetición mensual más alta aparece en redes sociales y puede ganar un pago adicional en efectivo"
+  },
+  "rejections": {
+    "title": "Principales Razones de Rechazo",
+    "intro": "Los envíos serán rechazados si:",
+    "grip": "El agarre no es supino",
+    "chin": "La barbilla no cruza claramente la barra",
+    "lockout": "Los brazos no se bloquean completamente en la parte inferior",
+    "momentum": "Usas momentum, balanceo o kipping",
+    "videoQuality": "Tu video no es claro, está editado o es privado",
+    "tagging": "No nos etiquetas o no sigues el formato"
+  },
+  "support": {
+    "title": "Soporte",
+    "description": "¿Necesitas ayuda o quieres desafiar una decisión?",
+    "email": "support@pullupclub.com",
+    "social": "@battlebunkerpullupclub"
+  },
+  "conclusion": "Al enviar tu video, reconoces y aceptas estas reglas en su totalidad. Nos reservamos el derecho de denegar cualquier presentación que no cumpla claramente con estos estándares."
+} 

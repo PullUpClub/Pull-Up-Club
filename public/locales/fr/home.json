@@ -1,0 +1,97 @@
+{
+  "meta": {
+    "title": "Pull-Up Club | La Compétition Ultime de Tractions",
+    "description": "Rejoignez le Battle Bunker Pull-Up Club, la compétition de tractions en ligne ultime. Soumettez vos vidéos, soyez jugé, et grimpez dans le classement mondial pour gagner des badges et des prix.",
+    "ogTitle": "Pull-Up Club | La Compétition Ultime de Tractions",
+    "ogDescription": "Affrontez des athlètes du monde entier dans le test de force ultime. Pouvez-vous dominer le classement ?"
+  },
+  "hero": {
+    "title": "Bienvenue au Pull-Up Club",
+    "subtitle": "Gagnez 1$ par répétition. Première Soumission gratuite.",
+    "cta": "Inscrivez-vous Maintenant",
+    "secondaryCta": "Voir le Classement",
+    "liveActivity": "<0>{{name}}</0> de {{location}} a complété <1>{{pullUps}}</1> tractions",
+    "live": "EN DIRECT",
+    "justNow": "À l'instant",
+    "warriorsJoined": "Guerriers Inscrits",
+    "price": "9,99 $/mois",
+    "cancelAnytime": "Annulez à tout moment",
+    "global": "Mondial",
+    "leaderboard": "Classement",
+    "badgeTypes": "Types de Badges",
+    "pullUpsToday": "<0>{{count}}</0> tractions complétées ces dernières 24 heures",
+    "alt_athlete": "Athlète faisant des tractions"
+  },
+  "howItWorks": {
+    "title": "Comment Ça Marche",
+    "subtitle": "Rejoignez le Battle Bunker Pull-Up Challenge en trois étapes simples. Montrez votre force et affrontez des athlètes du monde entier.",
+    "step1": {
+      "title": "1. Enregistrez et Soumettez",
+      "description": "Enregistrez votre meilleure performance de tractions, publiez-la et soumettez le lien de la vidéo avec les frais."
+    },
+    "step2": {
+      "title": "2. Soyez Évalué",
+      "description": "Notre équipe examinera votre soumission pour vérifier la bonne forme et compter vos tractions."
+    },
+    "step3": {
+      "title": "3. Rejoignez le Classement",
+      "description": "Une fois vérifiée, votre performance sera affichée sur notre classement mondial."
+    }
+  },
+  "perks": {
+    "title": "Avantages du Battle Bunker Pull-Up Club",
+    "subtitle": "Quand vous vous engagez, vous ne rejoignez pas seulement un club. Vous rejoignez un mouvement. Voici ce que vous obtenez :",
+    "perk1": {
+      "title": "PATCH D'ENTRÉE OFFICIEL",
+      "description": "Gagnez votre première bande. Chaque membre reçoit un patch exclusif du Battle Bunker Pull-Up Club expédié directement à sa porte. C'est votre insigne d'honneur — pas de répétitions, pas de patch."
+    },
+    "perk2": {
+      "title": "PATCH DE COLLECTIONNEUR TRIMESTRIEL",
+      "description": "Chaque trimestre, nous sortons un tout nouveau patch en édition limitée — les membres du club de tractions le recevront à leur porte. Vous l'avez manqué ? Vous ne le reverrez jamais."
+    },
+    "perk3": {
+      "title": "SYSTÈME DE CLASSEMENT PAR NIVEAUX",
+      "description": "Vous êtes classé en fonction de vos performances — Recrue, Prouvé, Endurci, Opérateur, Élite. Ce n'est pas de la participation. Vous gagnez votre place, et la communauté le voit."
+    },
+    "perk4": {
+      "title": "CLASSEMENT OFFICIEL",
+      "description": "Une fois vérifié, votre nom est verrouillé. Affrontez les meilleurs, suivez votre ascension et laissez les chiffres parler d'eux-mêmes. Le classement n'affiche que les membres actifs du club de tractions."
+    },
+    "perk5": {
+      "title": "ACCÈS À L'ÉQUIPEMENT RÉSERVÉ PAR NIVEAU",
+      "description": "Vous voulez l'équipement ? Gagnez-le. Le merchandising exclusif se débloque uniquement à certains niveaux. Pas de raccourcis, pas d'excuses — vous portez ce que vous avez prouvé."
+    },
+    "perk6": {
+      "title": "MISE EN AVANT SOCIALE",
+      "description": "Taguez-nous dans vos vidéos de soumission, photos de patchs et histoires de retour et soyez mis en avant. Nous partageons 100% de la communauté."
+    }
+  },
+  "leaderboardPreview": {
+    "title": "Meilleurs Concurrents",
+    "subtitle": "Découvrez nos champions actuels du classement. Votre nom sera-t-il sur cette liste ?",
+    "viewFull": "Voir le Classement Complet"
+  },
+  "testimonials": {
+    "title": "Ce que disent les participants",
+    "testimonial1": {
+      "quote": "Le Défi de Tractions de Battle Bunker m'a poussé à mes limites. Je suis passé de 15 à 25 tractions en seulement deux mois !",
+      "author": "Mike Johnson",
+      "role": "Athlète de CrossFit"
+    },
+    "testimonial2": {
+      "quote": "Le classement me maintient motivé. Voir mon nom grimper chaque semaine est incroyablement satisfaisant.",
+      "author": "Sarah Williams",
+      "role": "Membre Élite de Battle Bunker"
+    },
+    "testimonial3": {
+      "quote": "Cette plateforme a créé une compétition amicale parmi mes membres. Tout le monde s'entraîne plus dur !",
+      "author": "Dave Rodriguez",
+      "role": "Propriétaire, Iron Warriors Gym"
+    }
+  },
+  "ctaSection": {
+    "title": "Prêt à Tester Votre Force ?",
+    "subtitle": "Rejoignez des centaines d'athlètes qui concourent déjà dans le Battle Bunker Pull-Up Challenge. Montrez au monde de quoi vous êtes capable !",
+    "cta": "S'inscrire"
+  }
+} 

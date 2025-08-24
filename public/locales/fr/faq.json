@@ -1,0 +1,63 @@
+{
+  "title": "Foire Aux Questions",
+  "meta": {
+    "title": "FAQ | Pull-Up Club",
+    "description": "Trouvez les réponses aux questions fréquemment posées sur le Battle Bunker Pull-Up Club, y compris le processus de soumission, l'abonnement et les règles."
+  },
+  "q1": {
+    "q": "Comment le Pull-Up Club verse-t-il les prix en argent ?",
+    "a": "Nous utilisons Stripe Connect pour envoyer les paiements des prix directement aux gagnants. C'est rapide, sécurisé et mondial. Une fois que vous gagnez, nous vous inviterons à créer un compte Stripe Express gratuit (si vous n'en avez pas déjà un), et à partir de là, nous pourrons transférer l'argent du prix directement sur votre compte bancaire."
+  },
+  "q2": {
+    "q": "Qu'est-ce qui peut me faire gagner de l'argent ?",
+    "a": "Nous aimons la créativité, l'engagement et la communauté. En plus des victoires basées sur le classement, nous récompensons les participations exceptionnelles dans toutes sortes de catégories. Voici quelques exemples : 🎽 Porter des vêtements Battle Bunker, 🏋️‍♂️ Utiliser du matériel Battle Bunker, 🎶 Meilleure sélection musicale, 👕 Meilleur costume ou thème, 🎬 Meilleure intro et/ou outro de vidéo, 🤯 La surprise la plus folle ou le rebondissement inattendu, 💥 L'énergie la plus hype, 🧼 Les répétitions les plus propres. Si votre vidéo nous fait faire une pause, rire ou la rejouer, vous serez probablement payé."
+  },
+  "q3": {
+    "q": "Dois-je gagner le défi pour obtenir le prix en argent ?",
+    "a": "Non ! Gagner n'est pas tout ici. Nous récompensons la créativité, l'effort et l'esprit de communauté. Vous ne serez peut-être pas en tête du classement, mais si votre participation se démarque, il y a de fortes chances que vous obteniez un prix en espèces surprise."
+  },
+  "q4": {
+    "q": "Y a-t-il des restrictions de contenu, comme la nudité ?",
+    "a": "❌ Toute forme de nudité entraînera le rejet immédiat de la vidéo. Les participants doivent être habillés de manière appropriée, comme s'ils s'entraînaient dans une salle de sport publique."
+  },
+  "q5": {
+    "q": "Puis-je soumettre une vidéo enregistrée plus tôt cette année ?",
+    "a": "Oui, tant qu'elle respecte toutes les règles : vue claire, amplitude de mouvement complète, séquences continues non montées et accessibilité publique."
+  },
+  "q6": {
+    "q": "Puis-je couper la partie avant ou après les répétitions pour raccourcir la vidéo ?",
+    "a": "Non. La vidéo doit être un enregistrement continu et non coupé du début à la fin. Tout rognage, coupe ou montage entraînera la disqualification."
+  },
+  "q7": {
+    "q": "Est-il acceptable d'utiliser des filtres ou d'améliorer l'éclairage ?",
+    "a": "Non. Pour maintenir l'intégrité, les vidéos doivent être soumises telles qu'elles ont été capturées. Pas de filtres, d'améliorations d'éclairage ou d'ajustements basés sur l'IA de quelque nature que ce soit."
+  },
+  "q8": {
+    "q": "Que se passe-t-il si j'oublie de montrer le mouvement complet ou si mon menton n'est pas clairement au-dessus de la barre ?",
+    "a": "La répétition peut être disqualifiée ou la soumission entière peut être refusée. Nous vous recommandons vivement de revoir vos séquences avant de les soumettre pour vous assurer qu'elles respectent toutes les normes de mouvement."
+  },
+  "q9": {
+    "q": "Puis-je accélérer ou ralentir la vidéo ?",
+    "a": "Non. Les vidéos doivent être soumises à vitesse normale sans accélération, ralenti ou effets temporels."
+  },
+  "q10": {
+    "q": "Quelles plateformes puis-je utiliser pour soumettre ma vidéo ?",
+    "a": "Vous pouvez télécharger votre vidéo sur n'importe quelle plateforme publique telle que YouTube, Instagram ou TikTok. Assurez-vous simplement que vos paramètres de confidentialité nous permettent de la visionner sans nous connecter ni demander d'accès."
+  },
+  "q11": {
+    "q": "Ma vidéo est trop sombre / floue / instable - sera-t-elle quand même comptabilisée ?",
+    "a": "Si nous ne pouvons pas vérifier clairement chaque répétition et la norme de forme, la vidéo peut être refusée. Utilisez un bon éclairage, une caméra stable et un angle clair pour vous assurer que votre performance est visible."
+  },
+  "q12": {
+    "q": "Puis-je avoir de la musique en arrière-plan ?",
+    "a": "Oui, tant que cela n'interfère pas avec la visibilité ou l'examen audio. Évitez simplement tout ce qui est offensant ou distrayant, il s'agit toujours d'un événement communautaire !"
+  },
+  "q13": {
+    "q": "Comment vérifiez-vous les vidéos générées par l'IA ou en boucle ?",
+    "a": "Notre équipe examine toutes les séquences à la recherche de signes de manipulation, y compris l'implication de l'IA, le bouclage visuel ou les répétitions étrangement cohérentes. Toute participation soupçonnée de montage ou de falsification des répétitions sera automatiquement refusée et pourra être bannie des événements futurs."
+  },
+  "q14": {
+    "q": "Puis-je soumettre plus d'une vidéo par mois ?",
+    "a": "Si vous êtes abonné au plan mensuel, vous pouvez soumettre UNE PARTICIPATION par mois !"
+  }
+} 

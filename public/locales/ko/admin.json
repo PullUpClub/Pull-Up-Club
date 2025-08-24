@@ -1,0 +1,102 @@
+{
+  "title": "관리자 대시보드",
+  "meta": {
+    "title": "관리자 | 풀업 클럽",
+    "description": "제출물, 사용자 및 사이트 설정을 관리하기 위한 관리자 대시보드입니다."
+  },
+  "nav": {
+    "dashboard": "대시보드",
+    "submissions": "제출물",
+    "users": "사용자 관리"
+  },
+  "stats": {
+    "title": "사이트 통계",
+    "totalUsers": "총 사용자",
+    "activeSubscriptions": "활성 구독",
+    "pendingSubmissions": "대기 중인 제출물",
+    "totalSubmissions": "총 제출물"
+  },
+  "submissions": {
+    "title": "제출물 검토",
+    "newSubmissions": "검토할 새 제출물",
+    "noSubmissions": "검토할 대기 중인 제출물이 없습니다.",
+    "filterTitle": "필터",
+    "filterMonth": "월",
+    "allMonths": "모든 월",
+    "filterStatus": "상태",
+    "allStatuses": "모든 상태",
+    "search": "검색",
+    "searchPlaceholder": "검색...",
+    "resetFilters": "필터 초기화",
+    "loading": "제출물 로드 중...",
+    "table": {
+      "user": "사용자",
+      "date": "제출 날짜",
+      "status": "상태",
+      "actions": "작업"
+    },
+    "actions": {
+      "viewVideo": "비디오 보기",
+      "approve": "승인",
+      "reject": "거절",
+      "feature": "추천",
+      "unfeature": "추천 해제",
+      "watchVideo": "비디오 보기",
+      "infoTitle": "제출 정보",
+      "claimed": "주장:",
+      "verified": "확인됨:",
+      "pending": "대기 중",
+      "countPlaceholder": "횟수"
+    },
+    "pagination": {
+      "showing": "{{total}}개 중 {{count}}개의 제출물 표시 중",
+      "previous": "이전",
+      "next": "다음",
+      "page": "페이지 {{current}}/{{total}}"
+    },
+    "emailBanner": {
+      "title": "월간 제출 시스템 활성:",
+      "text": "제출물을 거부하면 거부 이메일이 사용자에게 자동으로 전송됩니다. 거부된 사용자는 즉시 다시 제출할 수 있습니다. 승인된 사용자는 다음 달까지 기다려야 합니다.",
+      "warning": "send-rejection-email Edge 함수가 배포 및 구성되었는지 확인하세요."
+    },
+    "updateSuccess": "제출 {{status}} 성공",
+    "updateError": "제출 업데이트 실패"
+  },
+  "users": {
+    "title": "사용자 관리",
+    "back": "대시보드로 돌아가기",
+    "refresh": "사용자 새로고침",
+    "error": "오류",
+    "loading": "사용자 로드 중...",
+    "noUsers": "사용자를 찾을 수 없음",
+    "table": {
+      "email": "이메일",
+      "name": "이름",
+      "role": "역할",
+      "paid": "유료",
+      "createdAt": "생성일",
+      "actions": "작업"
+    },
+    "role_user": "사용자",
+    "role_admin": "관리자",
+    "paid_yes": "예",
+    "paid_no": "아니요",
+    "actions": {
+      "makeAdmin": "관리자로 지정",
+      "removeAdmin": "관리자 제거",
+      "delete": "삭제",
+      "deleting": "삭제 중...",
+      "processing": "처리 중...",
+      "confirmDelete": "이 사용자를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
+      "status": {
+        "error": "오류: {{message}}",
+        "addSuccess": "성공: 관리자 역할이 추가되었습니다",
+        "removeSuccess": "성공: 관리자 역할이 제거되었습니다",
+        "deleteSuccess": "성공: 사용자가 삭제되었습니다"
+      }
+    }
+  }
+}
+
+</rewritten_file>
+ 

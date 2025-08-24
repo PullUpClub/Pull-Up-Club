@@ -1,0 +1,149 @@
+{
+  "title": "Mein Profil",
+  "meta": {
+    "title": "Profil | Pull-Up Club",
+    "description": "Sehen Sie sich Ihr Profil an, verfolgen Sie Ihren Einreichungsverlauf, verwalten Sie Ihr Abonnement und sehen Sie sich Ihre Erfolge an."
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "settings": "Profileinstellungen",
+    "subscription": "Abonnement",
+    "paymentHistory": "Zahlungsverlauf",
+    "submissions": "Einreichungen",
+    "subscriptionAndRewards": "Abonnement & Belohnungen"
+  },
+  "dashboard": {
+    "title": "Einreichungs-Dashboard",
+    "welcome": "Willkommen zurück, {{name}}!",
+    "noSubmissions": "Sie haben noch keine Einreichungen vorgenommen.",
+    "noSubmissionsCTA": "Ihr Einreichungsverlauf wird hier angezeigt, sobald Sie Ihr erstes Video eingereicht haben.",
+    "submitButton": "Video einreichen",
+    "submitFirstButton": "Ihr erstes Video einreichen",
+    "submitNewButton": "Neues Video einreichen",
+    "countdown": {
+      "title": "Monatlicher Wettbewerb",
+      "remaining": "verbleibende Zeit zum Einreichen"
+    },
+    "status": {
+      "title": "Einreichungsstatus",
+      "ready": "Bereit zum Einreichen!",
+      "thisMonth": "Einreichung dieses Monats",
+      "onLeaderboard": "✓ Auf der Bestenliste",
+      "rejected": "Ihre Einreichung wurde abgelehnt",
+      "rejectedCTA": "Sie können sofort ein neues Video einreichen!",
+      "competeCTA": "Reichen Sie Ihr Klimmzug-Video ein, um diesen Monat teilzunehmen",
+      "pullUps": "{{count}} Klimmzüge"
+    },
+    "best": {
+      "title": "Beste Leistung",
+      "unit": "Klimmzüge"
+    },
+    "thisMonth": {
+      "title": "Dieser Monat",
+      "submitted": "eingereichte Klimmzüge",
+      "status": "Status: {{status}}",
+      "submittedOn": "Eingereicht am: {{date}}"
+    },
+    "history": {
+      "title": "Einreichungsverlauf",
+      "loading": "Einreichungen werden geladen...",
+      "andMore": "Und {{count}} weitere Einreichungen...",
+      "viewVideo": "Video ansehen"
+    }
+  },
+  "settings": {
+    "title": "Profileinstellungen",
+    "subtitle": "Aktualisieren Sie hier Ihre Profilinformationen. Diese Informationen werden auf der Bestenliste angezeigt, wenn Sie eine genehmigte Einreichung haben.",
+    "updateSuccess": "Profil erfolgreich aktualisiert!",
+    "updateError": "Profil konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.",
+    "avatar": "Profilbild",
+    "avatarChange": "Bild ändern",
+    "fullName": "Vollständiger Name *",
+    "fullNamePlaceholder": "Geben Sie Ihren vollständigen Namen ein",
+    "fullNameDesc": "Dies wird auf der Bestenliste angezeigt",
+    "socialMedia": "Social-Media-Benutzername",
+    "socialMediaPlaceholder": "deinbenutzername",
+    "socialMediaDesc": "Fügen Sie das @-Symbol nicht hinzu, nur Ihren Benutzernamen. Wird auf der Bestenliste für soziale Verbindungen angezeigt",
+    "age": "Alter *",
+    "agePlaceholder": "25",
+    "gender": "Geschlecht *",
+    "selectGender": "Geschlecht auswählen",
+    "male": "Männlich",
+    "female": "Weiblich",
+    "other": "Andere",
+    "organization": "Club/Organisation",
+    "organizationPlaceholder": "Wisloka Chicago",
+    "region": "Region *",
+    "selectRegion": "Region auswählen",
+    "phone": "Telefonnummer (Optional)",
+    "phonePlaceholder": "+49 (123) 456-7890",
+    "saveButton": "Änderungen speichern",
+    "savingButton": "Änderungen werden gespeichert..."
+  },
+  "subscription": {
+    "title": "Abonnementdetails",
+    "status": "Status",
+    "plan": "Plan",
+    "price": "Preis",
+    "renewalDate": "Nächstes Erneuerungsdatum",
+    "manageButton": "Abonnement in Stripe verwalten"
+  },
+  "paymentHistory": {
+    "title": "Zahlungsverlauf",
+    "noHistory": "Kein Zahlungsverlauf gefunden.",
+    "date": "Datum",
+    "amount": "Betrag",
+    "status": "Status",
+    "invoice": "Rechnung"
+  },
+  "rewards": {
+    "shippingNotice": "Versand nur innerhalb der USA. Internationale Benutzer sind derzeit nicht für das Patch oder physische Belohnungen berechtigt.",
+    "subscription": {
+      "title": "Abonnement",
+      "subtitle": "Verwalten Sie Ihr monatliches Abonnement",
+      "button": "Abonnement verwalten"
+    },
+    "patch": {
+      "title": "Fordern Sie Ihr Patch an",
+      "subtitle": "Erhalten Sie Ihr verdientes Patch",
+      "button": "Ihr Patch anfordern"
+    },
+    "progress": {
+      "title": "Fortschritt nächstes Patch",
+      "progress": "{{percent}}% Fortschritt",
+      "remaining": "{{days}} Tage",
+      "untilNext": "bis zum Versand des nächsten Patches"
+    },
+    "gear": {
+      "title": "Ausrüstung kaufen",
+      "subtitle": "Holen Sie sich Ihre Trainingsausrüstung",
+      "button": "Ausrüstung kaufen"
+    },
+    "payouts": {
+      "title": "Wettbewerbsauszahlungen",
+      "loading": "Wird geladen...",
+      "available": "Zur Auszahlung verfügbar",
+      "pending": "Anfrage ausstehend",
+      "noEarnings": "Noch keine Einnahmen",
+      "requestButton": "Auszahlung anfordern",
+      "processing": "Wird verarbeitet..."
+    },
+    "earningsHistory": {
+      "title": "Einnahmenverlauf",
+      "andMore": "Und {{count}} weitere Einnahmen...",
+      "paid": "Bezahlt",
+      "available": "Verfügbar"
+    },
+    "payoutHistory": {
+      "title": "Auszahlungsanforderungen",
+      "request": "Auszahlungsanforderung über {{amount}}",
+      "requestedOn": "Angefordert am: {{date}}",
+      "processedOn": "Verarbeitet am: {{date}}"
+    },
+    "noEarnings": {
+      "title": "Noch keine Einnahmen",
+      "description": "Nehmen Sie an Wettbewerben teil, um Geld zu verdienen! Schauen Sie nach der Bekanntgabe der monatlichen Gewinner wieder vorbei."
+    },
+    "payoutSuccess": "Auszahlungsanforderung für {{amount}} erfolgreich übermittelt!"
+  }
+} 

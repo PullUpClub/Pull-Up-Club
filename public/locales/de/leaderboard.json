@@ -1,0 +1,81 @@
+{
+  "title": "Bestenliste",
+  "meta": {
+    "title": "Bestenliste | Pull-Up Club",
+    "description": "Sehen Sie, wo Sie auf der offiziellen globalen Bestenliste des Pull-Up Clubs rangieren. Filtern Sie nach Datum, Kategorie und Ort, um die besten Performer zu sehen."
+  },
+  "filters": {
+    "title": "Bestenliste filtern",
+    "clear": "Filter löschen",
+    "searchPlaceholder": "Suche nach Name...",
+    "pullUps": "Klimmzüge",
+    "allPullUps": "Alle Klimmzüge",
+    "pullUpsUnit": "{{range}} Klimmzüge",
+    "club": "Club",
+    "allClubs": "Alle Clubs",
+    "region": "Region",
+    "allRegions": "Alle Regionen",
+    "ageGroup": "Altersgruppe",
+    "allAges": "Alle Altersgruppen",
+    "gender": "Geschlecht",
+    "allGenders": "Alle Geschlechter",
+    "male": "Männlich",
+    "female": "Weiblich",
+    "other": "Andere",
+    "badge": "Abzeichen",
+    "allBadges": "Alle Abzeichen",
+    "sortBy": "Sortieren nach",
+    "relevance": "Relevanz",
+    "pullUpsDesc": "Klimmzüge (hoch nach niedrig)",
+    "pullUpsAsc": "Klimmzüge (niedrig nach hoch)",
+    "dateNewest": "Datum (neueste zuerst)",
+    "dateOldest": "Datum (älteste zuerst)",
+    "reset": "Filter zurücksetzen",
+    "operator": "Operator (30-39 Wiederholungen)",
+    "elite": "Elite (40+ Wiederholungen)",
+    "pullUpsRequired": "{{count}}+ Klimmzüge erforderlich"
+  },
+  "table": {
+    "rank": "Rang",
+    "athlete": "Athlet",
+    "pullUps": "Klimmzüge",
+    "badge": "Abzeichen",
+    "date": "Datum",
+    "video": "Video",
+    "noResults": "Keine Ergebnisse gefunden. Versuchen Sie, Ihre Filter anzupassen.",
+    "loading": "Bestenliste wird geladen..."
+  },
+  "badgeLegend": {
+    "title": "Abzeichen-Legende",
+    "recruit": "Rekrut (0-9 Wiederholungen)",
+    "proven": "Bewährt (10-19 Wiederholungen)",
+    "hardened": "Gehärtet (20-29 Wiederholungen)",
+    "operator": "Operator (30-39 Wiederholungen)",
+    "elite": "Elite (40+ Wiederholungen)",
+    "pullUpsRequired": "{{count}}+ Klimmzüge erforderlich"
+  },
+  "subtitle": "Sehen Sie, wie Sie im Vergleich zur Konkurrenz abschneiden. Unsere Bestenliste zeigt die besten Performer im Pull-Up Club Challenge.",
+  "error": "Fehler beim Laden der Bestenlistendaten",
+  "pagination": {
+    "previous": "Zurück",
+    "next": "Weiter"
+  },
+  "mobile": {
+    "showBadgeLegend": "Abzeichen-Legende anzeigen",
+    "hideBadgeLegend": "Abzeichen-Legende ausblenden",
+    "showFilters": "Ergebnisse filtern",
+    "hideFilters": "Filter ausblenden"
+  },
+  "pucBank": {
+    "title": "P.U.C Bank",
+    "drain": "Leere die Bank – wöchentlich aufgefüllt.",
+    "payouts": "Alle Auszahlungen erfolgen am Monatsende.",
+    "poolDepleted": "Pool aufgebraucht"
+  },
+  "dev": {
+    "cacheDebug": "Cache-Debug-Info",
+    "cacheSize": "Cache-Größe: {{size}}KB",
+    "cachedKeys": "Gecachte Schlüssel: {{count}}",
+    "clearCache": "Ganzen Cache leeren"
+  }
+} 

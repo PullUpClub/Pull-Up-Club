@@ -1,0 +1,149 @@
+{
+  "title": "ملفي الشخصي",
+  "meta": {
+    "title": "الملف الشخصي | نادي السحب",
+    "description": "اعرض ملفك الشخصي، وتتبع سجل التقديمات الخاص بك، وقم بإدارة اشتراكك، وشاهد إنجازاتك."
+  },
+  "sidebar": {
+    "dashboard": "لوحة التحكم",
+    "settings": "إعدادات الملف الشخصي",
+    "subscription": "الاشتراك",
+    "paymentHistory": "سجل الدفع",
+    "submissions": "التقديمات",
+    "subscriptionAndRewards": "الاشتراك والمكافآت"
+  },
+  "dashboard": {
+    "title": "لوحة تحكم التقديمات",
+    "welcome": "أهلاً بعودتك، {{name}}!",
+    "noSubmissions": "لم تقم بأي تقديمات بعد.",
+    "noSubmissionsCTA": "سيظهر سجل التقديمات الخاص بك هنا بمجرد تقديم أول فيديو لك.",
+    "submitButton": "إرسال الفيديو",
+    "submitFirstButton": "أرسل الفيديو الأول الخاص بك",
+    "submitNewButton": "إرسال فيديو جديد",
+    "countdown": {
+      "title": "المسابقة الشهرية",
+      "remaining": "الوقت المتبقي للتقديم"
+    },
+    "status": {
+      "title": "حالة التقديم",
+      "ready": "جاهز للتقديم!",
+      "thisMonth": "تقديم هذا الشهر",
+      "onLeaderboard": "✓ على لوحة الصدارة",
+      "rejected": "تم رفض تقديمك",
+      "rejectedCTA": "يمكنك إرسال فيديو جديد على الفور!",
+      "competeCTA": "أرسل فيديو السحب الخاص بك للمنافسة هذا الشهر",
+      "pullUps": "{{count}} سحبة"
+    },
+    "best": {
+      "title": "أفضل أداء",
+      "unit": "سحبات"
+    },
+    "thisMonth": {
+      "title": "هذا الشهر",
+      "submitted": "سحبة تم تقديمها",
+      "status": "الحالة: {{status}}",
+      "submittedOn": "تم التقديم في: {{date}}"
+    },
+    "history": {
+      "title": "سجل التقديمات",
+      "loading": "جاري تحميل التقديمات...",
+      "andMore": "و {{count}} تقديمات أخرى...",
+      "viewVideo": "مشاهدة الفيديو"
+    }
+  },
+  "settings": {
+    "title": "إعدادات الملف الشخصي",
+    "subtitle": "قم بتحديث معلومات ملفك الشخصي هنا. سيتم عرض هذه المعلومات على لوحة الصدارة عندما يكون لديك تقديم معتمد.",
+    "updateSuccess": "تم تحديث الملف الشخصي بنجاح!",
+    "updateError": "فشل تحديث الملف الشخصي. يرجى المحاولة مرة أخرى.",
+    "avatar": "صورة الملف الشخصي",
+    "avatarChange": "تغيير الصورة",
+    "fullName": "الاسم الكامل *",
+    "fullNamePlaceholder": "أدخل اسمك الكامل",
+    "fullNameDesc": "سيتم عرض هذا على لوحة الصدارة",
+    "socialMedia": "معرف وسائل التواصل الاجتماعي",
+    "socialMediaPlaceholder": "اسم المستخدم الخاص بك",
+    "socialMediaDesc": "لا تقم بتضمين الرمز @ ، فقط اسم المستخدم الخاص بك. معروض على لوحة الصدارة للاتصالات الاجتماعية",
+    "age": "العمر *",
+    "agePlaceholder": "25",
+    "gender": "الجنس *",
+    "selectGender": "اختر الجنس",
+    "male": "ذكر",
+    "female": "أنثى",
+    "other": "آخر",
+    "organization": "النادي / المنظمة",
+    "organizationPlaceholder": "Wisloka Chicago",
+    "region": "المنطقة *",
+    "selectRegion": "اختر المنطقة",
+    "phone": "رقم الهاتف (اختياري)",
+    "phonePlaceholder": "+1 (555) 123-4567",
+    "saveButton": "حفظ التغييرات",
+    "savingButton": "جارٍ حفظ التغييرات..."
+  },
+  "subscription": {
+    "title": "تفاصيل الاشتراك",
+    "status": "الحالة",
+    "plan": "الخطة",
+    "price": "السعر",
+    "renewalDate": "تاريخ التجديد التالي",
+    "manageButton": "إدارة الاشتراك في Stripe"
+  },
+  "paymentHistory": {
+    "title": "سجل الدفع",
+    "noHistory": "لم يتم العثور على سجل دفع.",
+    "date": "التاريخ",
+    "amount": "المبلغ",
+    "status": "الحالة",
+    "invoice": "فاتورة"
+  },
+  "rewards": {
+    "shippingNotice": "الشحن داخل الولايات المتحدة فقط. المستخدمون الدوليون غير مؤهلين للحصول على الشارة أو المكافآت المادية في الوقت الحالي.",
+    "subscription": {
+      "title": "الاشتراك",
+      "subtitle": "إدارة اشتراكك الشهري",
+      "button": "إدارة الاشتراك"
+    },
+    "patch": {
+      "title": "اطلب شارتك",
+      "subtitle": "احصل على شارتك المكتسبة",
+      "button": "اطلب شارتك"
+    },
+    "progress": {
+      "title": "تقدم الشارة التالية",
+      "progress": "{{percent}}٪ تقدم",
+      "remaining": "{{days}} أيام",
+      "untilNext": "حتى شحن الشارة التالية"
+    },
+    "gear": {
+      "title": "تسوق المعدات",
+      "subtitle": "احصل على معدات التدريب الخاصة بك",
+      "button": "تسوق المعدات"
+    },
+    "payouts": {
+      "title": "مدفوعات المسابقة",
+      "loading": "جار التحميل...",
+      "available": "متاح للسحب",
+      "pending": "الطلب معلق",
+      "noEarnings": "لا توجد أرباح حتى الآن",
+      "requestButton": "طلب الدفع",
+      "processing": "جار المعالجة..."
+    },
+    "earningsHistory": {
+      "title": "سجل الأرباح",
+      "andMore": "و {{count}} أرباح أخرى...",
+      "paid": "مدفوع",
+      "available": "متاح"
+    },
+    "payoutHistory": {
+      "title": "طلبات الدفع",
+      "request": "طلب دفع بقيمة {{amount}}",
+      "requestedOn": "تم الطلب في: {{date}}",
+      "processedOn": "تمت المعالجة في: {{date}}"
+    },
+    "noEarnings": {
+      "title": "لا توجد أرباح حتى الآن",
+      "description": "شارك في المسابقات لبدء كسب المال! تحقق مرة أخرى بعد الإعلان عن الفائزين شهريًا."
+    },
+    "payoutSuccess": "تم إرسال طلب دفع بقيمة {{amount}} بنجاح!"
+  }
+} 

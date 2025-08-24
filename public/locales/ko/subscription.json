@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "title": "구독 | 풀업 클럽",
+    "description": "구독 요금제를 선택하고 지금 풀업 클럽에 가입하세요. 월간 및 연간 요금제를 이용할 수 있습니다."
+  },
+  "title": "풀업 클럽 멤버십",
+  "subtitle": "독점적인 풀업 챌린지 커뮤니티에 가입하여 진행 상황을 추적하고 순위표에서 경쟁하세요.",
+  "completeSubscriptionTitle": "{{plan}} 구독 완료하기",
+  "loadingStatus": "구독 상태를 불러오지 못했습니다.",
+  "cancellationNotice": "현재 청구 기간이 끝나면 구독이 취소되도록 설정되었습니다. 그때까지는 계속 액세스할 수 있습니다.",
+  "activeNotice": "활성 멤버십이 있습니다. 아래에서 구독을 관리하세요.",
+  "agreement": "구독함으로써 귀하는 당사의 <0>서비스 약관</0> 및 <1>개인정보 보호정책</1>에 동의하게 됩니다.",
+  "goToProfile": "프로필로 이동",
+  "plans": {
+    "title": "요금제 선택",
+    "intro": "아래에서 요금제를 선택하세요. 결제 후 플랫폼에 액세스하기 위해 계정을 생성합니다.",
+    "monthly": "월간",
+    "annual": "연간",
+    "bestValue": "최고의 가치",
+    "monthlyTitle": "월간 멤버십",
+    "monthlyPrice": "/월 (USD)",
+    "monthlyFeatures": [
+      "리더보드 액세스",
+      "업적 배지",
+      "언제든지 취소 가능"
+    ],
+    "annualTitle": "연간 멤버십",
+    "annualPrice": "/년 (USD)",
+    "annualSavings": "연간 ${{annualSavings}} 절약",
+    "annualFeatures": [
+      "월간 요금제의 모든 것",
+      "장기 약정에 대한 더 나은 가치",
+      "설정하고 잊어버리세요 — 월별 청구 중단 없음"
+    ],
+    "button": "지금 시작",
+    "processing": "처리 중..."
+  },
+  "signup": {
+    "verifying": "결제 확인 중",
+    "verifyingDesc": "결제를 확인하는 동안 잠시 기다려 주세요...",
+    "failedTitle": "결제 확인 실패",
+    "failedDesc": "결제를 확인할 수 없습니다. 다시 시도해 주세요.",
+    "backButton": "구독으로 돌아가기",
+    "successTitle": "결제 성공!",
+    "successDesc": "이제 풀업 클럽 플랫폼에 액세스하기 위해 계정을 만드세요.",
+    "passwordPlaceholder": "비밀번호",
+    "confirmPasswordPlaceholder": "비밀번호 확인",
+    "requirementsTitle": "비밀번호 요구 사항:",
+    "reqMinLength": "8자 이상",
+    "reqUpperCase": "대문자 1개",
+    "reqLowerCase": "소문자 1개",
+    "reqNumber": "숫자 1개",
+    "reqMatch": "비밀번호가 일치합니다",
+    "createButton": "계정 만들기 및 플랫폼 액세스",
+    "creatingButton": "계정 생성 중..."
+  },
+  "securePayment": "Stripe를 통한 안전한 결제 처리. 언제든지 구독을 취소할 수 있습니다."
+} 

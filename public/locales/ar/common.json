@@ -1,0 +1,81 @@
+{
+  "navigation": {
+    "home": "الرئيسية",
+    "leaderboard": "لوحة الصدارة",
+    "profile": "الملف الشخصي",
+    "submit": "إرسال الفيديو",
+    "rules": "القواعد",
+    "faq": "الأسئلة الشائعة",
+    "ethos": "روحنا",
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "adminDashboard": "لوحة تحكم المسؤول",
+    "adminUsers": "إدارة المستخدمين"
+  },
+  "buttons": {
+    "submit": "إرسال",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "confirm": "تأكيد",
+    "retry": "إعادة المحاولة",
+    "close": "إغلاق",
+    "view": "عرض",
+    "upload": "تحميل",
+    "approve": "موافقة",
+    "reject": "رفض",
+    "manage": "إدارة",
+    "subscribe": "اشتراك",
+    "signUp": "التسجيل",
+    "createAccount": "إنشاء حساب"
+  },
+  "footer": {
+    "title": "نادي السحب",
+    "description": "الوجهة الأولى لمسابقات السحب وتحديات اللياقة البدنية. اختبر قوتك، تنافس مع الآخرين، وتصدر لوحة الصدارة.",
+    "quickLinks": "روابط سريعة",
+    "submitVideo": "أرسل الفيديو الخاص بك",
+    "leaderboard": "لوحة الصدارة",
+    "rules": "قواعد المسابقة",
+    "faq": "الأسئلة الشائعة",
+    "privacy": "سياسة الخصوصية",
+    "cookies": "سياسة ملفات تعريف الارتباط",
+    "contactUs": "اتصل بنا",
+    "email": "البريد الإلكتروني: support@pullupclub.com",
+    "phone": "الهاتف: (619) 363-4597",
+    "address": "العنوان: 871 Harold Pl, San Diego, CA 91914",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "youtube": "YouTube",
+    "copyright": "© {year} Pull-Up Club. جميع الحقوق محفوظة."
+  },
+  "labels": {
+    "email": "عنوان البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "fullName": "الاسم الكامل",
+    "username": "اسم المستخدم",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "videoUrl": "رابط الفيديو",
+    "pullUpCount": "عدد السحبات",
+    "notes": "ملاحظات"
+  },
+  "status": {
+    "loading": "جار التحميل...",
+    "error": "خطأ",
+    "success": "نجاح",
+    "pending": "قيد الانتظار",
+    "approved": "تمت الموافقة",
+    "rejected": "تم الرفض",
+    "active": "نشط",
+    "inactive": "غير نشط",
+    "connecting": "جار الاتصال...",
+    "connected": "متصل"
+  },
+  "misc": {
+    "or": "أو",
+    "logoAlt": "شعار نادي السحب"
+  },
+  "errors": {
+    "generic": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى في وقت لاحق."
+  }
+} 

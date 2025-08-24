@@ -1,0 +1,81 @@
+{
+  "navigation": {
+    "home": "ホーム",
+    "leaderboard": "リーダーボード",
+    "profile": "プロフィール",
+    "submit": "ビデオを提出",
+    "rules": "ルール",
+    "faq": "よくある質問",
+    "ethos": "私たちの理念",
+    "login": "ログイン",
+    "logout": "ログアウト",
+    "adminDashboard": "管理者ダッシュボード",
+    "adminUsers": "ユーザー管理"
+  },
+  "buttons": {
+    "submit": "提出",
+    "cancel": "キャンセル",
+    "save": "保存",
+    "edit": "編集",
+    "delete": "削除",
+    "confirm": "確認",
+    "retry": "再試行",
+    "close": "閉じる",
+    "view": "表示",
+    "upload": "アップロード",
+    "approve": "承認",
+    "reject": "拒否",
+    "manage": "管理",
+    "subscribe": "購読",
+    "signUp": "登録",
+    "createAccount": "アカウントを作成"
+  },
+  "footer": {
+    "title": "プルアップクラブ",
+    "description": "懸垂競技とフィットネスチャレンジの最高の目的地。あなたの力を試し、他の人と競い、リーダーボードを駆け上がろう。",
+    "quickLinks": "クイックリンク",
+    "submitVideo": "ビデオを提出する",
+    "leaderboard": "リーダーボード",
+    "rules": "競技ルール",
+    "faq": "よくある質問",
+    "privacy": "プライバシーポリシー",
+    "cookies": "クッキーポリシー",
+    "contactUs": "お問い合わせ",
+    "email": "メール: support@pullupclub.com",
+    "phone": "電話: (619) 363-4597",
+    "address": "住所: 871 Harold Pl, San Diego, CA 91914",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "youtube": "YouTube",
+    "copyright": "© {{year}} Pull-Up Club. 無断複写・転載を禁じます。"
+  },
+  "labels": {
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "fullName": "フルネーム",
+    "username": "ユーザー名",
+    "confirmPassword": "パスワードを確認",
+    "videoUrl": "ビデオURL",
+    "pullUpCount": "懸垂回数",
+    "notes": "ノート"
+  },
+  "status": {
+    "loading": "読み込み中...",
+    "error": "エラー",
+    "success": "成功",
+    "pending": "保留中",
+    "approved": "承認済み",
+    "rejected": "拒否されました",
+    "active": "アクティブ",
+    "inactive": "非アクティブ",
+    "connecting": "接続中...",
+    "connected": "接続済み"
+  },
+  "misc": {
+    "or": "または",
+    "logoAlt": "プルアップクラブのロゴ"
+  },
+  "errors": {
+    "generic": "予期せぬエラーが発生しました。後でもう一度お試しください。"
+  }
+} 

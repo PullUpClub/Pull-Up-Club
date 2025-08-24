@@ -1,0 +1,99 @@
+{
+  "title": "Tableau de Bord Admin",
+  "meta": {
+    "title": "Admin | Pull-Up Club",
+    "description": "Tableau de bord administrateur pour la gestion des soumissions, des utilisateurs et des paramètres du site."
+  },
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "submissions": "Soumissions",
+    "users": "Gestion des Utilisateurs"
+  },
+  "stats": {
+    "title": "Statistiques du Site",
+    "totalUsers": "Nombre total d'utilisateurs",
+    "activeSubscriptions": "Abonnements Actifs",
+    "pendingSubmissions": "Soumissions en Attente",
+    "totalSubmissions": "Nombre total de soumissions"
+  },
+  "submissions": {
+    "title": "Examiner les Soumissions",
+    "newSubmissions": "Nouvelles soumissions à examiner",
+    "noSubmissions": "Aucune soumission en attente d'examen.",
+    "filterTitle": "Filtres",
+    "filterMonth": "Mois",
+    "allMonths": "Tous les Mois",
+    "filterStatus": "Statut",
+    "allStatuses": "Tous les Statuts",
+    "search": "Rechercher",
+    "searchPlaceholder": "Rechercher...",
+    "resetFilters": "Réinitialiser les Filtres",
+    "loading": "Chargement des soumissions...",
+    "table": {
+      "user": "Utilisateur",
+      "date": "Date de Soumission",
+      "status": "Statut",
+      "actions": "Actions"
+    },
+    "actions": {
+      "viewVideo": "Voir la Vidéo",
+      "approve": "Approuver",
+      "reject": "Rejeter",
+      "feature": "Mettre en avant",
+      "unfeature": "Ne plus mettre en avant",
+      "watchVideo": "Regarder la Vidéo",
+      "infoTitle": "Infos de Soumission",
+      "claimed": "Réclamé :",
+      "verified": "Vérifié :",
+      "pending": "En attente",
+      "countPlaceholder": "Compte"
+    },
+    "pagination": {
+      "showing": "Affichage de {{count}} sur {{total}} soumissions",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "page": "Page {{current}} sur {{total}}"
+    },
+    "emailBanner": {
+      "title": "Système de Soumission Mensuel Actif :",
+      "text": "Les e-mails de rejet sont automatiquement envoyés aux utilisateurs lorsque vous rejetez des soumissions. Les utilisateurs rejetés peuvent resoumettre immédiatement. Les utilisateurs approuvés doivent attendre le mois suivant.",
+      "warning": "Assurez-vous que la fonction Edge send-rejection-email est déployée et configurée."
+    },
+    "updateSuccess": "Soumission {status} avec succès",
+    "updateError": "Échec de la mise à jour de la soumission"
+  },
+  "users": {
+    "title": "Gestion des Utilisateurs",
+    "back": "Retour au Tableau de Bord",
+    "refresh": "Actualiser les Utilisateurs",
+    "error": "Erreur",
+    "loading": "Chargement des utilisateurs...",
+    "noUsers": "Aucun utilisateur trouvé",
+    "table": {
+      "email": "E-mail",
+      "name": "Nom",
+      "role": "Rôle",
+      "paid": "Payé",
+      "createdAt": "Créé le",
+      "actions": "Actions"
+    },
+    "role_user": "Utilisateur",
+    "role_admin": "Admin",
+    "paid_yes": "Oui",
+    "paid_no": "Non",
+    "actions": {
+      "makeAdmin": "Nommer Admin",
+      "removeAdmin": "Retirer Admin",
+      "delete": "Supprimer",
+      "deleting": "Suppression...",
+      "processing": "Traitement...",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.",
+      "status": {
+        "error": "Erreur : {message}",
+        "addSuccess": "Succès : Rôle d'administrateur ajouté",
+        "removeSuccess": "Succès : Rôle d'administrateur supprimé",
+        "deleteSuccess": "Succès : Utilisateur supprimé"
+      }
+    }
+  }
+} 

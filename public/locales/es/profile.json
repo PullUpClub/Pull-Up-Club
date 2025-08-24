@@ -1,0 +1,153 @@
+{
+  "title": "Mi Perfil",
+  "meta": {
+    "title": "Perfil | Pull-Up Club",
+    "description": "Mira tu perfil, sigue tu historial de envíos, gestiona tu suscripción y ve tus logros."
+  },
+  "sidebar": {
+    "dashboard": "Panel",
+    "settings": "Configuración del Perfil",
+    "subscription": "Suscripción",
+    "paymentHistory": "Historial de Pagos",
+    "submissions": "Envíos",
+    "subscriptionAndRewards": "Suscripción y Recompensas"
+  },
+  "dashboard": {
+    "title": "Panel de Envíos",
+    "welcome": "¡Bienvenido de nuevo, {{name}}!",
+    "noSubmissions": "Aún no has hecho ningún envío.",
+    "noSubmissionsCTA": "Tu historial de envíos aparecerá aquí una vez que envíes tu primer video.",
+    "submitButton": "Enviar Video",
+    "submitFirstButton": "Enviar Tu Primer Video",
+    "submitNewButton": "Enviar Nuevo Video",
+    "countdown": {
+      "title": "Competición Mensual",
+      "remaining": "tiempo restante para enviar"
+    },
+    "status": {
+      "title": "Estado del Envío",
+      "ready": "¡Listo para Enviar!",
+      "thisMonth": "Envío de este mes",
+      "onLeaderboard": "✓ En la Clasificación",
+      "rejected": "Tu envío fue rechazado",
+      "rejectedCTA": "¡Puedes enviar un nuevo video de inmediato!",
+      "competeCTA": "Envía tu video de dominadas para competir este mes",
+      "pullUps": "{{count}} dominadas"
+    },
+    "best": {
+      "title": "Mejor Rendimiento",
+      "unit": "dominadas"
+    },
+    "thisMonth": {
+      "title": "Este Mes",
+      "submitted": "dominadas enviadas",
+      "status": "Estado: {{status}}",
+      "submittedOn": "Enviado el: {{date}}"
+    },
+    "history": {
+      "title": "Historial de Envíos",
+      "loading": "Cargando envíos...",
+      "andMore": "Y {{count}} envíos más...",
+      "viewVideo": "Ver Video"
+    }
+  },
+  "settings": {
+    "title": "Configuración del Perfil",
+    "subtitle": "Actualiza la información de tu perfil aquí. Esta información se mostrará en la clasificación cuando tengas un envío aprobado.",
+    "updateSuccess": "¡Perfil actualizado con éxito!",
+    "updateError": "Error al actualizar el perfil. Por favor, inténtalo de nuevo.",
+    "avatar": "Foto de Perfil",
+    "avatarChange": "Cambiar Foto",
+    "fullName": "Nombre Completo *",
+    "fullNamePlaceholder": "Ingresa tu nombre completo",
+    "fullNameDesc": "Esto se mostrará en la clasificación",
+    "socialMedia": "Usuario de Redes Sociales",
+    "socialMediaPlaceholder": "tuusuario",
+    "socialMediaDesc": "No incluyas el símbolo @, solo tu nombre de usuario. Se muestra en la clasificación para conexiones sociales",
+    "age": "Edad *",
+    "agePlaceholder": "25",
+    "gender": "Género *",
+    "selectGender": "Seleccionar Género",
+    "male": "Masculino",
+    "female": "Femenino",
+    "other": "Otro",
+    "organization": "Club/Organización",
+    "organizationPlaceholder": "Wisloka Chicago",
+    "region": "Región *",
+    "selectRegion": "Seleccionar Región",
+    "phone": "Número de Teléfono (Opcional)",
+    "phonePlaceholder": "+1 (555) 123-4567",
+    "saveButton": "Guardar Cambios",
+    "savingButton": "Guardando Cambios..."
+  },
+  "subscription": {
+    "title": "Detalles de la Suscripción",
+    "status": "Estado",
+    "plan": "Plan",
+    "price": "Precio",
+    "renewalDate": "Próxima Fecha de Renovación",
+    "manageButton": "Gestionar Suscripción en Stripe"
+  },
+  "paymentHistory": {
+    "title": "Historial de Pagos",
+    "noHistory": "No se encontró historial de pagos.",
+    "date": "Fecha",
+    "amount": "Monto",
+    "status": "Estado",
+    "invoice": "Factura"
+  },
+  "rewards": {
+    "shippingNotice": "Envío solo a EE. UU. Los usuarios internacionales no son elegibles para el parche o las recompensas físicas en este momento.",
+    "subscription": {
+      "title": "Suscripción",
+      "subtitle": "Gestiona tu suscripción mensual",
+      "button": "Gestionar Suscripción"
+    },
+    "patch": {
+      "title": "Reclama Tu Parche",
+      "subtitle": "Recibe tu parche ganado",
+      "button": "Reclamar Tu Parche"
+    },
+    "progress": {
+      "title": "Progreso del Próximo Parche",
+      "progress": "{{percent}}% de Progreso",
+      "remaining": "{{days}} días",
+      "untilNext": "hasta el envío del próximo parche"
+    },
+    "gear": {
+      "title": "Comprar Equipo",
+      "subtitle": "Consigue tu equipo de entrenamiento",
+      "button": "Comprar Equipo"
+    },
+    "payouts": {
+      "title": "Pagos de Competición",
+      "subtitle": "Seguimiento de ganancias de competición",
+      "loading": "Cargando...",
+      "available": "Disponible para Pago",
+      "onHold": "En Espera Hasta Fin de Mes",
+      "pending": "Solicitud Pendiente",
+      "noEarnings": "Sin ganancias aún",
+      "requestButton": "Solicitar Pago",
+      "processing": "Procesando...",
+      "waitForPeriod": "Disponible para pago al final del mes"
+    },
+    "earningsHistory": {
+      "title": "Historial de Ganancias",
+      "andMore": "y {{count}} más...",
+      "paid": "Pagado",
+      "available": "Disponible",
+      "onHold": "En Espera"
+    },
+    "payoutHistory": {
+      "title": "Solicitudes de Pago",
+      "request": "solicitud de pago de {{amount}}",
+      "requestedOn": "Solicitado el: {{date}}",
+      "processedOn": "Procesado el: {{date}}"
+    },
+    "noEarnings": {
+      "title": "Aún no hay ganancias",
+      "description": "¡Participa en competiciones para empezar a ganar dinero! Vuelve a consultar después de que se anuncien los ganadores mensuales."
+    },
+    "payoutSuccess": "¡Solicitud de pago de {{amount}} enviada con éxito!"
+  }
+} 

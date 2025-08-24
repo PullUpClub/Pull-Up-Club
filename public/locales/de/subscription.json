@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "title": "Abonnement | Pull-Up Club",
+    "description": "Wählen Sie Ihren Abonnementplan und treten Sie noch heute dem Pull-Up Club bei. Monats- und Jahrespläne verfügbar."
+  },
+  "title": "Pull-Up Club Mitgliedschaft",
+  "subtitle": "Treten Sie unserer exklusiven Klimmzug-Herausforderungsgemeinschaft bei, verfolgen Sie Ihren Fortschritt und konkurrieren Sie auf der Bestenliste.",
+  "completeSubscriptionTitle": "Vervollständigen Sie Ihr {{plan}} Abonnement",
+  "loadingStatus": "Fehler beim Laden des Abonnementstatus",
+  "cancellationNotice": "Ihr Abonnement wird am Ende Ihres aktuellen Abrechnungszeitraums gekündigt. Sie haben bis dahin weiterhin Zugriff.",
+  "activeNotice": "Sie haben eine aktive Mitgliedschaft. Verwalten Sie Ihr Abonnement unten.",
+  "agreement": "Mit dem Abonnieren stimmen Sie unseren <0>Nutzungsbedingungen</0> und unserer <1>Datenschutzrichtlinie</1> zu.",
+  "goToProfile": "Gehen Sie zu Ihrem Profil",
+  "plans": {
+    "title": "Wählen Sie Ihren Plan",
+    "intro": "Wählen Sie unten Ihren Plan. Nach der Zahlung erstellen Sie Ihr Konto, um auf die Plattform zuzugreifen.",
+    "monthly": "Monatlich",
+    "annual": "Jährlich",
+    "bestValue": "BESTES ANGEBOT",
+    "monthlyTitle": "Monatliche Mitgliedschaft",
+    "monthlyPrice": "/Monat (USD)",
+    "monthlyFeatures": [
+      "Zugang zur Bestenliste",
+      "Leistungsabzeichen",
+      "Jederzeit kündbar"
+    ],
+    "annualTitle": "Jährliche Mitgliedschaft",
+    "annualPrice": "/Jahr (USD)",
+    "annualSavings": "Sparen Sie ${{annualSavings}} pro Jahr",
+    "annualFeatures": [
+      "Alles im Monatsplan enthalten",
+      "Besseres Preis-Leistungs-Verhältnis für langfristiges Engagement",
+      "Einmal einrichten und vergessen – keine monatlichen Abrechnungsunterbrechungen"
+    ],
+    "button": "Jetzt starten",
+    "processing": "Wird verarbeitet..."
+  },
+  "signup": {
+    "verifying": "Zahlung wird überprüft",
+    "verifyingDesc": "Bitte warten Sie, während wir Ihre Zahlung überprüfen...",
+    "failedTitle": "Zahlungsüberprüfung fehlgeschlagen",
+    "failedDesc": "Wir konnten Ihre Zahlung nicht überprüfen. Bitte versuchen Sie es erneut.",
+    "backButton": "Zurück zum Abonnement",
+    "successTitle": "Zahlung erfolgreich!",
+    "successDesc": "Erstellen Sie jetzt Ihr Konto, um auf die Pull-Up Club-Plattform zuzugreifen.",
+    "passwordPlaceholder": "Passwort",
+    "confirmPasswordPlaceholder": "Passwort bestätigen",
+    "requirementsTitle": "Passwortanforderungen:",
+    "reqMinLength": "Mindestens 8 Zeichen",
+    "reqUpperCase": "Ein Großbuchstabe",
+    "reqLowerCase": "Ein Kleinbuchstabe",
+    "reqNumber": "Eine Zahl",
+    "reqMatch": "Passwörter stimmen überein",
+    "createButton": "Konto erstellen & Plattform betreten",
+    "creatingButton": "Konto wird erstellt..."
+  },
+  "securePayment": "Sichere Zahlungsabwicklung durch Stripe. Kündigen Sie Ihr Abonnement jederzeit."
+} 

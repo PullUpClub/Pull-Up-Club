@@ -1,0 +1,149 @@
+{
+  "title": "내 프로필",
+  "meta": {
+    "title": "프로필 | 풀업 클럽",
+    "description": "프로필 보기, 제출 내역 추적, 구독 관리, 성과 확인"
+  },
+  "sidebar": {
+    "dashboard": "대시보드",
+    "settings": "프로필 설정",
+    "subscription": "구독",
+    "paymentHistory": "결제 내역",
+    "submissions": "제출물",
+    "subscriptionAndRewards": "구독 및 보상"
+  },
+  "dashboard": {
+    "title": "제출 대시보드",
+    "welcome": "다시 오신 것을 환영합니다, {{name}}!",
+    "noSubmissions": "아직 제출한 내용이 없습니다.",
+    "noSubmissionsCTA": "첫 번째 비디오를 제출하면 여기에 제출 내역이 표시됩니다.",
+    "submitButton": "비디오 제출",
+    "submitFirstButton": "첫 비디오 제출하기",
+    "submitNewButton": "새 비디오 제출하기",
+    "countdown": {
+      "title": "월간 대회",
+      "remaining": "제출까지 남은 시간"
+    },
+    "status": {
+      "title": "제출 상태",
+      "ready": "제출 준비 완료!",
+      "thisMonth": "이달의 제출물",
+      "onLeaderboard": "✓ 리더보드에 등록됨",
+      "rejected": "제출이 거부되었습니다",
+      "rejectedCTA": "즉시 새 비디오를 제출할 수 있습니다!",
+      "competeCTA": "이번 달 대회에 참가하려면 풀업 비디오를 제출하세요",
+      "pullUps": "{{count}}회 풀업"
+    },
+    "best": {
+      "title": "최고 성과",
+      "unit": "회 풀업"
+    },
+    "thisMonth": {
+      "title": "이번 달",
+      "submitted": "회 풀업 제출됨",
+      "status": "상태: {{status}}",
+      "submittedOn": "제출일: {{date}}"
+    },
+    "history": {
+      "title": "제출 내역",
+      "loading": "제출물 로드 중...",
+      "andMore": "그리고 {{count}}개의 제출물 더 보기...",
+      "viewVideo": "비디오 보기"
+    }
+  },
+  "settings": {
+    "title": "프로필 설정",
+    "subtitle": "여기에서 프로필 정보를 업데이트하세요. 이 정보는 승인된 제출물이 있을 때 리더보드에 표시됩니다.",
+    "updateSuccess": "프로필이 성공적으로 업데이트되었습니다!",
+    "updateError": "프로필 업데이트에 실패했습니다. 다시 시도해 주세요.",
+    "avatar": "프로필 사진",
+    "avatarChange": "사진 변경",
+    "fullName": "전체 이름 *",
+    "fullNamePlaceholder": "전체 이름을 입력하세요",
+    "fullNameDesc": "리더보드에 표시됩니다",
+    "socialMedia": "소셜 미디어 핸들",
+    "socialMediaPlaceholder": "사용자 이름",
+    "socialMediaDesc": "@ 기호 없이 사용자 이름만 입력하세요. 소셜 연결을 위해 리더보드에 표시됩니다",
+    "age": "나이 *",
+    "agePlaceholder": "25",
+    "gender": "성별 *",
+    "selectGender": "성별 선택",
+    "male": "남성",
+    "female": "여성",
+    "other": "기타",
+    "organization": "클럽/조직",
+    "organizationPlaceholder": "위슬로카 시카고",
+    "region": "지역 *",
+    "selectRegion": "지역 선택",
+    "phone": "전화번호(선택 사항)",
+    "phonePlaceholder": "010-1234-5678",
+    "saveButton": "변경 사항 저장",
+    "savingButton": "변경 사항 저장 중..."
+  },
+  "subscription": {
+    "title": "구독 정보",
+    "status": "상태",
+    "plan": "요금제",
+    "price": "가격",
+    "renewalDate": "다음 갱신일",
+    "manageButton": "Stripe에서 구독 관리"
+  },
+  "paymentHistory": {
+    "title": "결제 내역",
+    "noHistory": "결제 내역을 찾을 수 없습니다.",
+    "date": "날짜",
+    "amount": "금액",
+    "status": "상태",
+    "invoice": "청구서"
+  },
+  "rewards": {
+    "shippingNotice": "미국 내 배송만 가능합니다. 현재 해외 사용자는 패치나 실물 보상을 받을 수 없습니다.",
+    "subscription": {
+      "title": "구독",
+      "subtitle": "월간 구독 관리",
+      "button": "구독 관리"
+    },
+    "patch": {
+      "title": "패치 신청",
+      "subtitle": "획득한 패치 받기",
+      "button": "패치 신청하기"
+    },
+    "progress": {
+      "title": "다음 패치 진행률",
+      "progress": "{{percent}}% 진행",
+      "remaining": "{{days}}일",
+      "untilNext": "다음 패치 배송까지"
+    },
+    "gear": {
+      "title": "장비 구매",
+      "subtitle": "훈련 장비 구매",
+      "button": "장비 구매하기"
+    },
+    "payouts": {
+      "title": "대회 상금",
+      "loading": "로드 중...",
+      "available": "인출 가능",
+      "pending": "요청 대기 중",
+      "noEarnings": "아직 수익 없음",
+      "requestButton": "상금 요청",
+      "processing": "처리 중..."
+    },
+    "earningsHistory": {
+      "title": "수익 내역",
+      "andMore": "그리고 {{count}}개 더 많은 수익...",
+      "paid": "지급됨",
+      "available": "사용 가능"
+    },
+    "payoutHistory": {
+      "title": "상금 요청 내역",
+      "request": "{{amount}} 상금 요청",
+      "requestedOn": "요청일: {{date}}",
+      "processedOn": "처리일: {{date}}"
+    },
+    "noEarnings": {
+      "title": "아직 수익 없음",
+      "description": "대회에 참가하여 수익을 창출하세요! 월간 우승자가 발표된 후 다시 확인해 주세요."
+    },
+    "payoutSuccess": "{{amount}} 상금 요청이 성공적으로 제출되었습니다!"
+  }
+} 

@@ -1,0 +1,161 @@
+{
+  "title": "My Profile",
+  "meta": {
+    "title": "Profile | Pull-Up Club",
+    "description": "View your profile, track your submission history, manage your subscription, and see your achievements."
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "settings": "Profile Settings",
+    "subscription": "Subscription",
+    "paymentHistory": "Payment History",
+    "submissions": "Submissions",
+    "subscriptionAndRewards": "Subscription & Rewards"
+  },
+  "dashboard": {
+    "title": "Submission Dashboard",
+    "welcome": "Welcome back, {{name}}!",
+    "noSubmissions": "You haven't made any submissions yet.",
+    "noSubmissionsCTA": "Your submission history will appear here once you submit your first video.",
+    "submitButton": "Submit Video",
+    "submitFirstButton": "Submit Your First Video",
+    "submitNewButton": "Submit New Video",
+    "countdown": {
+      "title": "Monthly Competition",
+      "remaining": "time remaining to submit"
+    },
+    "status": {
+      "title": "Submission Status",
+      "ready": "Ready to Submit!",
+      "thisMonth": "This month's submission",
+      "onLeaderboard": "✓ On Leaderboard",
+      "rejected": "Your submission was rejected",
+      "rejectedCTA": "You can submit a new video right away!",
+      "competeCTA": "Submit your pull-up video to compete this month",
+      "pullUps": "{{count}} pull-ups"
+    },
+    "best": {
+      "title": "Best Performance",
+      "unit": "pull-ups"
+    },
+    "thisMonth": {
+      "title": "This Month",
+      "submitted": "pull-ups submitted",
+      "status": "Status: {{status}}",
+      "submittedOn": "Submitted: {{date}}"
+    },
+    "history": {
+      "title": "Submission History",
+      "loading": "Loading submissions...",
+      "andMore": "And {{count}} more submissions...",
+      "viewVideo": "View Video"
+    },
+    "nextToBeat": {
+      "title": "Next to Beat",
+      "loading": "Loading targets...",
+      "leading": "You're Leading!",
+      "keepGoing": "Keep pushing your limits!",
+      "pullUps": "pull-ups",
+      "noTargets": "Start submitting to see your next targets!"
+    }
+  },
+  "settings": {
+    "title": "Profile Settings",
+    "subtitle": "Update your profile information here. This information will be displayed on the leaderboard when you have an approved submission.",
+    "updateSuccess": "Profile updated successfully!",
+    "updateError": "Failed to update profile. Please try again.",
+    "avatar": "Profile Picture",
+    "avatarChange": "Change Picture",
+    "fullName": "Full Name *",
+    "fullNamePlaceholder": "Enter your full name",
+    "fullNameDesc": "This will be displayed on the leaderboard",
+    "socialMedia": "Social Media Handle",
+    "socialMediaPlaceholder": "yourusername",
+    "socialMediaDesc": "Do not include the @ symbol, just your username. Displayed on leaderboard for social connections",
+    "age": "Age *",
+    "agePlaceholder": "25",
+    "gender": "Gender *",
+    "selectGender": "Select Gender",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "organization": "Club/Organization",
+    "organizationPlaceholder": "Wisloka Chicago",
+    "region": "Region *",
+    "selectRegion": "Select Region",
+    "phone": "Phone Number (Optional)",
+    "phonePlaceholder": "+1 (555) 123-4567",
+    "saveButton": "Save Changes",
+    "savingButton": "Saving Changes..."
+  },
+  "subscription": {
+    "title": "Subscription Details",
+    "status": "Status",
+    "plan": "Plan",
+    "price": "Price",
+    "renewalDate": "Next Renewal Date",
+    "manageButton": "Manage Subscription in Stripe"
+  },
+  "paymentHistory": {
+    "title": "Payment History",
+    "noHistory": "No payment history found.",
+    "date": "Date",
+    "amount": "Amount",
+    "status": "Status",
+    "invoice": "Invoice"
+  },
+  "rewards": {
+    "shippingNotice": "US shipping only. International users are not currently eligible for patch or physical rewards.",
+    "subscription": {
+      "title": "Subscription",
+      "subtitle": "Manage your monthly subscription",
+      "button": "Manage Subscription"
+    },
+    "patch": {
+      "title": "Claim Your Patch",
+      "subtitle": "Get your earned patch",
+      "button": "Claim Patch"
+    },
+    "progress": {
+      "title": "Next Patch Progress",
+      "progress": "{{percent}}% progress",
+      "remaining": "{{days}} days",
+      "untilNext": "until next patch ships"
+    },
+    "gear": {
+      "title": "Shop Gear",
+      "subtitle": "Get your training equipment",
+      "button": "Shop Gear"
+    },
+    "payouts": {
+      "title": "Competition Payouts",
+      "subtitle": "Track your competition earnings",
+      "loading": "Loading...",
+      "available": "Available for Payout",
+      "onHold": "On Hold Until End of Month",
+      "pending": "Request Pending",
+      "noEarnings": "No earnings yet",
+      "requestButton": "Request Payout",
+      "processing": "Processing...",
+      "waitForPeriod": "Available for payout at end of month"
+    },
+    "earningsHistory": {
+      "title": "Earnings History",
+      "andMore": "and {{count}} more earnings...",
+      "paid": "Paid",
+      "available": "Available",
+      "onHold": "On Hold"
+    },
+    "payoutHistory": {
+      "title": "Payout Requests",
+      "request": "Payout request for {{amount}}",
+      "requestedOn": "Requested on: {{date}}",
+      "processedOn": "Processed on: {{date}}"
+    },
+    "noEarnings": {
+      "title": "No Earnings Yet",
+      "description": "Participate in competitions to start earning! Check back after winners are announced monthly."
+    },
+    "payoutSuccess": "Successfully submitted payout request for {{amount}}!"
+  }
+} 

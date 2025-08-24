@@ -1,0 +1,99 @@
+{
+  "title": "لوحة تحكم المسؤول",
+  "meta": {
+    "title": "المسؤول | نادي السحب",
+    "description": "لوحة تحكم المسؤول لإدارة التقديمات والمستخدمين وإعدادات الموقع."
+  },
+  "nav": {
+    "dashboard": "لوحة التحكم",
+    "submissions": "التقديمات",
+    "users": "إدارة المستخدمين"
+  },
+  "stats": {
+    "title": "إحصائيات الموقع",
+    "totalUsers": "إجمالي المستخدمين",
+    "activeSubscriptions": "الاشتراكات النشطة",
+    "pendingSubmissions": "التقديمات المعلقة",
+    "totalSubmissions": "إجمالي التقديمات"
+  },
+  "submissions": {
+    "title": "مراجعة التقديمات",
+    "newSubmissions": "تقديمات جديدة للمراجعة",
+    "noSubmissions": "لا توجد تقديمات معلقة للمراجعة.",
+    "filterTitle": "المرشحات",
+    "filterMonth": "الشهر",
+    "allMonths": "كل الشهور",
+    "filterStatus": "الحالة",
+    "allStatuses": "كل الحالات",
+    "search": "بحث",
+    "searchPlaceholder": "بحث...",
+    "resetFilters": "إعادة تعيين المرشحات",
+    "loading": "جاري تحميل التقديمات...",
+    "table": {
+      "user": "المستخدم",
+      "date": "تاريخ التقديم",
+      "status": "الحالة",
+      "actions": "الإجراءات"
+    },
+    "actions": {
+      "viewVideo": "مشاهدة الفيديو",
+      "approve": "موافقة",
+      "reject": "رفض",
+      "feature": "تمييز",
+      "unfeature": "إلغاء التمييز",
+      "watchVideo": "مشاهدة الفيديو",
+      "infoTitle": "معلومات التقديم",
+      "claimed": "المطالب به:",
+      "verified": "تم التحقق منه:",
+      "pending": "قيد الانتظار",
+      "countPlaceholder": "العدد"
+    },
+    "pagination": {
+      "showing": "عرض {count} من {total} من التقديمات",
+      "previous": "السابق",
+      "next": "التالي",
+      "page": "صفحة {current} من {total}"
+    },
+    "emailBanner": {
+      "title": "نظام التقديم الشهري نشط:",
+      "text": "يتم إرسال رسائل البريد الإلكتروني الخاصة بالرفض تلقائيًا إلى المستخدمين عند رفض التقديمات. يمكن للمستخدمين المرفوضين إعادة التقديم على الفور. يجب على المستخدمين المعتمدين الانتظار حتى الشهر التالي.",
+      "warning": "تأكد من نشر وتكوين دالة الحافة send-rejection-email."
+    },
+    "updateSuccess": "تم {status} التقديم بنجاح",
+    "updateError": "فشل تحديث التقديم"
+  },
+  "users": {
+    "title": "إدارة المستخدمين",
+    "back": "العودة إلى لوحة التحكم",
+    "refresh": "تحديث المستخدمين",
+    "error": "خطأ",
+    "loading": "جاري تحميل المستخدمين...",
+    "noUsers": "لم يتم العثور على مستخدمين",
+    "table": {
+      "email": "البريد الإلكتروني",
+      "name": "الاسم",
+      "role": "الدور",
+      "paid": "مدفوع",
+      "createdAt": "تم الإنشاء في",
+      "actions": "الإجراءات"
+    },
+    "role_user": "مستخدم",
+    "role_admin": "مسؤول",
+    "paid_yes": "نعم",
+    "paid_no": "لا",
+    "actions": {
+      "makeAdmin": "جعله مسؤولاً",
+      "removeAdmin": "إزالة المسؤول",
+      "delete": "حذف",
+      "deleting": "جاري الحذف...",
+      "processing": "جاري المعالجة...",
+      "confirmDelete": "هل أنت متأكد من أنك تريد حذف هذا المستخدم؟ لا يمكن التراجع عن هذا الإجراء.",
+      "status": {
+        "error": "خطأ: {message}",
+        "addSuccess": "نجاح: تمت إضافة دور المسؤول",
+        "removeSuccess": "نجاح: تمت إزالة دور المسؤول",
+        "deleteSuccess": "نجاح: تم حذف المستخدم"
+      }
+    }
+  }
+} 

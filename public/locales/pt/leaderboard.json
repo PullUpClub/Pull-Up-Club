@@ -1,0 +1,84 @@
+{
+  "title": "Quadro de Líderes",
+  "meta": {
+    "title": "Quadro de Líderes | Pull-Up Club",
+    "description": "Veja sua classificação no quadro de líderes global oficial do Pull-Up Club. Filtre por data, categoria e local para ver os melhores desempenhos."
+  },
+  "filters": {
+    "title": "Filtrar Quadro de Líderes",
+    "clear": "Limpar Filtros",
+    "searchPlaceholder": "Buscar por nome...",
+    "pullUps": "Barras",
+    "allPullUps": "Todas as Barras",
+    "pullUpsUnit": "{{range}} Barras",
+    "club": "Clube",
+    "allClubs": "Todos os Clubes",
+    "region": "Região",
+    "allRegions": "Todas as Regiões",
+    "ageGroup": "Faixa Etária",
+    "allAges": "Todas as Idades",
+    "gender": "Gênero",
+    "allGenders": "Todos os Gêneros",
+    "male": "Masculino",
+    "female": "Feminino",
+    "other": "Outro",
+    "badge": "Emblema",
+    "allBadges": "Todos os Emblemas",
+    "sortBy": "Ordenar por",
+    "relevance": "Relevância",
+    "pullUpsDesc": "Barras (de mais para menos)",
+    "pullUpsAsc": "Barras (de menos para mais)",
+    "dateNewest": "Data (mais recente primeiro)",
+    "dateOldest": "Data (mais antigo primeiro)",
+    "reset": "Redefinir Filtros",
+    "recruit": "Recruta (0-9 reps)",
+    "proven": "Comprovado (10-19 reps)",
+    "hardened": "Endurecido (20-29 reps)",
+    "operator": "Operador (30-39 reps)",
+    "elite": "Elite (40+ reps)",
+    "pullUpsRequired": "{{count}}+ Barras Necessárias"
+  },
+  "table": {
+    "rank": "Posição",
+    "athlete": "Atleta",
+    "pullUps": "Barras",
+    "badge": "Emblema",
+    "date": "Data",
+    "video": "Vídeo",
+    "noResults": "Nenhum resultado encontrado. Tente ajustar seus filtros.",
+    "loading": "Carregando quadro de líderes..."
+  },
+  "badgeLegend": {
+    "title": "Legenda dos Emblemas",
+    "recruit": "Recruta (0-9 reps)",
+    "proven": "Comprovado (10-19 reps)",
+    "hardened": "Endurecido (20-29 reps)",
+    "operator": "Operador (30-39 reps)",
+    "elite": "Elite (40+ reps)",
+    "pullUpsRequired": "{{count}}+ Barras Necessárias"
+  },
+  "subtitle": "Veja como você se compara à concorrência. Nosso quadro de líderes mostra os melhores desempenhos no Desafio Pull-Up Club.",
+  "error": "Falha ao carregar os dados do quadro de líderes",
+  "pagination": {
+    "previous": "Anterior",
+    "next": "Próximo"
+  },
+  "mobile": {
+    "showBadgeLegend": "Ver Legenda dos Emblemas",
+    "hideBadgeLegend": "Ocultar Legenda dos Emblemas",
+    "showFilters": "Filtrar Resultados",
+    "hideFilters": "Ocultar Filtros"
+  },
+  "pucBank": {
+    "title": "P.U.C Bank",
+    "drain": "Esvazie o banco — reabastecido semanalmente.",
+    "payouts": "Todos os pagamentos acontecem no final do mês.",
+    "poolDepleted": "Fundo esgotado"
+  },
+  "dev": {
+    "cacheDebug": "Informações de depuração de cache",
+    "cacheSize": "Tamanho do cache: {{size}}KB",
+    "cachedKeys": "Chaves em cache: {{count}}",
+    "clearCache": "Limpar todo o cache"
+  }
+} 

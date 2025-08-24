@@ -1,0 +1,87 @@
+{
+  "title": "Envie seu vídeo de barra fixa",
+  "meta": {
+    "title": "Enviar Vídeo | Pull-Up Club",
+    "description": "Envie seu vídeo de barra fixa para a competição mensal. Siga as regras e entre no quadro de líderes."
+  },
+  "subtitle": "Envie seu vídeo de barra fixa para competir no quadro de líderes",
+  "eligibility": {
+    "checking": "Verificando a elegibilidade do envio...",
+    "error": "Não foi possível verificar a elegibilidade do envio. Por favor, tente novamente.",
+    "retry": "Tentar Novamente",
+    "eligible": {
+      "title": "✅ Pronto para Enviar!",
+      "message": "Você está elegível para enviar um novo vídeo para a competição deste mês.",
+      "deadline": "Prazo Mensal:",
+      "remaining": "{{days}} dias, {{hours}} horas, {{minutes}} minutos restantes"
+    },
+    "rejected": {
+      "title": "🔄 Reenvio Disponível",
+      "message": "Seu envio anterior foi rejeitado.",
+      "feedback": "Você recebeu um e-mail com feedback. Corrija os problemas e envie novamente!"
+    },
+    "pending": {
+      "title": "⏳ Em Análise",
+      "message": "Seu envio para este mês está atualmente em análise.",
+      "notify": "Nós o notificaremos por e-mail assim que seu envio for analisado."
+    },
+    "approved": {
+      "title": "🎉 Envio Aprovado!",
+      "message": "Parabéns! Seu envio foi aprovado e está no quadro de líderes.",
+      "next": "Próximo envio disponível em:",
+      "countdown": "{{days}} dias, {{hours}} horas, {{minutes}} minutos"
+    },
+    "notAvailable": {
+      "title": "Envio não Disponível",
+      "message": "Você não pode enviar um vídeo no momento. Verifique seu status de elegibilidade acima.",
+      "viewLeaderboard": "Ver Quadro de Líderes"
+    }
+  },
+  "form": {
+    "pullUpCount": "Contagem de Barras",
+    "pullUpCountDesc": "Digite o número de barras consecutivas que você completou no vídeo.",
+    "gender": "Gênero",
+    "male": "Masculino",
+    "female": "Feminino",
+    "other": "Outro",
+    "region": "Região",
+    "selectRegion": "Selecione sua região",
+    "club": "Afiliação a Clube",
+    "selectClub": "Selecione um clube (opcional)",
+    "none": "Nenhum",
+    "otherClub": "Outro",
+    "otherClubPlaceholder": "Digite o nome do seu clube",
+    "videoUrl": "URL do Vídeo",
+    "videoUrlPlaceholder": "https://youtube.com/watch?v=...",
+    "videoUrlDesc": "Por favor, envie seu vídeo para o YouTube, Instagram ou TikTok e cole o link público aqui. Certifique-se de que seu vídeo esteja publicamente acessível.",
+    "requirementsTitle": "Requisitos do Vídeo",
+    "req1": "Visão clara e desobstruída do movimento completo",
+    "req2": "O queixo deve ultrapassar a barra em cada repetição",
+    "req3": "Extensão completa dos braços na parte inferior de cada repetição",
+    "req4": "As mãos devem estar separadas na largura dos ombros; a pegada não deve exceder 1,2 metros de largura",
+    "req5": "Gravação contínua sem cortes ou edições",
+    "req6": "O vídeo deve estar acessível publicamente",
+    "checkbox1": "Confirmo que o link do meu vídeo está correto e publicamente visível, sem necessidade de login ou acesso especial. Entendo que links inacessíveis podem levar à desqualificação e que as taxas de envio não são reembolsáveis.",
+    "checkbox2": "Confirmo que este vídeo é autêntico e não editado, sem IA ou efeitos usados para alterar meu desempenho. Qualquer adulteração ou deturpação resultará em desqualificação e perda de quaisquer taxas, classificações ou recompensas.",
+    "checkbox3": "Concedo ao Pull-Up Club permissão para usar meus vídeos enviados em esforços de marketing atuais e futuros - com e sem marca - em todas as plataformas, em perpetuidade, sem limitação ou compensação adicional.",
+    "checkbox4": "Ao enviar este formulário, concordo em ser inscrito automaticamente nas comunicações por e-mail e SMS do Pull-Up Club. Entendo que posso cancelar a inscrição de qualquer canal a qualquer momento, seguindo as instruções de cancelamento incluídas em cada mensagem.",
+    "reviewTime": "Por favor, aguarde até 15 dias para que nossa equipe analise e atribua corretamente seu envio ao mês em que foi enviado.",
+    "submitButton": "Enviar Agora",
+    "submittingButton": "Enviando..."
+  },
+  "noAuth": {
+    "title": "Autenticação Necessária",
+    "description": "Você precisa estar logado para enviar vídeos. Por favor, faça o login ou crie uma conta para continuar.",
+    "login": "Entrar",
+    "createAccount": "Criar Conta"
+  },
+  "recentSubmissions": {
+    "title": "Envios Recentes",
+    "verified": "(Verificado: {{count}})",
+    "submittedOn": "Enviado em {{date}}",
+    "reviewNotes": "Notas da Revisão:",
+    "viewVideo": "Ver Vídeo",
+    "viewAll": "Ver Todos os Envios"
+  },
+  "successToast": "Vídeo enviado com sucesso!"
+} 

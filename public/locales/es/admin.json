@@ -1,0 +1,99 @@
+{
+  "title": "Panel de Administrador",
+  "meta": {
+    "title": "Admin | Pull-Up Club",
+    "description": "Panel de administrador para gestionar envíos, usuarios y configuración del sitio."
+  },
+  "nav": {
+    "dashboard": "Panel",
+    "submissions": "Envíos",
+    "users": "Gestión de Usuarios"
+  },
+  "stats": {
+    "title": "Estadísticas del Sitio",
+    "totalUsers": "Total de Usuarios",
+    "activeSubscriptions": "Suscripciones Activas",
+    "pendingSubmissions": "Envíos Pendientes",
+    "totalSubmissions": "Total de Envíos"
+  },
+  "submissions": {
+    "title": "Revisar Envíos",
+    "newSubmissions": "Nuevos envíos para revisar",
+    "noSubmissions": "No hay envíos pendientes para revisar.",
+    "filterTitle": "Filtros",
+    "filterMonth": "Mes",
+    "allMonths": "Todos los Meses",
+    "filterStatus": "Estado",
+    "allStatuses": "Todos los Estados",
+    "search": "Buscar",
+    "searchPlaceholder": "Buscar...",
+    "resetFilters": "Restablecer Filtros",
+    "loading": "Cargando envíos...",
+    "table": {
+      "user": "Usuario",
+      "date": "Fecha de Envío",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "actions": {
+      "viewVideo": "Ver Video",
+      "approve": "Aprobar",
+      "reject": "Rechazar",
+      "feature": "Destacar",
+      "unfeature": "Quitar Destacado",
+      "watchVideo": "Ver Video",
+      "infoTitle": "Información del Envío",
+      "claimed": "Reclamado:",
+      "verified": "Verificado:",
+      "pending": "Pendiente",
+      "countPlaceholder": "Cantidad"
+    },
+    "pagination": {
+      "showing": "Mostrando {{count}} de {{total}} envíos",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "page": "Página {{current}} de {{total}}"
+    },
+    "emailBanner": {
+      "title": "Sistema de Envío Mensual Activo:",
+      "text": "Los correos electrónicos de rechazo se envían automáticamente a los usuarios cuando rechaza los envíos. Los usuarios rechazados pueden volver a enviar de inmediato. Los usuarios aprobados deben esperar hasta el próximo mes.",
+      "warning": "Asegúrese de que la función de borde send-rejection-email esté implementada y configurada."
+    },
+    "updateSuccess": "Envío {{status}} con éxito",
+    "updateError": "Error al actualizar el envío"
+  },
+  "users": {
+    "title": "Gestión de Usuarios",
+    "back": "Volver al Panel",
+    "refresh": "Actualizar Usuarios",
+    "error": "Error",
+    "loading": "Cargando usuarios...",
+    "noUsers": "No se encontraron usuarios",
+    "table": {
+      "email": "Correo Electrónico",
+      "name": "Nombre",
+      "role": "Rol",
+      "paid": "Pagado",
+      "createdAt": "Creado el",
+      "actions": "Acciones"
+    },
+    "role_user": "Usuario",
+    "role_admin": "Administrador",
+    "paid_yes": "Sí",
+    "paid_no": "No",
+    "actions": {
+      "makeAdmin": "Hacer Administrador",
+      "removeAdmin": "Quitar Administrador",
+      "delete": "Eliminar",
+      "deleting": "Eliminando...",
+      "processing": "Procesando...",
+      "confirmDelete": "¿Estás seguro de que quieres eliminar a este usuario? Esta acción no se puede deshacer.",
+      "status": {
+        "error": "Error: {{message}}",
+        "addSuccess": "Éxito: Rol de administrador agregado",
+        "removeSuccess": "Éxito: Rol de administrador eliminado",
+        "deleteSuccess": "Éxito: Usuario eliminado"
+      }
+    }
+  }
+} 

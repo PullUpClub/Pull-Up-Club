@@ -1,0 +1,87 @@
+{
+  "title": "提交您的引体向上视频",
+  "meta": {
+    "title": "提交视频 | 引体向上俱乐部",
+    "description": "提交您的引体向上视频以参加每月比赛。遵守规则，登上排行榜。"
+  },
+  "subtitle": "提交您的引体向上视频以在排行榜上竞争",
+  "eligibility": {
+    "checking": "正在检查提交资格...",
+    "error": "无法检查提交资格。请重试。",
+    "retry": "重试",
+    "eligible": {
+      "title": "✅ 准备提交！",
+      "message": "您有资格为本月的比赛提交新视频。",
+      "deadline": "每月截止日期：",
+      "remaining": "剩余 {{days}} 天 {{hours}} 小时 {{minutes}} 分钟"
+    },
+    "rejected": {
+      "title": "🔄 可重新提交",
+      "message": "您之前的提交被拒绝。",
+      "feedback": "您收到了一封包含反馈的电子邮件。解决问题后再次提交！"
+    },
+    "pending": {
+      "title": "⏳ 审核中",
+      "message": "您本月的提交正在审核中。",
+      "notify": "我们将在您的提交审核后通过电子邮件通知您。"
+    },
+    "approved": {
+      "title": "🎉 提交已批准！",
+      "message": "恭喜！您的提交已获批准并已登上排行榜。",
+      "next": "下一次提交可用时间：",
+      "countdown": "{{days}} 天 {{hours}} 小时 {{minutes}} 分钟"
+    },
+    "notAvailable": {
+      "title": "提交不可用",
+      "message": "您目前无法提交视频。请检查您上方的资格状态。",
+      "viewLeaderboard": "查看排行榜"
+    }
+  },
+  "form": {
+    "pullUpCount": "引体向上次数",
+    "pullUpCountDesc": "输入您在视频中完成的连续引体向上次数。",
+    "gender": "性别",
+    "male": "男",
+    "female": "女",
+    "other": "其他",
+    "region": "地区",
+    "selectRegion": "选择您所在的地区",
+    "club": "俱乐部所属",
+    "selectClub": "选择俱乐部（可选）",
+    "none": "无",
+    "otherClub": "其他",
+    "otherClubPlaceholder": "输入您的俱乐部名称",
+    "videoUrl": "视频网址",
+    "videoUrlPlaceholder": "https://youtube.com/watch?v=...",
+    "videoUrlDesc": "请将您的视频上传到YouTube、Instagram或TikTok，然后在此处粘贴公开链接。请确保您的视频可公开访问。",
+    "requirementsTitle": "视频要求",
+    "req1": "清晰、无遮挡的完整动作视图",
+    "req2": "每次重复时下巴必须超过横杆",
+    "req3": "每次重复底部需完全伸展手臂",
+    "req4": "双手需保持肩宽距离；握距不得超过1.2米",
+    "req5": "连续录制，无剪辑或编辑",
+    "req6": "视频必须公开可访问",
+    "checkbox1": "我确认我的视频链接正确且可公开查看，无需登录或特殊访问权限。我理解，无法访问的链接可能导致取消资格，且提交费用不予退还。",
+    "checkbox2": "我确认此视频是真实的、未经编辑的，没有使用人工智能或特效来改变我的表现。任何篡改或失实陈述都将导致取消资格，并丧失任何费用、排名或奖励。",
+    "checkbox3": "我授予引体向上俱乐部许可，在当前和未来的营销活动中——无论是否有品牌——在所有平台上永久使用我提交的视频，不受限制且无需额外补偿。",
+    "checkbox4": "提交此表格即表示我同意自动加入引体向上俱乐部的电子邮件和短信通讯。我理解，我可以随时通过每条消息中包含的退订说明取消订阅任何一个渠道。",
+    "reviewTime": "请允许我们的团队最多15天的时间来审查您的提交，并将其正确分配到提交的月份。",
+    "submitButton": "立即提交",
+    "submittingButton": "正在提交..."
+  },
+  "noAuth": {
+    "title": "需要身份验证",
+    "description": "您需要登录才能提交视频。请登录或创建帐户以继续。",
+    "login": "登录",
+    "createAccount": "创建帐户"
+  },
+  "recentSubmissions": {
+    "title": "最近的提交",
+    "verified": "（已验证：{{count}}）",
+    "submittedOn": "提交于 {{date}}",
+    "reviewNotes": "审核说明：",
+    "viewVideo": "查看视频",
+    "viewAll": "查看所有提交"
+  },
+  "successToast": "视频提交成功！"
+} 

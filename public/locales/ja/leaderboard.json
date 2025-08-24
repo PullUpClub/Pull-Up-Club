@@ -1,0 +1,79 @@
+{
+  "title": "リーダーボード",
+  "meta": {
+    "title": "リーダーボード | プルアップクラブ",
+    "description": "公式プルアップクラブグローバルリーダーボードでの順位を確認できます。日付、カテゴリ、場所でフィルタリングして、トップパフォーマーをご覧ください。"
+  },
+  "filters": {
+    "title": "リーダーボードを絞り込む",
+    "clear": "フィルターをクリア",
+    "searchPlaceholder": "名前で検索...",
+    "pullUps": "懸垂",
+    "allPullUps": "すべての懸垂",
+    "pullUpsUnit": "{{range}} 回の懸垂",
+    "club": "クラブ",
+    "allClubs": "すべてのクラブ",
+    "region": "地域",
+    "allRegions": "すべての地域",
+    "ageGroup": "年齢層",
+    "allAges": "すべての年齢",
+    "gender": "性別",
+    "allGenders": "すべての性別",
+    "male": "男性",
+    "female": "女性",
+    "other": "その他",
+    "badge": "バッジ",
+    "allBadges": "すべてのバッジ",
+    "sortBy": "並べ替え",
+    "relevance": "関連性",
+    "pullUpsDesc": "懸垂 (多い順)",
+    "pullUpsAsc": "懸垂 (少ない順)",
+    "dateNewest": "日付 (新しい順)",
+    "dateOldest": "日付 (古い順)",
+    "reset": "フィルターをリセット",
+    "operator": "オペレーター (30-39 回)",
+    "elite": "エリート (40+ 回)",
+    "pullUpsRequired": "{{count}}+ 回の懸垂が必要"
+  },
+  "table": {
+    "rank": "順位",
+    "athlete": "アスリート",
+    "pullUps": "懸垂",
+    "badge": "バッジ",
+    "date": "日付",
+    "video": "ビデオ",
+    "noResults": "結果が見つかりませんでした。フィルターを調整してみてください。",
+    "loading": "リーダーボードを読み込み中..."
+  },
+  "badgeLegend": {
+    "title": "バッジの凡例",
+    "recruit": "新兵 (0-9 回)",
+    "proven": "証明済み (10-19 回)",
+    "hardened": "強化済み (20-29 回)",
+    "pullUpsRequired": "{{count}}+ 回の懸垂が必要"
+  },
+  "subtitle": "競争相手と比べてみてください。私たちのリーダーボードには、プルアップクラブチャレンジのトップパフォーマーが表示されます。",
+  "error": "リーダーボードデータの読み込みに失敗しました",
+  "pagination": {
+    "previous": "前へ",
+    "next": "次へ"
+  },
+  "mobile": {
+    "showBadgeLegend": "バッジの凡例を表示",
+    "hideBadgeLegend": "バッジの凡例を非表示",
+    "showFilters": "結果を絞り込む",
+    "hideFilters": "フィルターを非表示"
+  },
+  "pucBank": {
+    "title": "P.U.C Bank",
+    "drain": "バンクを空にしろ — 毎週補充されます。",
+    "payouts": "すべての支払いは月末に行われます。",
+    "poolDepleted": "プールが枯渇しました"
+  },
+  "dev": {
+    "cacheDebug": "キャッシュデバッグ情報",
+    "cacheSize": "キャッシュサイズ: {{size}}KB",
+    "cachedKeys": "キャッシュされたキー: {{count}}",
+    "clearCache": "すべてのキャッシュをクリア"
+  }
+} 

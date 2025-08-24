@@ -1,0 +1,87 @@
+{
+  "title": "Submit Your Pull-Up Video",
+  "meta": {
+    "title": "Submit Video | Pull-Up Club",
+    "description": "Submit your pull-up video for the monthly competition. Follow the rules and get on the leaderboard."
+  },
+  "subtitle": "Submit your pull-up video to compete on the leaderboard",
+  "eligibility": {
+    "checking": "Checking submission eligibility...",
+    "error": "Unable to check submission eligibility. Please try again.",
+    "retry": "Retry",
+    "eligible": {
+      "title": "✅ Ready to Submit!",
+      "message": "You are eligible to submit a new video for this month's competition.",
+      "deadline": "Monthly Deadline:",
+      "remaining": "{{days}} days, {{hours}} hours, {{minutes}} minutes remaining"
+    },
+    "rejected": {
+      "title": "🔄 Resubmission Available",
+      "message": "Your previous submission was rejected.",
+      "feedback": "You received an email with feedback. Address the issues and submit again!"
+    },
+    "pending": {
+      "title": "⏳ Under Review",
+      "message": "Your submission for this month is currently under review.",
+      "notify": "We'll notify you via email once your submission is reviewed."
+    },
+    "approved": {
+      "title": "🎉 Submission Approved!",
+      "message": "Congratulations! Your submission was approved and is on the leaderboard.",
+      "next": "Next submission available in:",
+      "countdown": "{{days}} days, {{hours}} hours, {{minutes}} minutes"
+    },
+    "notAvailable": {
+      "title": "Submission Not Available",
+      "message": "You cannot submit a video at this time. Check your eligibility status above.",
+      "viewLeaderboard": "View Leaderboard"
+    }
+  },
+  "form": {
+    "pullUpCount": "Pull-Up Count",
+    "pullUpCountDesc": "Enter the number of consecutive pull-ups you completed in the video.",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "region": "Region",
+    "selectRegion": "Select your region",
+    "club": "Club Affiliation",
+    "selectClub": "Select a club (optional)",
+    "none": "None",
+    "otherClub": "Other",
+    "otherClubPlaceholder": "Enter your club name",
+    "videoUrl": "Video URL",
+    "videoUrlPlaceholder": "https://youtube.com/watch?v=...",
+    "videoUrlDesc": "Please upload your video to YouTube, Instagram, or TikTok and paste the public link here. Make sure your video is publicly accessible.",
+    "requirementsTitle": "Video Requirements",
+    "req1": "Clear, unobstructed view of the full movement",
+    "req2": "Chin must clear the bar for each rep",
+    "req3": "Full arm extension at the bottom of each rep",
+    "req4": "Hands must be shoulder-width apart; grip should not exceed 4 feet in width",
+    "req5": "Continuous recording without cuts or edits",
+    "req6": "Video must be publicly accessible",
+    "checkbox1": "I confirm that my video link is correct and publicly viewable without requiring login or special access. I understand that inaccessible links may lead to disqualification and that submission fees are non-refundable.",
+    "checkbox2": "I confirm this video is authentic and unedited, with no AI or effects used to alter my performance. Any tampering or misrepresentation will result in disqualification and loss of any fees, rankings, or rewards.",
+    "checkbox3": "I grant Pull-Up Club permission to use my submitted videos in current and future marketing efforts—both branded and unbranded—across all platforms, in perpetuity, without limitation or additional compensation.",
+    "checkbox4": "By submitting this form, I agree to be automatically enrolled in Pull-Up Club email and SMS communications. I understand that I can unsubscribe from either channel at any time by following the opt-out instructions included in each message.",
+    "reviewTime": "Please allow up to 15 days for our team to review and properly assign your submission to the month it was submitted.",
+    "submitButton": "Submit Now",
+    "submittingButton": "Submitting..."
+  },
+  "noAuth": {
+    "title": "Authentication Required",
+    "description": "You need to be logged in to submit videos. Please log in or create an account to continue.",
+    "login": "Log In",
+    "createAccount": "Create Account"
+  },
+  "recentSubmissions": {
+    "title": "Recent Submissions",
+    "verified": "(Verified: {{count}})",
+    "submittedOn": "Submitted on {{date}}",
+    "reviewNotes": "Review Notes:",
+    "viewVideo": "View Video",
+    "viewAll": "View All Submissions"
+  },
+  "successToast": "Video submitted successfully!"
+} 

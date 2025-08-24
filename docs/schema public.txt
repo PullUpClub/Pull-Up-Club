@@ -1,0 +1,275 @@
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
+
+CREATE TABLE public.admin_roles (
+  user_id uuid NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  CONSTRAINT admin_roles_pkey PRIMARY KEY (user_id),
+  CONSTRAINT admin_roles_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id),
+  CONSTRAINT admin_roles_user_id_fkey_profiles FOREIGN KEY (user_id) REFERENCES public.profiles(id)
+);
+CREATE TABLE public.badge_assignment_metrics (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  badge_id uuid,
+  assignments_count integer DEFAULT 0,
+  processing_time_ms integer,
+  success boolean DEFAULT true,
+  error_count integer DEFAULT 0,
+  batch_id uuid,
+  timestamp timestamp with time zone DEFAULT now(),
+  CONSTRAINT badge_assignment_metrics_pkey PRIMARY KEY (id),
+  CONSTRAINT badge_assignment_metrics_badge_id_fkey FOREIGN KEY (badge_id) REFERENCES public.badges(id)
+);
+CREATE TABLE public.badges (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  name text NOT NULL UNIQUE,
+  description text,
+  image_url text,
+  requirements text,
+  min_pull_ups integer,
+  gender text CHECK (gender = ANY (ARRAY['Male'::text, 'Female'::text, 'Any'::text])),
+  created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT badges_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.edge_function_tests (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  function_name text NOT NULL,
+  start_time timestamp with time zone NOT NULL,
+  end_time timestamp with time zone NOT NULL,
+  duration_ms integer NOT NULL,
+  status text NOT NULL,
+  is_cold_start boolean DEFAULT true,
+  response_status integer,
+  error_message text,
+  test_parameters jsonb,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT edge_function_tests_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.email_engagement (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  email text NOT NULL,
+  type text NOT NULL,
+  metadata jsonb DEFAULT '{}'::jsonb,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT email_engagement_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.email_events (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  type text NOT NULL,
+  email text NOT NULL,
+  event_data jsonb DEFAULT '{}'::jsonb,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT email_events_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.email_notifications (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid,
+  email_type text NOT NULL,
+  recipient_email text NOT NULL,
+  subject text NOT NULL,
+  message text NOT NULL,
+  sent_at timestamp without time zone,
+  created_at timestamp without time zone DEFAULT now(),
+  CONSTRAINT email_notifications_pkey PRIMARY KEY (id),
+  CONSTRAINT email_notifications_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id)
+);
+CREATE TABLE public.email_suppression (
+  email text NOT NULL,
+  reason text NOT NULL,
+  details text,
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT email_suppression_pkey PRIMARY KEY (email)
+);
+CREATE TABLE public.function_performance_tests (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  function_name text NOT NULL,
+  start_time timestamp with time zone NOT NULL,
+  end_time timestamp with time zone NOT NULL,
+  duration_ms numeric NOT NULL,
+  test_type text NOT NULL,
+  created_at timestamp with time zone DEFAULT now(),
+  owner_id uuid NOT NULL,
+  CONSTRAINT function_performance_tests_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.messages_log (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL,
+  message_type text NOT NULL CHECK (message_type = ANY (ARRAY['welcome'::text, 'summon'::text, 'billing_reminder'::text, 'submission_rejected'::text, 'submission_approved'::text, 'custom'::text])),
+  content text NOT NULL,
+  sent_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+  delivery_status text DEFAULT 'sent'::text CHECK (delivery_status = ANY (ARRAY['sent'::text, 'delivered'::text, 'failed'::text])),
+  created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT messages_log_pkey PRIMARY KEY (id),
+  CONSTRAINT messages_log_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id)
+);
+CREATE TABLE public.notification_queue (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid,
+  template_id uuid,
+  status text DEFAULT 'pending'::text,
+  data jsonb DEFAULT '{}'::jsonb,
+  scheduled_for timestamp with time zone DEFAULT now(),
+  sent_at timestamp with time zone,
+  error text,
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now(),
+  delivered_at timestamp with time zone,
+  CONSTRAINT notification_queue_pkey PRIMARY KEY (id),
+  CONSTRAINT notification_queue_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id),
+  CONSTRAINT notification_queue_template_id_fkey FOREIGN KEY (template_id) REFERENCES public.notification_templates(id)
+);
+CREATE TABLE public.notification_templates (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  type text NOT NULL,
+  subject text NOT NULL,
+  body_template text NOT NULL,
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT notification_templates_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.performance_logs (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  operation text NOT NULL,
+  duration_ms integer NOT NULL,
+  success boolean DEFAULT true,
+  error_message text,
+  metadata jsonb DEFAULT '{}'::jsonb,
+  timestamp timestamp with time zone DEFAULT now(),
+  CONSTRAINT performance_logs_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.processed_webhooks (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  stripe_event_id text NOT NULL UNIQUE,
+  event_type text NOT NULL,
+  processed_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT processed_webhooks_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.profiles (
+  id uuid NOT NULL,
+  full_name text,
+  age integer,
+  organization text,
+  gender text,
+  phone text,
+  address text,
+  stripe_customer_id text,
+  is_paid boolean DEFAULT false,
+  role text DEFAULT 'user'::text,
+  last_summon_at timestamp with time zone,
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now(),
+  email text,
+  is_profile_completed boolean DEFAULT false,
+  bio text,
+  avatar_url text,
+  apartment text,
+  user_settings jsonb DEFAULT '{}'::jsonb,
+  notification_preferences jsonb DEFAULT '{"workout_reminders": true, "email_notifications": true, "leaderboard_updates": true, "subscription_reminders": true, "achievement_notifications": true}'::jsonb,
+  theme_preferences jsonb DEFAULT '{"theme": "light", "font_size": "medium", "color_scheme": "default"}'::jsonb,
+  privacy_settings jsonb DEFAULT '{"show_stats": true, "show_profile": true, "show_activity": true, "show_achievements": true}'::jsonb,
+  street_address text,
+  city text,
+  state text,
+  zip_code text,
+  country text,
+  social_media text,
+  pending_subscription_plan jsonb,
+  last_viewed_page text,
+  session_data jsonb DEFAULT '{}'::jsonb,
+  admin_role_id uuid,
+  user_id uuid UNIQUE,
+  latitude numeric,
+  longitude numeric,
+  region text CHECK (region = ANY (ARRAY['North America'::text, 'South America'::text, 'Europe'::text, 'Asia'::text, 'Africa'::text, 'Australia/Oceania'::text, 'Middle East'::text, ''::text])),
+  CONSTRAINT profiles_pkey PRIMARY KEY (id),
+  CONSTRAINT profiles_id_fkey FOREIGN KEY (id) REFERENCES auth.users(id),
+  CONSTRAINT fk_admin_role FOREIGN KEY (admin_role_id) REFERENCES public.admin_roles(user_id)
+);
+CREATE TABLE public.query_performance_tests (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  query_name text NOT NULL,
+  query_text text NOT NULL,
+  start_time timestamp with time zone NOT NULL,
+  end_time timestamp with time zone NOT NULL,
+  duration_ms integer NOT NULL,
+  rows_returned integer,
+  execution_plan text,
+  test_parameters jsonb,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT query_performance_tests_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.submissions (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL,
+  video_url text NOT NULL,
+  pull_up_count integer NOT NULL,
+  actual_pull_up_count integer,
+  status text DEFAULT 'pending'::text CHECK (status = ANY (ARRAY['pending'::text, 'approved'::text, 'rejected'::text, 'featured'::text])),
+  notes text,
+  submitted_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+  approved_at timestamp with time zone,
+  created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+  platform text,
+  CONSTRAINT submissions_pkey PRIMARY KEY (id),
+  CONSTRAINT submissions_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id)
+);
+CREATE TABLE public.subscriptions (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL,
+  stripe_subscription_id text NOT NULL,
+  status text NOT NULL DEFAULT 'active'::text CHECK (status = ANY (ARRAY['active'::text, 'past_due'::text, 'canceled'::text])),
+  current_period_start timestamp with time zone NOT NULL,
+  current_period_end timestamp with time zone NOT NULL,
+  created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT subscriptions_pkey PRIMARY KEY (id),
+  CONSTRAINT subscriptions_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id)
+);
+CREATE TABLE public.system_documentation (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  topic text NOT NULL,
+  content text NOT NULL,
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT system_documentation_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.system_metrics (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  metric_name text NOT NULL,
+  metric_value numeric NOT NULL,
+  metric_type text NOT NULL,
+  timestamp timestamp with time zone DEFAULT now(),
+  metadata jsonb DEFAULT '{}'::jsonb,
+  CONSTRAINT system_metrics_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.user_badges (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL,
+  badge_id uuid NOT NULL,
+  awarded_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+  submission_id uuid,
+  CONSTRAINT user_badges_pkey PRIMARY KEY (id),
+  CONSTRAINT user_badges_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.profiles(id),
+  CONSTRAINT user_badges_submission_id_fkey FOREIGN KEY (submission_id) REFERENCES public.submissions(id),
+  CONSTRAINT user_badges_badge_id_fkey FOREIGN KEY (badge_id) REFERENCES public.badges(id)
+);
+CREATE TABLE public.webhook_registry (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  name text NOT NULL UNIQUE,
+  table_name text NOT NULL,
+  event_type text NOT NULL,
+  function_name text NOT NULL,
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT webhook_registry_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.your_table_name (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  admin_role_id uuid,
+  CONSTRAINT your_table_name_pkey PRIMARY KEY (id),
+  CONSTRAINT fk_admin_roles FOREIGN KEY (admin_role_id) REFERENCES public.admin_roles(user_id)
+);

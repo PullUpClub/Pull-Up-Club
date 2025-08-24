@@ -1,0 +1,99 @@
+{
+  "title": "管理员仪表板",
+  "meta": {
+    "title": "管理员 | 引体向上俱乐部",
+    "description": "用于管理提交、用户和网站设置的管理员仪表板。"
+  },
+  "nav": {
+    "dashboard": "仪表板",
+    "submissions": "提交",
+    "users": "用户管理"
+  },
+  "stats": {
+    "title": "网站统计",
+    "totalUsers": "总用户",
+    "activeSubscriptions": "有效订阅",
+    "pendingSubmissions": "待处理的提交",
+    "totalSubmissions": "总提交"
+  },
+  "submissions": {
+    "title": "审核提交",
+    "newSubmissions": "待审核的新提交",
+    "noSubmissions": "没有待审核的提交。",
+    "filterTitle": "筛选器",
+    "filterMonth": "月份",
+    "allMonths": "所有月份",
+    "filterStatus": "状态",
+    "allStatuses": "所有状态",
+    "search": "搜索",
+    "searchPlaceholder": "搜索...",
+    "resetFilters": "重置筛选器",
+    "loading": "正在加载提交...",
+    "table": {
+      "user": "用户",
+      "date": "提交日期",
+      "status": "状态",
+      "actions": "操作"
+    },
+    "actions": {
+      "viewVideo": "查看视频",
+      "approve": "批准",
+      "reject": "拒绝",
+      "feature": "推荐",
+      "unfeature": "取消推荐",
+      "watchVideo": "观看视频",
+      "infoTitle": "提交信息",
+      "claimed": "声称：",
+      "verified": "已验证：",
+      "pending": "待处理",
+      "countPlaceholder": "计数"
+    },
+    "pagination": {
+      "showing": "正在显示 {{total}} 个提交中的 {{count}} 个",
+      "previous": "上一个",
+      "next": "下一个",
+      "page": "第 {{current}} 页，共 {{total}} 页"
+    },
+    "emailBanner": {
+      "title": "每月提交系统已激活：",
+      "text": "当您拒绝提交时，拒绝电子邮件会自动发送给用户。被拒绝的用户可以立即重新提交。已批准的用户必须等到下个月。",
+      "warning": "确保已部署并配置了 send-rejection-email Edge 函数。"
+    },
+    "updateSuccess": "提交{{status}}成功",
+    "updateError": "更新提交失败"
+  },
+  "users": {
+    "title": "用户管理",
+    "back": "返回仪表板",
+    "refresh": "刷新用户",
+    "error": "错误",
+    "loading": "正在加载用户...",
+    "noUsers": "未找到用户",
+    "table": {
+      "email": "电子邮件",
+      "name": "姓名",
+      "role": "角色",
+      "paid": "已支付",
+      "createdAt": "创建于",
+      "actions": "操作"
+    },
+    "role_user": "用户",
+    "role_admin": "管理员",
+    "paid_yes": "是",
+    "paid_no": "否",
+    "actions": {
+      "makeAdmin": "设为管理员",
+      "removeAdmin": "移除管理员",
+      "delete": "删除",
+      "deleting": "正在删除...",
+      "processing": "处理中...",
+      "confirmDelete": "您确定要删除此用户吗？此操作无法撤消。",
+      "status": {
+        "error": "错误：{{message}}",
+        "addSuccess": "成功：已添加管理员角色",
+        "removeSuccess": "成功：已移除管理员角色",
+        "deleteSuccess": "成功：已删除用户"
+      }
+    }
+  }
+} 

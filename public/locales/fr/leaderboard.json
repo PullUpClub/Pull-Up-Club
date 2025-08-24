@@ -1,0 +1,83 @@
+{
+  "title": "Classement",
+  "meta": {
+    "title": "Classement | Pull-Up Club",
+    "description": "Voyez où vous vous situez sur le classement mondial officiel du Pull-Up Club. Filtrez par date, catégorie et lieu pour voir les meilleurs."
+  },
+  "filters": {
+    "title": "Filtrer le Classement",
+    "clear": "Effacer les Filtres",
+    "searchPlaceholder": "Rechercher par nom...",
+    "pullUps": "Tractions",
+    "allPullUps": "Toutes les Tractions",
+    "pullUpsUnit": "{{range}} Tractions",
+    "club": "Club",
+    "allClubs": "Tous les Clubs",
+    "region": "Région",
+    "allRegions": "Toutes les Régions",
+    "ageGroup": "Groupe d'âge",
+    "allAges": "Tous les Âges",
+    "gender": "Genre",
+    "allGenders": "Tous les Genres",
+    "male": "Masculin",
+    "female": "Féminin",
+    "other": "Autre",
+    "badge": "Badge",
+    "allBadges": "Tous les Badges",
+    "sortBy": "Trier par",
+    "relevance": "Pertinence",
+    "pullUpsDesc": "Tractions (décroissant)",
+    "pullUpsAsc": "Tractions (croissant)",
+    "dateNewest": "Date (plus récent)",
+    "dateOldest": "Date (plus ancien)",
+    "reset": "Réinitialiser les Filtres",
+    "operator": "Opérateur (30-39 reps)",
+    "elite": "Élite (40+ reps)",
+    "pullUpsRequired": "{{count}}+ Tractions Requises"
+  },
+  "table": {
+    "rank": "Rang",
+    "athlete": "Athlète",
+    "pullUps": "Tractions",
+    "badge": "Badge",
+    "date": "Date",
+    "video": "Vidéo",
+    "noResults": "Aucun résultat trouvé. Essayez d'ajuster vos filtres.",
+    "loading": "Chargement du classement..."
+  },
+  "badgeLegend": {
+    "title": "Légende des Badges",
+    "recruit": "Recrue (0-9 reps)",
+    "proven": "Prouvé (10-19 reps)",
+    "hardened": "Endurci (20-29 reps)",
+    "operator": "Opérateur (30-39 reps)",
+    "elite": "Élite (40+ reps)",
+    "pullUpsRequired": "{{count}}+ Tractions Requises",
+    "menPullUps": "Hommes <0>{{count}}</0>+ Tractions",
+    "womenPullUps": "Femmes <0>{{count}}</0>+ Tractions"
+  },
+  "subtitle": "Voyez comment vous vous situez par rapport à la concurrence. Notre classement montre les meilleurs du Pull-Up Club Challenge.",
+  "error": "Échec du chargement des données du classement",
+  "pagination": {
+    "previous": "Précédent",
+    "next": "Suivant"
+  },
+  "mobile": {
+    "showBadgeLegend": "Afficher la Légende des Badges",
+    "hideBadgeLegend": "Masquer la Légende des Badges",
+    "showFilters": "Filtrer les Résultats",
+    "hideFilters": "Masquer les Filtres"
+  },
+  "pucBank": {
+    "title": "P.U.C Bank",
+    "drain": "Videz la banque — réapprovisionnée chaque semaine.",
+    "payouts": "Tous les paiements ont lieu en fin de mois.",
+    "poolDepleted": "Cagnotte épuisée"
+  },
+  "dev": {
+    "cacheDebug": "Infos de débogage du cache",
+    "cacheSize": "Taille du cache : {{size}} Ko",
+    "cachedKeys": "Clés en cache : {{count}}",
+    "clearCache": "Vider tout le cache"
+  }
+} 

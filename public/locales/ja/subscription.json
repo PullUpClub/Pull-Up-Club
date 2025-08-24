@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "title": "サブスクリプション | プルアップクラブ",
+    "description": "サブスクリプションプランを選択して、今すぐプルアップクラブに参加しましょう。月額プランと年額プランをご利用いただけます。"
+  },
+  "title": "プルアップクラブ会員",
+  "subtitle": "私たちの独占的なプルアップチャレンジコミュニティに参加し、進捗を追跡し、リーダーボードで競いましょう。",
+  "completeSubscriptionTitle": "{{plan}}サブスクリプションを完了する",
+  "loadingStatus": "サブスクリプションステータスの読み込みに失敗しました",
+  "cancellationNotice": "サブスクリプションは現在の請求期間の終わりにキャンセルされるように設定されています。それまでは引き続きアクセスできます。",
+  "activeNotice": "アクティブなメンバーシップがあります。以下でサブスクリプションを管理してください。",
+  "agreement": "購読することにより、当社の<0>利用規約</0>および<1>プライバシーポリシー</1>に同意したことになります。",
+  "goToProfile": "あなたのプロフィールに移動",
+  "plans": {
+    "title": "プランを選択",
+    "intro": "以下からプランを選択してください。お支払い後、プラットフォームにアクセスするためのアカウントを作成します。",
+    "monthly": "月額",
+    "annual": "年額",
+    "bestValue": "ベストバリュー",
+    "monthlyTitle": "月額会員",
+    "monthlyPrice": "/月 (USD)",
+    "monthlyFeatures": [
+      "リーダーボードへのアクセス",
+      "アチーブメントバッジ",
+      "いつでもキャンセル可能"
+    ],
+    "annualTitle": "年額会員",
+    "annualPrice": "/年 (USD)",
+    "annualSavings": "年間${{annualSavings}}節約",
+    "annualFeatures": [
+      "月額プランのすべて",
+      "長期契約でさらにお得",
+      "一度設定すれば、毎月の請求中断の心配なし"
+    ],
+    "button": "今すぐ始める",
+    "processing": "処理中..."
+  },
+  "signup": {
+    "verifying": "支払いを確認中",
+    "verifyingDesc": "お支払いを確認しています。しばらくお待ちください...",
+    "failedTitle": "支払いの確認に失敗しました",
+    "failedDesc": "お支払いの確認ができませんでした。もう一度お試しください。",
+    "backButton": "サブスクリプションに戻る",
+    "successTitle": "支払い成功！",
+    "successDesc": "プルアップクラブプラットフォームにアクセスするためのアカウントを作成してください。",
+    "passwordPlaceholder": "パスワード",
+    "confirmPasswordPlaceholder": "パスワードを確認",
+    "requirementsTitle": "パスワードの要件：",
+    "reqMinLength": "8文字以上",
+    "reqUpperCase": "大文字1文字",
+    "reqLowerCase": "小文字1文字",
+    "reqNumber": "数字1文字",
+    "reqMatch": "パスワードが一致します",
+    "createButton": "アカウントを作成してプラットフォームにアクセス",
+    "creatingButton": "アカウントを作成中..."
+  },
+  "securePayment": "Stripeによる安全な支払い処理。サブスクリプションはいつでもキャンセルできます。"
+} 

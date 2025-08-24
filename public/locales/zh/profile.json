@@ -1,0 +1,149 @@
+{
+  "title": "我的个人资料",
+  "meta": {
+    "title": "个人资料 | 引体向上俱乐部",
+    "description": "查看您的个人资料，跟踪您的提交历史，管理您的订阅，并查看您的成就。"
+  },
+  "sidebar": {
+    "dashboard": "仪表板",
+    "settings": "个人资料设置",
+    "subscription": "订阅",
+    "paymentHistory": "付款历史",
+    "submissions": "提交记录",
+    "subscriptionAndRewards": "订阅与奖励"
+  },
+  "dashboard": {
+    "title": "提交仪表板",
+    "welcome": "欢迎回来, {{name}}!",
+    "noSubmissions": "您还没有任何提交。",
+    "noSubmissionsCTA": "一旦您提交第一个视频，您的提交历史将显示在这里。",
+    "submitButton": "提交视频",
+    "submitFirstButton": "提交您的第一个视频",
+    "submitNewButton": "提交新视频",
+    "countdown": {
+      "title": "每月比赛",
+      "remaining": "剩余提交时间"
+    },
+    "status": {
+      "title": "提交状态",
+      "ready": "准备提交！",
+      "thisMonth": "本月提交",
+      "onLeaderboard": "✓ 在排行榜上",
+      "rejected": "您的提交被拒绝",
+      "rejectedCTA": "您可以立即提交新视频！",
+      "competeCTA": "提交您的引体向上视频以参加本月比赛",
+      "pullUps": "{{count}} 次引体向上"
+    },
+    "best": {
+      "title": "最佳表现",
+      "unit": "次引体向上"
+    },
+    "thisMonth": {
+      "title": "本月",
+      "submitted": "次引体向上已提交",
+      "status": "状态: {{status}}",
+      "submittedOn": "提交于: {{date}}"
+    },
+    "history": {
+      "title": "提交历史",
+      "loading": "正在加载提交...",
+      "andMore": "还有 {{count}} 更多提交...",
+      "viewVideo": "查看视频"
+    }
+  },
+  "settings": {
+    "title": "个人资料设置",
+    "subtitle": "在此处更新您的个人资料信息。当您有已批准的提交时，此信息将显示在排行榜上。",
+    "updateSuccess": "个人资料更新成功！",
+    "updateError": "更新个人资料失败。请重试。",
+    "avatar": "个人资料图片",
+    "avatarChange": "更换图片",
+    "fullName": "全名 *",
+    "fullNamePlaceholder": "输入您的全名",
+    "fullNameDesc": "这将显示在排行榜上",
+    "socialMedia": "社交媒体账号",
+    "socialMediaPlaceholder": "您的用户名",
+    "socialMediaDesc": "不要包含@符号，只需您的用户名。显示在排行榜上用于社交联系",
+    "age": "年龄 *",
+    "agePlaceholder": "25",
+    "gender": "性别 *",
+    "selectGender": "选择性别",
+    "male": "男",
+    "female": "女",
+    "other": "其他",
+    "organization": "俱乐部/组织",
+    "organizationPlaceholder": "Wisloka Chicago",
+    "region": "地区 *",
+    "selectRegion": "选择地区",
+    "phone": "电话号码（可选）",
+    "phonePlaceholder": "+1 (555) 123-4567",
+    "saveButton": "保存更改",
+    "savingButton": "正在保存更改..."
+  },
+  "subscription": {
+    "title": "订阅详情",
+    "status": "状态",
+    "plan": "计划",
+    "price": "价格",
+    "renewalDate": "下次续订日期",
+    "manageButton": "在Stripe中管理订阅"
+  },
+  "paymentHistory": {
+    "title": "付款历史",
+    "noHistory": "未找到付款历史。",
+    "date": "日期",
+    "amount": "金额",
+    "status": "状态",
+    "invoice": "发票"
+  },
+  "rewards": {
+    "shippingNotice": "仅限美国境内运送。国际用户目前不符合获得补丁或实物奖励的资格。",
+    "subscription": {
+      "title": "订阅",
+      "subtitle": "管理您的月度订阅",
+      "button": "管理订阅"
+    },
+    "patch": {
+      "title": "领取您的补丁",
+      "subtitle": "获取您赢得的补丁",
+      "button": "领取您的补丁"
+    },
+    "progress": {
+      "title": "下一个补丁进度",
+      "progress": "{{percent}}% 进度",
+      "remaining": "{{days}} 天",
+      "untilNext": "直到下一个补丁发货"
+    },
+    "gear": {
+      "title": "购买装备",
+      "subtitle": "获取您的训练装备",
+      "button": "购买装备"
+    },
+    "payouts": {
+      "title": "比赛奖金",
+      "loading": "加载中...",
+      "available": "可提现",
+      "pending": "请求待处理",
+      "noEarnings": "暂无收入",
+      "requestButton": "请求提现",
+      "processing": "处理中..."
+    },
+    "earningsHistory": {
+      "title": "收入历史",
+      "andMore": "还有 {{count}} 更多收入...",
+      "paid": "已支付",
+      "available": "可用"
+    },
+    "payoutHistory": {
+      "title": "提现请求",
+      "request": "{{amount}} 的提现请求",
+      "requestedOn": "请求于: {{date}}",
+      "processedOn": "处理于: {{date}}"
+    },
+    "noEarnings": {
+      "title": "暂无收入",
+      "description": "参加比赛开始赚钱！每月获奖者公布后请回来查看。"
+    },
+    "payoutSuccess": "成功提交 {{amount}} 的提现请求！"
+  }
+} 

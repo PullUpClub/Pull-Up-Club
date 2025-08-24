@@ -1,0 +1,81 @@
+{
+  "navigation": {
+    "home": "Início",
+    "leaderboard": "Quadro de Líderes",
+    "profile": "Perfil",
+    "submit": "Enviar Vídeo",
+    "rules": "Regras",
+    "faq": "FAQ",
+    "ethos": "Nosso Ethos",
+    "login": "Entrar",
+    "logout": "Sair",
+    "adminDashboard": "Painel do Administrador",
+    "adminUsers": "Gerenciamento de Usuários"
+  },
+  "buttons": {
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "confirm": "Confirmar",
+    "retry": "Tentar Novamente",
+    "close": "Fechar",
+    "view": "Ver",
+    "upload": "Carregar",
+    "approve": "Aprovar",
+    "reject": "Rejeitar",
+    "manage": "Gerenciar",
+    "subscribe": "Inscrever-se",
+    "signUp": "Registrar-se",
+    "createAccount": "Criar Conta"
+  },
+  "footer": {
+    "title": "Pull-Up Club",
+    "description": "O principal destino para competições de barra fixa e desafios de fitness. Teste sua força, compita com outros e suba no quadro de líderes.",
+    "quickLinks": "Links Rápidos",
+    "submitVideo": "Envie Seu Vídeo",
+    "leaderboard": "Quadro de Líderes",
+    "rules": "Regras da Competição",
+    "faq": "FAQ",
+    "privacy": "Política de Privacidade",
+    "cookies": "Política de Cookies",
+    "contactUs": "Contate-nos",
+    "email": "E-mail: support@pullupclub.com",
+    "phone": "Telefone: (619) 363-4597",
+    "address": "Endereço: 871 Harold Pl, San Diego, CA 91914",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "youtube": "YouTube",
+    "copyright": "© {{year}} Pull-Up Club. Todos os direitos reservados."
+  },
+  "labels": {
+    "email": "Endereço de E-mail",
+    "password": "Senha",
+    "fullName": "Nome Completo",
+    "username": "Nome de Usuário",
+    "confirmPassword": "Confirmar Senha",
+    "videoUrl": "URL do Vídeo",
+    "pullUpCount": "Contagem de Barras",
+    "notes": "Notas"
+  },
+  "status": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "pending": "Pendente",
+    "approved": "Aprovado",
+    "rejected": "Rejeitado",
+    "active": "Ativo",
+    "inactive": "Inativo",
+    "connecting": "Conectando...",
+    "connected": "Conectado"
+  },
+  "misc": {
+    "or": "ou",
+    "logoAlt": "Logo do Pull-Up Club"
+  },
+  "errors": {
+    "generic": "Ocorreu um erro inesperado. Por favor, tente novamente mais tarde."
+  }
+} 

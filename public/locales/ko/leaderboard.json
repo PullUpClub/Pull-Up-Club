@@ -1,0 +1,84 @@
+{
+  "title": "리더보드",
+  "meta": {
+    "title": "리더보드 | 풀업 클럽",
+    "description": "공식 풀업 클럽 글로벌 리더보드에서 순위를 확인하세요. 날짜, 카테고리, 위치별로 필터링하여 상위 성과자를 확인하세요."
+  },
+  "filters": {
+    "title": "리더보드 필터링",
+    "clear": "필터 초기화",
+    "searchPlaceholder": "이름으로 검색...",
+    "pullUps": "풀업",
+    "allPullUps": "모든 풀업",
+    "pullUpsUnit": "{{range}} 풀업",
+    "club": "클럽",
+    "allClubs": "모든 클럽",
+    "region": "지역",
+    "allRegions": "모든 지역",
+    "ageGroup": "연령대",
+    "allAges": "모든 연령",
+    "gender": "성별",
+    "allGenders": "모든 성별",
+    "male": "남성",
+    "female": "여성",
+    "other": "기타",
+    "badge": "배지",
+    "allBadges": "모든 배지",
+    "sortBy": "정렬 기준",
+    "relevance": "관련성",
+    "pullUpsDesc": "풀업 (높은 순)",
+    "pullUpsAsc": "풀업 (낮은 순)",
+    "dateNewest": "날짜 (최신 순)",
+    "dateOldest": "날짜 (오래된 순)",
+    "reset": "필터 초기화",
+    "recruit": "신병 (0-9회)",
+    "proven": "입증됨 (10-19회)",
+    "hardened": "단련됨 (20-29회)",
+    "operator": "작전병 (30-39회)",
+    "elite": "엘리트 (40회 이상)",
+    "pullUpsRequired": "{{count}}회 이상 풀업 필요"
+  },
+  "table": {
+    "rank": "순위",
+    "athlete": "선수",
+    "pullUps": "풀업",
+    "badge": "배지",
+    "date": "날짜",
+    "video": "비디오",
+    "noResults": "결과를 찾을 수 없습니다. 필터를 조정해 보세요.",
+    "loading": "리더보드 로드 중..."
+  },
+  "badgeLegend": {
+    "title": "배지 범례",
+    "recruit": "신병 (0-9회)",
+    "proven": "입증됨 (10-19회)",
+    "hardened": "단련됨 (20-29회)",
+    "operator": "작전병 (30-39회)",
+    "elite": "엘리트 (40회 이상)",
+    "pullUpsRequired": "{{count}}회 이상 풀업 필요"
+  },
+  "subtitle": "경쟁자들과 비교하여 자신의 위치를 확인하세요. 저희 리더보드에는 풀업 클럽 챌린지의 상위 성과자들이 표시됩니다.",
+  "error": "리더보드 데이터 로드 실패",
+  "pagination": {
+    "previous": "이전",
+    "next": "다음"
+  },
+  "mobile": {
+    "showBadgeLegend": "배지 범례 보기",
+    "hideBadgeLegend": "배지 범례 숨기기",
+    "showFilters": "결과 필터링",
+    "hideFilters": "필터 숨기기"
+  },
+  "pucBank": {
+    "title": "P.U.C 은행",
+    "drain": "은행을 비우세요 — 매주 보충됩니다.",
+    "payouts": "모든 지급은 월말에 이루어집니다.",
+    "poolDepleted": "풀 고갈됨"
+  },
+  "dev": {
+    "cacheDebug": "캐시 디버그 정보",
+    "cacheSize": "캐시 크기: {{size}}KB",
+    "cachedKeys": "캐시된 키: {{count}}",
+    "clearCache": "모든 캐시 지우기"
+  }
+} 

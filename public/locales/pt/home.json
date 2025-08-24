@@ -1,0 +1,97 @@
+{
+  "meta": {
+    "title": "Pull-Up Club | A Competição Definitiva de Barra Fixa",
+    "description": "Junte-se ao Battle Bunker Pull-Up Club, a competição online definitiva de barra fixa. Envie seus vídeos, seja avaliado e suba no quadro de líderes global para ganhar emblemas e prêmios.",
+    "ogTitle": "Pull-Up Club | A Competição Definitiva de Barra Fixa",
+    "ogDescription": "Compita com atletas de todo o mundo no teste definitivo de força. Você consegue chegar ao topo do quadro de líderes?"
+  },
+  "hero": {
+    "title": "Bem-vindo ao Pull-Up Club",
+    "subtitle": "Ganhe $1 por repetição. Primeira Submissão grátis.",
+    "cta": "Inscreva-se Agora",
+    "secondaryCta": "Ver Quadro de Líderes",
+    "liveActivity": "<0>{{name}}</0> de {{location}} completou <1>{{pullUps}}</1> barras",
+    "live": "AO VIVO",
+    "justNow": "Agora mesmo",
+    "warriorsJoined": "Guerreiros Inscritos",
+    "price": "R$9,99/mês",
+    "cancelAnytime": "Cancele a qualquer momento",
+    "global": "Global",
+    "leaderboard": "Quadro de Líderes",
+    "badgeTypes": "Tipos de Emblemas",
+    "pullUpsToday": "<0>{{count}}</0> barras completadas nas últimas 24 horas",
+    "alt_athlete": "Atleta fazendo barra fixa"
+  },
+  "howItWorks": {
+    "title": "Como Funciona",
+    "subtitle": "Junte-se ao Desafio de Barra Fixa do Battle Bunker em três passos simples. Mostre sua força e compita com atletas de todo o mundo.",
+    "step1": {
+      "title": "1. Grave e Envie",
+      "description": "Grave seu melhor desempenho em barra fixa, poste publicamente e envie o link do vídeo juntamente com uma taxa."
+    },
+    "step2": {
+      "title": "2. Seja Avaliado",
+      "description": "Nossa equipe irá rever sua submissão para a forma correta e contar suas barras."
+    },
+    "step3": {
+      "title": "3. Junte-se ao Quadro de Líderes",
+      "description": "Uma vez verificado, seu desempenho será destacado em nosso quadro de líderes global."
+    }
+  },
+  "perks": {
+    "title": "Vantagens do Battle Bunker Pull-Up Club",
+    "subtitle": "Ao se alistar, você não se junta apenas a um clube. Você se junta a um movimento. Eis o que você ganha:",
+    "perk1": {
+      "title": "PATCH DE ENTRADA OFICIAL",
+      "description": "Ganhe sua primeira faixa. Cada membro recebe um patch exclusivo do Battle Bunker Pull-Up Club enviado diretamente para sua porta. Este é seu emblema de honra — sem repetições, sem patch."
+    },
+    "perk2": {
+      "title": "PATCH DE COLECIONADOR TRIMESTRAL",
+      "description": "A cada trimestre, lançamos um novo patch de edição limitada — os membros do clube de barra fixa receberão o patch em sua porta. Perdeu? Você nunca mais o verá."
+    },
+    "perk3": {
+      "title": "SISTEMA DE RANKING POR NÍVEL",
+      "description": "Você é classificado com base no desempenho — Recruta, Comprovado, Endurecido, Operador, Elite. Isso não é participação. Você sobe de nível, e a comunidade vê."
+    },
+    "perk4": {
+      "title": "QUADRO DE LÍDERES OFICIAL",
+      "description": "Uma vez verificado, seu nome está garantido. Compita com os melhores, acompanhe sua subida e deixe os números falarem por si. O quadro de líderes exibe apenas membros ativos do clube de barra fixa."
+    },
+    "perk5": {
+      "title": "ACESSO A EQUIPAMENTOS RESTRITOS POR NÍVEL",
+      "description": "Quer o equipamento? Conquiste-o. O merchandising exclusivo só é desbloqueado em certos níveis. Sem atalhos, sem desculpas — você usa o que provou."
+    },
+    "perk6": {
+      "title": "DESTAQUE SOCIAL",
+      "description": "Marque-nos em seus vídeos de submissão, fotos de patches e histórias de superação e seja destacado. Compartilhamos 100% da comunidade."
+    }
+  },
+  "leaderboardPreview": {
+    "title": "Melhores Competidores",
+    "subtitle": "Confira nossos atuais campeões do quadro de líderes. Seu nome estará nesta lista?",
+    "viewFull": "Ver Quadro de Líderes Completo"
+  },
+  "testimonials": {
+    "title": "O que os participantes dizem",
+    "testimonial1": {
+      "quote": "O Desafio de Barra Fixa do Battle Bunker me levou aos meus limites. Fui de 15 para 25 barras em apenas dois meses!",
+      "author": "Mike Johnson",
+      "role": "Atleta de CrossFit"
+    },
+    "testimonial2": {
+      "quote": "O quadro de líderes me mantém motivado. Ver meu nome subir a cada semana é incrivelmente satisfatório.",
+      "author": "Sarah Williams",
+      "role": "Membro de Elite do Battle Bunker"
+    },
+    "testimonial3": {
+      "quote": "Esta plataforma criou uma competição amigável entre meus membros. Todos estão treinando mais forte!",
+      "author": "Dave Rodriguez",
+      "role": "Proprietário, Iron Warriors Gym"
+    }
+  },
+  "ctaSection": {
+    "title": "Pronto para Testar Sua Força?",
+    "subtitle": "Junte-se a centenas de atletas que já estão competindo no Desafio de Barra Fixa do Battle Bunker. Mostre ao mundo do que você é capaz!",
+    "cta": "Inscreva-se"
+  }
+} 

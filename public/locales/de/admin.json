@@ -1,0 +1,99 @@
+{
+  "title": "Admin-Dashboard",
+  "meta": {
+    "title": "Admin | Pull-Up Club",
+    "description": "Admin-Dashboard zur Verwaltung von Einreichungen, Benutzern und Website-Einstellungen."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "submissions": "Einreichungen",
+    "users": "Benutzerverwaltung"
+  },
+  "stats": {
+    "title": "Website-Statistiken",
+    "totalUsers": "Benutzer insgesamt",
+    "activeSubscriptions": "Aktive Abonnements",
+    "pendingSubmissions": "Ausstehende Einreichungen",
+    "totalSubmissions": "Einreichungen insgesamt"
+  },
+  "submissions": {
+    "title": "Einreichungen überprüfen",
+    "newSubmissions": "Neue Einreichungen zur Überprüfung",
+    "noSubmissions": "Keine ausstehenden Einreichungen zur Überprüfung.",
+    "filterTitle": "Filter",
+    "filterMonth": "Monat",
+    "allMonths": "Alle Monate",
+    "filterStatus": "Status",
+    "allStatuses": "Alle Status",
+    "search": "Suchen",
+    "searchPlaceholder": "Suchen...",
+    "resetFilters": "Filter zurücksetzen",
+    "loading": "Einreichungen werden geladen...",
+    "table": {
+      "user": "Benutzer",
+      "date": "Einreichungsdatum",
+      "status": "Status",
+      "actions": "Aktionen"
+    },
+    "actions": {
+      "viewVideo": "Video ansehen",
+      "approve": "Genehmigen",
+      "reject": "Ablehnen",
+      "feature": "Hervorheben",
+      "unfeature": "Hervorhebung aufheben",
+      "watchVideo": "Video ansehen",
+      "infoTitle": "Einreichungsinformationen",
+      "claimed": "Beansprucht:",
+      "verified": "Verifiziert:",
+      "pending": "Ausstehend",
+      "countPlaceholder": "Anzahl"
+    },
+    "pagination": {
+      "showing": "Zeige {{count}} von {{total}} Einreichungen",
+      "previous": "Zurück",
+      "next": "Weiter",
+      "page": "Seite {{current}} von {{total}}"
+    },
+    "emailBanner": {
+      "title": "Monatliches Einreichungssystem aktiv:",
+      "text": "Ablehnungs-E-Mails werden automatisch an Benutzer gesendet, wenn Sie Einreichungen ablehnen. Abgelehnte Benutzer können sofort erneut einreichen. Genehmigte Benutzer müssen bis zum nächsten Monat warten.",
+      "warning": "Stellen Sie sicher, dass die Edge-Funktion send-rejection-email bereitgestellt und konfiguriert ist."
+    },
+    "updateSuccess": "Einreichung {{status}} erfolgreich",
+    "updateError": "Fehler beim Aktualisieren der Einreichung"
+  },
+  "users": {
+    "title": "Benutzerverwaltung",
+    "back": "Zurück zum Dashboard",
+    "refresh": "Benutzer aktualisieren",
+    "error": "Fehler",
+    "loading": "Benutzer werden geladen...",
+    "noUsers": "Keine Benutzer gefunden",
+    "table": {
+      "email": "E-Mail",
+      "name": "Name",
+      "role": "Rolle",
+      "paid": "Bezahlt",
+      "createdAt": "Erstellt am",
+      "actions": "Aktionen"
+    },
+    "role_user": "Benutzer",
+    "role_admin": "Admin",
+    "paid_yes": "Ja",
+    "paid_no": "Nein",
+    "actions": {
+      "makeAdmin": "Zum Admin machen",
+      "removeAdmin": "Admin entfernen",
+      "delete": "Löschen",
+      "deleting": "Wird gelöscht...",
+      "processing": "Wird verarbeitet...",
+      "confirmDelete": "Sind Sie sicher, dass Sie diesen Benutzer löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "status": {
+        "error": "Fehler: {{message}}",
+        "addSuccess": "Erfolg: Admin-Rolle hinzugefügt",
+        "removeSuccess": "Erfolg: Admin-Rolle entfernt",
+        "deleteSuccess": "Erfolg: Benutzer gelöscht"
+      }
+    }
+  }
+} 

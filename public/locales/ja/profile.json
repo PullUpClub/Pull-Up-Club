@@ -1,0 +1,149 @@
+{
+  "title": "マイプロフィール",
+  "meta": {
+    "title": "プロフィール | プルアップクラブ",
+    "description": "プロフィールを表示し、提出履歴を追跡し、サブスクリプションを管理し、実績を確認します。"
+  },
+  "sidebar": {
+    "dashboard": "ダッシュボード",
+    "settings": "プロフィール設定",
+    "subscription": "サブスクリプション",
+    "paymentHistory": "支払い履歴",
+    "submissions": "提出物",
+    "subscriptionAndRewards": "サブスクリプションと報酬"
+  },
+  "dashboard": {
+    "title": "提出ダッシュボード",
+    "welcome": "おかえりなさい、{{name}}！",
+    "noSubmissions": "まだ提出物はありません。",
+    "noSubmissionsCTA": "最初のビデオを提出すると、ここに提出履歴が表示されます。",
+    "submitButton": "ビデオを提出",
+    "submitFirstButton": "最初のビデオを提出する",
+    "submitNewButton": "新しいビデオを提出する",
+    "countdown": {
+      "title": "月例大会",
+      "remaining": "提出までの残り時間"
+    },
+    "status": {
+      "title": "提出状況",
+      "ready": "提出準備完了！",
+      "thisMonth": "今月の提出物",
+      "onLeaderboard": "✓ リーダーボードに掲載中",
+      "rejected": "あなたの提出は拒否されました",
+      "rejectedCTA": "すぐに新しいビデオを提出できます！",
+      "competeCTA": "今月の大会に参加するために懸垂ビデオを提出してください",
+      "pullUps": "{{count}} 回の懸垂"
+    },
+    "best": {
+      "title": "ベストパフォーマンス",
+      "unit": "懸垂"
+    },
+    "thisMonth": {
+      "title": "今月",
+      "submitted": "回の懸垂が提出されました",
+      "status": "ステータス: {{status}}",
+      "submittedOn": "提出日: {{date}}"
+    },
+    "history": {
+      "title": "提出履歴",
+      "loading": "提出物を読み込み中...",
+      "andMore": "さらに{{count}}件の提出物...",
+      "viewVideo": "ビデオを見る"
+    }
+  },
+  "settings": {
+    "title": "プロフィール設定",
+    "subtitle": "ここでプロフィール情報を更新してください。承認された提出物がある場合、この情報はリーダーボードに表示されます。",
+    "updateSuccess": "プロフィールが正常に更新されました！",
+    "updateError": "プロフィールの更新に失敗しました。もう一度お試しください。",
+    "avatar": "プロフィール写真",
+    "avatarChange": "写真を変更",
+    "fullName": "フルネーム *",
+    "fullNamePlaceholder": "フルネームを入力してください",
+    "fullNameDesc": "これはリーダーボードに表示されます",
+    "socialMedia": "ソーシャルメディアのハンドルネーム",
+    "socialMediaPlaceholder": "あなたのユーザーネーム",
+    "socialMediaDesc": "@記号は含めず、ユーザーネームのみを入力してください。ソーシャル接続のためにリーダーボードに表示されます",
+    "age": "年齢 *",
+    "agePlaceholder": "25",
+    "gender": "性別 *",
+    "selectGender": "性別を選択",
+    "male": "男性",
+    "female": "女性",
+    "other": "その他",
+    "organization": "クラブ/組織",
+    "organizationPlaceholder": "ウィスウォカ・シカゴ",
+    "region": "地域 *",
+    "selectRegion": "地域を選択",
+    "phone": "電話番号（任意）",
+    "phonePlaceholder": "+81 (90) 1234-5678",
+    "saveButton": "変更を保存",
+    "savingButton": "変更を保存中..."
+  },
+  "subscription": {
+    "title": "サブスクリプションの詳細",
+    "status": "ステータス",
+    "plan": "プラン",
+    "price": "価格",
+    "renewalDate": "次回の更新日",
+    "manageButton": "Stripeでサブスクリプションを管理"
+  },
+  "paymentHistory": {
+    "title": "支払い履歴",
+    "noHistory": "支払い履歴が見つかりません。",
+    "date": "日付",
+    "amount": "金額",
+    "status": "ステータス",
+    "invoice": "請求書"
+  },
+  "rewards": {
+    "shippingNotice": "米国内発送のみ。現在、海外のユーザーはパッチや物理的な報酬の対象外です。",
+    "subscription": {
+      "title": "サブスクリプション",
+      "subtitle": "月額サブスクリプションを管理する",
+      "button": "サブスクリプションを管理"
+    },
+    "patch": {
+      "title": "パッチを請求する",
+      "subtitle": "獲得したパッチを受け取る",
+      "button": "パッチを請求する"
+    },
+    "progress": {
+      "title": "次のパッチの進捗",
+      "progress": "{{percent}}% の進捗",
+      "remaining": "{{days}} 日",
+      "untilNext": "次のパッチ発送まで"
+    },
+    "gear": {
+      "title": "ギアを購入",
+      "subtitle": "トレーニング機器を入手する",
+      "button": "ギアを購入"
+    },
+    "payouts": {
+      "title": "大会の支払い",
+      "loading": "読み込み中...",
+      "available": "引き出し可能",
+      "pending": "リクエスト保留中",
+      "noEarnings": "まだ収益がありません",
+      "requestButton": "支払いをリクエスト",
+      "processing": "処理中..."
+    },
+    "earningsHistory": {
+      "title": "収益履歴",
+      "andMore": "さらに{{count}}件の収益...",
+      "paid": "支払い済み",
+      "available": "利用可能"
+    },
+    "payoutHistory": {
+      "title": "支払いリクエスト",
+      "request": "{{amount}}の支払いリクエスト",
+      "requestedOn": "リクエスト日: {{date}}",
+      "processedOn": "処理日: {{date}}"
+    },
+    "noEarnings": {
+      "title": "まだ収益がありません",
+      "description": "大会に参加して収益を上げ始めましょう！月間勝者が発表された後、再度確認してください。"
+    },
+    "payoutSuccess": "{{amount}}の支払いリクエストが正常に送信されました！"
+  }
+} 

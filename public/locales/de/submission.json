@@ -1,0 +1,87 @@
+{
+  "title": "Reichen Sie Ihr Klimmzug-Video ein",
+  "meta": {
+    "title": "Video einreichen | Pull-Up Club",
+    "description": "Reichen Sie Ihr Klimmzug-Video für den monatlichen Wettbewerb ein. Befolgen Sie die Regeln und gelangen Sie auf die Bestenliste."
+  },
+  "subtitle": "Reichen Sie Ihr Klimmzug-Video ein, um auf der Bestenliste zu konkurrieren",
+  "eligibility": {
+    "checking": "Überprüfung der Einreichungsberechtigung...",
+    "error": "Die Einreichungsberechtigung kann nicht überprüft werden. Bitte versuchen Sie es erneut.",
+    "retry": "Erneut versuchen",
+    "eligible": {
+      "title": "✅ Bereit zum Einreichen!",
+      "message": "Sie sind berechtigt, ein neues Video für den Wettbewerb dieses Monats einzureichen.",
+      "deadline": "Monatliche Frist:",
+      "remaining": "{{days}} Tage, {{hours}} Stunden, {{minutes}} Minuten verbleibend"
+    },
+    "rejected": {
+      "title": "🔄 Erneute Einreichung möglich",
+      "message": "Ihre vorherige Einreichung wurde abgelehnt.",
+      "feedback": "Sie haben eine E-Mail mit Feedback erhalten. Beheben Sie die Probleme und reichen Sie es erneut ein!"
+    },
+    "pending": {
+      "title": "⏳ In Prüfung",
+      "message": "Ihre Einreichung für diesen Monat wird derzeit geprüft.",
+      "notify": "Wir werden Sie per E-Mail benachrichtigen, sobald Ihre Einreichung geprüft wurde."
+    },
+    "approved": {
+      "title": "🎉 Einreichung genehmigt!",
+      "message": "Herzlichen Glückwunsch! Ihre Einreichung wurde genehmigt und befindet sich auf der Bestenliste.",
+      "next": "Nächste Einreichung verfügbar in:",
+      "countdown": "{{days}} Tagen, {{hours}} Stunden, {{minutes}} Minuten"
+    },
+    "notAvailable": {
+      "title": "Einreichung nicht verfügbar",
+      "message": "Sie können derzeit kein Video einreichen. Überprüfen Sie oben Ihren Berechtigungsstatus.",
+      "viewLeaderboard": "Bestenliste ansehen"
+    }
+  },
+  "form": {
+    "pullUpCount": "Anzahl der Klimmzüge",
+    "pullUpCountDesc": "Geben Sie die Anzahl der aufeinanderfolgenden Klimmzüge ein, die Sie im Video abgeschlossen haben.",
+    "gender": "Geschlecht",
+    "male": "Männlich",
+    "female": "Weiblich",
+    "other": "Andere",
+    "region": "Region",
+    "selectRegion": "Wählen Sie Ihre Region",
+    "club": "Clubzugehörigkeit",
+    "selectClub": "Wählen Sie einen Club (optional)",
+    "none": "Keine",
+    "otherClub": "Andere",
+    "otherClubPlaceholder": "Geben Sie Ihren Clubnamen ein",
+    "videoUrl": "Video-URL",
+    "videoUrlPlaceholder": "https://youtube.com/watch?v=...",
+    "videoUrlDesc": "Bitte laden Sie Ihr Video auf YouTube, Instagram oder TikTok hoch und fügen Sie den öffentlichen Link hier ein. Stellen Sie sicher, dass Ihr Video öffentlich zugänglich ist.",
+    "requirementsTitle": "Videoanforderungen",
+    "req1": "Klare, ungehinderte Sicht auf die vollständige Bewegung",
+    "req2": "Das Kinn muss bei jeder Wiederholung die Stange überqueren",
+    "req3": "Vollständige Armstreckung am unteren Ende jeder Wiederholung",
+    "req4": "Die Hände müssen schulterbreit auseinander sein; der Griff darf 1,2 Meter nicht überschreiten",
+    "req5": "Kontinuierliche Aufnahme ohne Schnitte oder Bearbeitung",
+    "req6": "Das Video muss öffentlich zugänglich sein",
+    "checkbox1": "Ich bestätige, dass mein Videolink korrekt und öffentlich einsehbar ist, ohne dass eine Anmeldung oder ein spezieller Zugriff erforderlich ist. Ich verstehe, dass unzugängliche Links zur Disqualifikation führen können und dass die Einreichungsgebühren nicht erstattungsfähig sind.",
+    "checkbox2": "Ich bestätige, dass dieses Video authentisch und unbearbeitet ist und keine KI oder Effekte zur Veränderung meiner Leistung verwendet wurden. Jede Manipulation oder Falschdarstellung führt zur Disqualifikation und zum Verlust aller Gebühren, Ranglisten oder Belohnungen.",
+    "checkbox3": "Ich erteile dem Pull-Up Club die Erlaubnis, meine eingereichten Videos in aktuellen und zukünftigen Marketingmaßnahmen – sowohl mit als auch ohne Markenzeichen – auf allen Plattformen auf Dauer, ohne Einschränkung oder zusätzliche Vergütung zu verwenden.",
+    "checkbox4": "Durch das Absenden dieses Formulars erkläre ich mich damit einverstanden, automatisch in die E-Mail- und SMS-Kommunikation des Pull-Up Clubs aufgenommen zu werden. Ich verstehe, dass ich mich jederzeit von beiden Kanälen abmelden kann, indem ich den in jeder Nachricht enthaltenen Anweisungen zum Abbestellen folge.",
+    "reviewTime": "Bitte geben Sie unserem Team bis zu 15 Tage Zeit, um Ihre Einreichung zu prüfen und dem Monat, in dem sie eingereicht wurde, korrekt zuzuordnen.",
+    "submitButton": "Jetzt einreichen",
+    "submittingButton": "Wird eingereicht..."
+  },
+  "noAuth": {
+    "title": "Authentifizierung erforderlich",
+    "description": "Sie müssen angemeldet sein, um Videos einzureichen. Bitte melden Sie sich an oder erstellen Sie ein Konto, um fortzufahren.",
+    "login": "Anmelden",
+    "createAccount": "Konto erstellen"
+  },
+  "recentSubmissions": {
+    "title": "Aktuelle Einreichungen",
+    "verified": "(Verifiziert: {{count}})",
+    "submittedOn": "Eingereicht am {{date}}",
+    "reviewNotes": "Anmerkungen zur Überprüfung:",
+    "viewVideo": "Video ansehen",
+    "viewAll": "Alle Einreichungen ansehen"
+  },
+  "successToast": "Video erfolgreich eingereicht!"
+} 

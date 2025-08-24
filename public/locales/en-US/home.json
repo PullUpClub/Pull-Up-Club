@@ -1,0 +1,25 @@
+{
+  "meta": {
+    "title": "Pull-Up Club | The Ultimate Pull-Up Competition",
+    "description": "Join Pull-Up Club at Battle Bunker, the ultimate online pull-up competition. Submit your videos, get rated, and top the global leaderboard to earn badges and prizes.",
+    "ogTitle": "Pull-Up Club | The Ultimate Pull-Up Competition",
+    "ogDescription": "Compete with athletes from around the world in the ultimate test of strength. Can you top the leaderboard?"
+  },
+  "hero": {
+    "title": "Welcome to Pull-Up Club",
+    "subtitle": "One Submission a Month. $1 Per Rep. Your First Month is Free!",
+    "cta": "Sign Up Now",
+    "secondaryCta": "View Leaderboard",
+    "liveActivity": "<0>{{name}}</0> from {{location}} completed <1>{{pullUps}}</1> pull-ups",
+    "live": "LIVE",
+    "justNow": "just now",
+    "warriorsJoined": "warriors joined",
+    "price": "$9.99/month",
+    "cancelAnytime": "Cancel anytime",
+    "global": "Global",
+    "leaderboard": "Leaderboard",
+    "badgeTypes": "Badge Types",
+    "pullUpsToday": "<0>{{count}}</0> pull-ups completed in the last 24 hours",
+    "alt_athlete": "Athlete performing pull-ups"
+  }
+} 

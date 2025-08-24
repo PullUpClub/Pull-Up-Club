@@ -1,0 +1,87 @@
+{
+  "title": "Soumettez votre vidéo de tractions",
+  "meta": {
+    "title": "Soumettre une Vidéo | Pull-Up Club",
+    "description": "Soumettez votre vidéo de tractions pour la compétition mensuelle. Suivez les règles et figurez au classement."
+  },
+  "subtitle": "Soumettez votre vidéo de tractions pour concourir au classement",
+  "eligibility": {
+    "checking": "Vérification de l'éligibilité de la soumission...",
+    "error": "Impossible de vérifier l'éligibilité de la soumission. Veuillez réessayer.",
+    "retry": "Réessayer",
+    "eligible": {
+      "title": "✅ Prêt à Soumettre !",
+      "message": "Vous êtes éligible pour soumettre une nouvelle vidéo pour la compétition de ce mois-ci.",
+      "deadline": "Date Limite Mensuelle :",
+      "remaining": "{{days}} jours, {{hours}} heures, {{minutes}} minutes restantes"
+    },
+    "rejected": {
+      "title": "🔄 Resoumission Disponible",
+      "message": "Votre soumission précédente a été rejetée.",
+      "feedback": "Vous avez reçu un e-mail avec des commentaires. Corrigez les problèmes et soumettez à nouveau !"
+    },
+    "pending": {
+      "title": "⏳ En Cours d'Examen",
+      "message": "Votre soumission pour ce mois est actuellement en cours d'examen.",
+      "notify": "Nous vous informerons par e-mail une fois votre soumission examinée."
+    },
+    "approved": {
+      "title": "🎉 Soumission Approuvée !",
+      "message": "Félicitations ! Votre soumission a été approuvée et figure sur le classement.",
+      "next": "Prochaine soumission disponible dans :",
+      "countdown": "{{days}} jours, {{hours}} heures, {{minutes}} minutes"
+    },
+    "notAvailable": {
+      "title": "Soumission non Disponible",
+      "message": "Vous ne pouvez pas soumettre de vidéo pour le moment. Vérifiez votre statut d'éligibilité ci-dessus.",
+      "viewLeaderboard": "Voir le Classement"
+    }
+  },
+  "form": {
+    "pullUpCount": "Nombre de Tractions",
+    "pullUpCountDesc": "Entrez le nombre de tractions consécutives que vous avez effectuées dans la vidéo.",
+    "gender": "Genre",
+    "male": "Masculin",
+    "female": "Féminin",
+    "other": "Autre",
+    "region": "Région",
+    "selectRegion": "Sélectionnez votre région",
+    "club": "Affiliation au Club",
+    "selectClub": "Sélectionnez un club (facultatif)",
+    "none": "Aucun",
+    "otherClub": "Autre",
+    "otherClubPlaceholder": "Entrez le nom de votre club",
+    "videoUrl": "URL de la Vidéo",
+    "videoUrlPlaceholder": "https://youtube.com/watch?v=...",
+    "videoUrlDesc": "Veuillez télécharger votre vidéo sur YouTube, Instagram ou TikTok et coller le lien public ici. Assurez-vous que votre vidéo est accessible au public.",
+    "requirementsTitle": "Exigences Vidéo",
+    "req1": "Vue claire et sans obstruction du mouvement complet",
+    "req2": "Le menton doit dépasser la barre à chaque répétition",
+    "req3": "Extension complète des bras en bas de chaque répétition",
+    "req4": "Les mains doivent être écartées à la largeur des épaules; la prise ne doit pas dépasser 1,2 mètres de large",
+    "req5": "Enregistrement continu sans coupures ni montage",
+    "req6": "La vidéo doit être accessible publiquement",
+    "checkbox1": "Je confirme que le lien de ma vidéo est correct et visible publiquement sans nécessiter de connexion ou d'accès spécial. Je comprends que les liens inaccessibles peuvent entraîner une disqualification et que les frais de soumission ne sont pas remboursables.",
+    "checkbox2": "Je confirme que cette vidéo est authentique et non montée, sans IA ni effets utilisés pour altérer ma performance. Toute falsification ou fausse déclaration entraînera une disqualification et la perte de tous frais, classements ou récompenses.",
+    "checkbox3": "J'accorde au Pull-Up Club la permission d'utiliser mes vidéos soumises dans les efforts marketing actuels et futurs, de marque et sans marque, sur toutes les plateformes, à perpétuité, sans limitation ni compensation supplémentaire.",
+    "checkbox4": "En soumettant ce formulaire, j'accepte d'être automatiquement inscrit aux communications par e-mail et SMS du Pull-Up Club. Je comprends que je peux me désinscrire de l'un ou l'autre canal à tout moment en suivant les instructions de désinscription incluses dans chaque message.",
+    "reviewTime": "Veuillez prévoir jusqu'à 15 jours pour que notre équipe examine et attribue correctement votre soumission au mois où elle a été soumise.",
+    "submitButton": "Soumettre Maintenant",
+    "submittingButton": "Soumission en cours..."
+  },
+  "noAuth": {
+    "title": "Authentification Requise",
+    "description": "Vous devez être connecté pour soumettre des vidéos. Veuillez vous connecter ou créer un compte pour continuer.",
+    "login": "Se Connecter",
+    "createAccount": "Créer un Compte"
+  },
+  "recentSubmissions": {
+    "title": "Soumissions Récentes",
+    "verified": "(Vérifié : {{count}})",
+    "submittedOn": "Soumis le {{date}}",
+    "reviewNotes": "Notes d'Examen :",
+    "viewVideo": "Voir la Vidéo",
+    "viewAll": "Voir Toutes les Soumissions"
+  },
+  "successToast": "Vidéo soumise avec succès !"
+} 

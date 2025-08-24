@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "title": "Subscription | Pull-Up Club",
+    "description": "Choose your subscription plan and join the Pull-Up Club today. Monthly and annual plans available."
+  },
+  "title": "Pull-Up Club Membership",
+  "subtitle": "Join our exclusive pull-up challenge community, track your progress, and compete on the leaderboard.",
+  "completeSubscriptionTitle": "Complete Your {{plan}} Subscription",
+  "loadingStatus": "Failed to load subscription status",
+  "cancellationNotice": "Your subscription has been set to cancel at the end of your current billing period. You'll continue to have access until then.",
+  "activeNotice": "You have an active membership. Manage your subscription below.",
+  "agreement": "By subscribing, you agree to our <0>Terms of Service</0> and <1>Privacy Policy</1>.",
+  "goToProfile": "Go to your profile",
+  "plans": {
+    "title": "Choose Your Plan",
+    "intro": "Choose your plan below. After payment, you'll create your account to access the platform.",
+    "monthly": "Monthly",
+    "annual": "Annual",
+    "bestValue": "BEST VALUE",
+    "monthlyTitle": "Monthly Membership",
+    "monthlyPrice": "/month (USD)",
+    "monthlyFeatures": [
+      "Leaderboard access",
+      "Achievement badges",
+      "Cancel anytime"
+    ],
+    "annualTitle": "Annual Membership",
+    "annualPrice": "/year (USD)",
+    "annualSavings": "Save ${{annualSavings}} per year",
+    "annualFeatures": [
+      "Everything in monthly plan",
+      "Better value for long-term commitment",
+      "Set-it-and-forget-it — no monthly billing interruptions"
+    ],
+    "button": "Start Now",
+    "processing": "Processing..."
+  },
+  "signup": {
+    "verifying": "Verifying Payment",
+    "verifyingDesc": "Please wait while we verify your payment...",
+    "failedTitle": "Payment Verification Failed",
+    "failedDesc": "We could not verify your payment. Please try again.",
+    "backButton": "Back to Subscription",
+    "successTitle": "Payment Successful!",
+    "successDesc": "Now create your account to access the Pull-Up Club platform.",
+    "passwordPlaceholder": "Password",
+    "confirmPasswordPlaceholder": "Confirm Password",
+    "requirementsTitle": "Password Requirements:",
+    "reqMinLength": "At least 8 characters",
+    "reqUpperCase": "One uppercase letter",
+    "reqLowerCase": "One lowercase letter",
+    "reqNumber": "One number",
+    "reqMatch": "Passwords match",
+    "createButton": "Create Account & Access Platform",
+    "creatingButton": "Creating Account..."
+  },
+  "securePayment": "Secure payment processing by Stripe. Cancel your subscription anytime."
+} 

@@ -1,0 +1,81 @@
+{
+  "navigation": {
+    "home": "首页",
+    "leaderboard": "排行榜",
+    "profile": "个人资料",
+    "submit": "提交视频",
+    "rules": "规则",
+    "faq": "常见问题",
+    "ethos": "我们的理念",
+    "login": "登录",
+    "logout": "登出",
+    "adminDashboard": "管理员仪表板",
+    "adminUsers": "用户管理"
+  },
+  "buttons": {
+    "submit": "提交",
+    "cancel": "取消",
+    "save": "保存",
+    "edit": "编辑",
+    "delete": "删除",
+    "confirm": "确认",
+    "retry": "重试",
+    "close": "关闭",
+    "view": "查看",
+    "upload": "上传",
+    "approve": "批准",
+    "reject": "拒绝",
+    "manage": "管理",
+    "subscribe": "订阅",
+    "signUp": "注册",
+    "createAccount": "创建账户"
+  },
+  "footer": {
+    "title": "引体向上俱乐部",
+    "description": "引体向上比赛和健身挑战的首选目的地。测试您的力量，与他人竞争，并攀登排行榜。",
+    "quickLinks": "快速链接",
+    "submitVideo": "提交您的视频",
+    "leaderboard": "排行榜",
+    "rules": "比赛规则",
+    "faq": "常见问题",
+    "privacy": "隐私政策",
+    "cookies": "Cookie政策",
+    "contactUs": "联系我们",
+    "email": "电子邮件: support@pullupclub.com",
+    "phone": "电话: (619) 363-4597",
+    "address": "地址: 871 Harold Pl, San Diego, CA 91914",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "youtube": "YouTube",
+    "copyright": "© {{year}} Pull-Up Club. 版权所有。"
+  },
+  "labels": {
+    "email": "电子邮件地址",
+    "password": "密码",
+    "fullName": "全名",
+    "username": "用户名",
+    "confirmPassword": "确认密码",
+    "videoUrl": "视频网址",
+    "pullUpCount": "引体向上次数",
+    "notes": "笔记"
+  },
+  "status": {
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "pending": "待定",
+    "approved": "已批准",
+    "rejected": "已拒绝",
+    "active": "活跃",
+    "inactive": "不活跃",
+    "connecting": "连接中...",
+    "connected": "已连接"
+  },
+  "misc": {
+    "or": "或",
+    "logoAlt": "引体向上俱乐部徽标"
+  },
+  "errors": {
+    "generic": "发生了意外错误。请稍后再试。"
+  }
+} 

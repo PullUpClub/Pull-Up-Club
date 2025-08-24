@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en" class="lenis lenis-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    
+    <!-- Favicon links -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Safari iOS fixes for orange hue issue -->
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Pull-Up Club">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Join Battle Bunker Pull-Up Club - the ultimate pull-up competition platform. Compete globally, track your progress, and prove your strength.">
+    <meta name="keywords" content="pull-up competition, fitness challenge, strength training, global leaderboard, pull-up club, battle bunker">
+    <meta name="author" content="Battle Bunker">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pullupclub.com/">
+    <meta property="og:title" content="Battle Bunker Pull-Up Club - Global Pull-Up Competition">
+    <meta property="og:description" content="Join the ultimate pull-up competition platform. Compete globally, track your progress, and prove your strength.">
+    <meta property="og:image" content="https://pullupclub.com/pullup_header_desktop.webp">
+    <meta property="og:site_name" content="Battle Bunker Pull-Up Club">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://pullupclub.com/">
+    <meta property="twitter:title" content="Battle Bunker Pull-Up Club - Global Pull-Up Competition">
+    <meta property="twitter:description" content="Join the ultimate pull-up competition platform. Compete globally, track your progress, and prove your strength.">
+    <meta property="twitter:image" content="https://pullupclub.com/pullup_header_desktop.webp">
+    
+    <!-- Google Search Console verification (placeholder) -->
+    <meta name="google-site-verification" content="PLACEHOLDER_REPLACE_WITH_ACTUAL_VERIFICATION_CODE">
+    
+    <!-- Critical resource preloading for performance -->
+    <link rel="preload" as="image" href="/pullup_header_desktop.webp" fetchpriority="high" media="(min-width: 1025px)">
+    <link rel="preload" as="image" href="/pullup_header-tablet.webp" fetchpriority="high" media="(min-width: 769px) and (max-width: 1024px)">
+    <link rel="preload" as="image" href="/pullup_header-mobile.webp" fetchpriority="high" media="(max-width: 768px)">
+    
+    <!-- DNS prefetching for external services -->
+    <link rel="preconnect" href="https://yqnikgupiaghgjtsaypr.supabase.co">
+    <link rel="preconnect" href="https://js.stripe.com">
+    <link rel="preconnect" href="https://r.stripe.com">
+    <link rel="dns-prefetch" href="https://api.stripe.com">
+    
+    <!-- Security headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.youtube.com https://js.stripe.com https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; frame-src 'self' https://www.youtube.com https://youtube.com https://js.stripe.com; img-src 'self' data: https://i.ytimg.com https://img.youtube.com https://flagcdn.com; connect-src 'self' https://yqnikgupiaghgjtsaypr.supabase.co https://api.stripe.com https://va.vercel-scripts.com; font-src 'self' data:;"> -->
+    
+    <title>Battle Bunker Pull-Up Club - Global Pull-Up Competition Platform</title>
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SportsOrganization",
+      "name": "Battle Bunker Pull-Up Club",
+      "url": "https://pullupclub.com",
+      "logo": "https://pullupclub.com/favicon-32x32.png",
+      "description": "Global pull-up competition platform for fitness enthusiasts",
+      "sport": "Fitness",
+      "offers": {
+        "@type": "Offer",
+        "name": "Monthly Subscription",
+        "description": "Access to global pull-up competitions and leaderboards",
+        "price": "9.99",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://pullupclub.com/leaderboard?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
+    <!-- Google Analytics will be handled by the application code -->
+  </head>
+  <body>
+    <!-- Meta Pixel Code -->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      
+      // Enable debug mode for troubleshooting (remove in production)
+      fbq('set', 'debug', true);
+      
+      // Initialize pixel
+      fbq('init', '1512318086417813');
+      
+      // Enable Advanced Matching for better Event Match Quality
+      fbq('set', 'autoConfig', false, '1512318086417813');
+      
+      // Track PageView immediately
+      fbq('track', 'PageView');
+      
+      // Make fbq available globally
+      window.fbq = fbq;
+      
+      // Helper function to get Facebook parameters
+      window.getFacebookParams = function() {
+        const fbp = document.cookie.match(/_fbp=([^;]+)/)?.[1];
+        const fbc = document.cookie.match(/_fbc=([^;]+)/)?.[1];
+        return { fbp, fbc };
+      };
+    </script>
+    <noscript>
+      <img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=1512318086417813&ev=PageView&noscript=1"/>
+    </noscript>
+    <!-- End Meta Pixel Code -->
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

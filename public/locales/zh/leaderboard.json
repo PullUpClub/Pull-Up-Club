@@ -1,0 +1,84 @@
+{
+  "title": "排行榜",
+  "meta": {
+    "title": "排行榜 | 引体向上俱乐部",
+    "description": "查看您在引体向上俱乐部官方全球排行榜上的排名。按日期、类别和地点筛选，查看顶尖选手。"
+  },
+  "filters": {
+    "title": "筛选排行榜",
+    "clear": "清除筛选",
+    "searchPlaceholder": "按名称搜索...",
+    "pullUps": "引体向上",
+    "allPullUps": "所有引体向上",
+    "pullUpsUnit": "{{range}} 次引体向上",
+    "club": "俱乐部",
+    "allClubs": "所有俱乐部",
+    "region": "地区",
+    "allRegions": "所有地区",
+    "ageGroup": "年龄组",
+    "allAges": "所有年龄",
+    "gender": "性别",
+    "allGenders": "所有性别",
+    "male": "男",
+    "female": "女",
+    "other": "其他",
+    "badge": "徽章",
+    "allBadges": "所有徽章",
+    "sortBy": "排序方式",
+    "relevance": "相关性",
+    "pullUpsDesc": "引体向上 (从高到低)",
+    "pullUpsAsc": "引体向上 (从低到高)",
+    "dateNewest": "日期 (最新优先)",
+    "dateOldest": "日期 (最旧优先)",
+    "reset": "重置筛选",
+    "recruit": "新兵 (0-9 次)",
+    "proven": "老兵 (10-19 次)",
+    "hardened": "精英 (20-29 次)",
+    "operator": "特战 (30-39 次)",
+    "elite": "精英 (40+ 次)",
+    "pullUpsRequired": "需要 {{count}}+ 次引体向上"
+  },
+  "table": {
+    "rank": "排名",
+    "athlete": "运动员",
+    "pullUps": "引体向上",
+    "badge": "徽章",
+    "date": "日期",
+    "video": "视频",
+    "noResults": "未找到结果。请尝试调整您的筛选条件。",
+    "loading": "正在加载排行榜..."
+  },
+  "badgeLegend": {
+    "title": "徽章图例",
+    "recruit": "新兵 (0-9 次)",
+    "proven": "老兵 (10-19 次)",
+    "hardened": "精英 (20-29 次)",
+    "operator": "特战 (30-39 次)",
+    "elite": "精英 (40+ 次)",
+    "pullUpsRequired": "需要 {{count}}+ 次引体向上"
+  },
+  "subtitle": "看看您与竞争对手的差距。我们的排行榜展示了引体向上俱乐部挑战赛中的顶尖选手。",
+  "error": "加载排行榜数据失败",
+  "pagination": {
+    "previous": "上一页",
+    "next": "下一页"
+  },
+  "mobile": {
+    "showBadgeLegend": "查看徽章图例",
+    "hideBadgeLegend": "隐藏徽章图例",
+    "showFilters": "筛选结果",
+    "hideFilters": "隐藏筛选"
+  },
+  "pucBank": {
+    "title": "P.U.C银行",
+    "drain": "清空银行——每周补充。",
+    "payouts": "所有支付均在月底进行。",
+    "poolDepleted": "奖金池已耗尽"
+  },
+  "dev": {
+    "cacheDebug": "缓存调试信息",
+    "cacheSize": "缓存大小: {{size}}KB",
+    "cachedKeys": "缓存键: {{count}}",
+    "clearCache": "清除所有缓存"
+  }
+} 

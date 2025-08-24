@@ -1,0 +1,63 @@
+{
+  "title": "Häufig gestellte Fragen",
+  "meta": {
+    "title": "FAQ | Pull-Up Club",
+    "description": "Finden Sie Antworten auf häufig gestellte Fragen zum Battle Bunker Pull-Up Club, einschließlich des Einreichungsprozesses, des Abonnements und der Regeln."
+  },
+  "q1": {
+    "q": "Wie zahlt der Pull-Up Club Preisgelder aus?",
+    "a": "Wir verwenden Stripe Connect, um Preisgelder direkt an die Gewinner zu senden. Es ist schnell, sicher und global. Sobald Sie gewinnen, werden wir Sie auffordern, ein kostenloses Stripe Express-Konto zu erstellen (falls Sie noch keines haben), und von dort aus können wir das Preisgeld direkt auf Ihr Bankkonto überweisen."
+  },
+  "q2": {
+    "q": "Womit kann ich Geld gewinnen?",
+    "a": "Wir lieben Kreativität, Engagement und Gemeinschaft. Zusätzlich zu den auf der Bestenliste basierenden Gewinnen belohnen wir herausragende Einsendungen in allen möglichen Kategorien. Hier sind einige Beispiele: 🎽 Tragen von Battle Bunker-Ausrüstung, 🏋️‍♂️ Verwendung von Battle Bunker-Geräten, 🎶 Beste Musikauswahl, 👕 Bestes Kostüm oder Thema, 🎬 Bestes Video-Intro und/oder -Outro, 🤯 Verrückteste Überraschung oder unerwartete Wendung, 💥 Größte Hype-Energie, 🧼 Sauberste Wiederholungen. Wenn Ihr Video uns zum Anhalten, Lachen oder Wiederholen bringt, werden Sie wahrscheinlich bezahlt."
+  },
+  "q3": {
+    "q": "Muss ich die Herausforderung gewinnen, um Preisgeld zu erhalten?",
+    "a": "Nein! Gewinnen ist hier nicht alles. Wir belohnen Kreativität, Anstrengung und Gemeinschaftsgeist. Sie stehen vielleicht nicht an der Spitze der Bestenliste, aber wenn Ihre Teilnahme herausragt, besteht eine gute Chance, dass Sie einen Überraschungsgeldpreis erhalten."
+  },
+  "q4": {
+    "q": "Gibt es Inhaltseinschränkungen, wie z.B. Nacktheit?",
+    "a": "❌ Jede Form von Nacktheit führt zur sofortigen Ablehnung des Videos. Die Teilnehmer müssen angemessen gekleidet sein, als ob sie in einem öffentlichen Fitnessstudio trainieren würden."
+  },
+  "q5": {
+    "q": "Kann ich ein früher in diesem Jahr aufgenommenes Video einreichen?",
+    "a": "Ja, solange es alle Regeln befolgt: klare Sicht, voller Bewegungsumfang, kontinuierliches, ungeschnittenes Filmmaterial und öffentliche Zugänglichkeit."
+  },
+  "q6": {
+    "q": "Kann ich den Teil vor oder nach den Wiederholungen herausschneiden, um das Video zu kürzen?",
+    "a": "Nein. Das Video muss eine kontinuierliche, ungeschnittene Aufnahme von vor Ihrer ersten Wiederholung bis nach Ihrer letzten Wiederholung sein. Jedes Trimmen, Schneiden oder Bearbeiten führt zur Disqualifikation."
+  },
+  "q7": {
+    "q": "Ist es in Ordnung, Filter zu verwenden oder die Beleuchtung zu verbessern?",
+    "a": "Nein. Um die Integrität zu wahren, sollten Videos so eingereicht werden, wie sie aufgenommen wurden. Keine Filter, Beleuchtungsverbesserungen oder KI-gesteuerte Anpassungen jeglicher Art."
+  },
+  "q8": {
+    "q": "Was passiert, wenn ich vergesse, die volle Bewegung zu zeigen oder mein Kinn nicht deutlich über der Stange ist?",
+    "a": "Die Wiederholung kann disqualifiziert oder die gesamte Einreichung kann abgelehnt werden. Wir empfehlen dringend, Ihr Filmmaterial vor dem Einreichen zu überprüfen, um sicherzustellen, dass es alle Bewegungsstandards erfüllt."
+  },
+  "q9": {
+    "q": "Kann ich das Video beschleunigen oder verlangsamen?",
+    "a": "Nein. Videos müssen in normaler Geschwindigkeit ohne Beschleunigung, Zeitlupe oder Zeiteffekte eingereicht werden."
+  },
+  "q10": {
+    "q": "Welche Plattformen kann ich verwenden, um mein Video einzureichen?",
+    "a": "Sie können Ihr Video auf jeder öffentlichen Plattform wie YouTube, Instagram oder TikTok hochladen. Stellen Sie nur sicher, dass Ihre Datenschutzeinstellungen es uns ermöglichen, es ohne Anmeldung oder Anforderung eines Zugriffs anzuzeigen."
+  },
+  "q11": {
+    "q": "Mein Video ist zu dunkel / unscharf / instabil - wird es trotzdem zählen?",
+    "a": "Wenn wir nicht jede Wiederholung und den Formstandard klar überprüfen können, kann das Video abgelehnt werden. Verwenden Sie gute Beleuchtung, eine stabile Kamera und einen klaren Winkel, um sicherzustellen, dass Ihre Leistung sichtbar ist."
+  },
+  "q12": {
+    "q": "Kann ich Musik im Hintergrund abspielen lassen?",
+    "a": "Ja, solange es die Sichtbarkeit oder die Audioüberprüfung nicht beeinträchtigt. Vermeiden Sie einfach alles, was anstößig oder ablenkend ist, dies ist immer noch eine Gemeinschaftsveranstaltung!"
+  },
+  "q13": {
+    "q": "Wie überprüfen Sie auf KI-generierte oder geloopte Videos?",
+    "a": "Unser Team überprüft alle Aufnahmen auf Anzeichen von Manipulation, einschließlich KI-Beteiligung, visuellem Looping oder verdächtig konsistenten Wiederholungen. Jeder Beitrag, bei dem der Verdacht auf Bearbeitung oder Fälschung von Wiederholungen besteht, wird automatisch abgelehnt und kann von zukünftigen Veranstaltungen ausgeschlossen werden."
+  },
+  "q14": {
+    "q": "Kann ich mehr als ein Video pro Monat einreichen?",
+    "a": "Wenn Sie den Monatsplan abonniert haben, können Sie EINE EINREICHUNG pro Monat vornehmen!"
+  }
+} 

@@ -1,0 +1,41 @@
+{
+  "title": "Wettbewerbsregeln",
+  "meta": {
+    "title": "Wettbewerbsregeln | Pull-Up Club",
+    "description": "Offizielle Regeln für den Battle Bunker Pull-Up Club Wettbewerb. Lesen Sie die Richtlinien für die Videoeinreichung, Klimmzugstandards und Bewertungskriterien."
+  },
+  "mainTitle": "Offizielle Regeln für die Videoeinreichung",
+  "introduction": "Um Fairness, Konsistenz und Integrität bei allen Einsendungen zu gewährleisten, müssen alle Teilnehmer die folgenden Anforderungen für die Videoeinreichung einhalten. Jede Videoeinreichung, die eines dieser Kriterien nicht erfüllt, kann ohne Vorankündigung abgelehnt werden. Wenn Sie Mitglied im Pull-Up Club sind und die monatliche Gebühr bezahlen, dürfen Sie ein Video pro Monat einreichen.",
+  "section1": {
+    "title": "1. Klare und ungehinderte Sicht",
+    "point1": "Der gesamte Körper und die Stange müssen während des gesamten Videos jederzeit deutlich sichtbar sein.",
+    "point2": "Der Kamerawinkel darf wichtige Bewegungspunkte (z. B. Kinn, Arme, Sperrposition) nicht verdecken oder verschleiern.",
+    "point3": "Vermeiden Sie dunkle Beleuchtung, übermäßige Gegenbeleuchtung oder wackelige Kameraführung. Stabilisieren Sie Ihre Aufnahme, bevor Sie beginnen."
+  },
+  "section2": {
+    "title": "2. Anforderungen an die korrekte Form",
+    "intro": "Damit eine Wiederholung als gültig zählt, muss jede Wiederholung die folgenden Standards erfüllen:",
+    "point1": "Kinn über der Stange: Das Kinn des Athleten muss bei jeder Wiederholung deutlich über die horizontale Ebene der Stange steigen.",
+    "point2": "Volle Streckung: Die Arme müssen am unteren Ende jeder Wiederholung die volle Streckung (Ellbogen durchgestreckt) erreichen.",
+    "point3": "Wiederholungen, die mit Kipping, Schwingen oder teilweisem Bewegungsumfang ausgeführt werden, können nach unserem Ermessen nicht gezählt werden."
+  },
+  "section3": {
+    "title": "3. Kontinuierliche Aufzeichnung",
+    "point1": "Das Video muss in einer einzigen kontinuierlichen Aufnahme von Anfang bis Ende aufgenommen werden, ohne Schnitte, Bearbeitungen, Zeitlupen oder Zeitsprünge.",
+    "point2": "Stellen Sie sicher, dass die Aufnahme vor der ersten Wiederholung beginnt und bis nach Abschluss der letzten Wiederholung andauert.",
+    "point3": "Schneiden oder spleißen Sie kein Filmmaterial in der Postproduktion."
+  },
+  "section4": {
+    "title": "4. Echtheit des Videos",
+    "intro": "Ihre Einreichung muss 100% echtes, unverändertes Filmmaterial sein. Mit der Einreichung stimmen Sie zu, dass:",
+    "point1": "Das Video nicht durch KI-Tools generiert, verbessert oder verändert wird.",
+    "point2": "Das Video nicht durch Schleifen, Schichten oder Zeitbearbeitungen manipuliert wird, um die Leistung fälschlicherweise zu verlängern oder zu verbessern.",
+    "point3": "Jede Einreichung, die gegen diese Regel verstößt, wird automatisch disqualifiziert."
+  },
+  "section5": {
+    "title": "5. Öffentlicher Zugang",
+    "point1": "Ihr Video muss auf einer Plattform wie Instagram, TikTok, YouTube oder Facebook öffentlich zugänglich sein.",
+    "point2": "Private, passwortgeschützte oder abgelaufene Links werden nicht überprüft oder gezählt."
+  },
+  "conclusion": "Durch das Einreichen Ihres Videos erkennen Sie diese Regeln vollständig an und akzeptieren sie. Wir behalten uns das Recht vor, jede Einreichung abzulehnen, die diese Standards nicht eindeutig erfüllt."
+} 

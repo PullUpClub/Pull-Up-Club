@@ -1,0 +1,97 @@
+{
+  "meta": {
+    "title": "Pull-Up Club | Der ultimative Klimmzug-Wettbewerb",
+    "description": "Treten Sie dem Battle Bunker Pull-Up Club bei, dem ultimativen Online-Klimmzug-Wettbewerb. Reichen Sie Ihre Videos ein, lassen Sie sich bewerten und erklimmen Sie die globale Bestenliste, um Abzeichen und Preise zu verdienen.",
+    "ogTitle": "Pull-Up Club | Der ultimative Klimmzug-Wettbewerb",
+    "ogDescription": "Messen Sie sich mit Athleten weltweit im ultimativen Krafttest. Können Sie die Bestenliste anführen?"
+  },
+  "hero": {
+    "title": "Willkommen im Pull-Up Club",
+    "subtitle": "Verdienen Sie 1$ pro Wiederholung. Erste Einreichung ist kostenlos.",
+    "cta": "Jetzt anmelden",
+    "secondaryCta": "Bestenliste ansehen",
+    "liveActivity": "<0>{{name}}</0> aus {{location}} hat <1>{{pullUps}}</1> Klimmzüge absolviert",
+    "live": "LIVE",
+    "justNow": "Gerade eben",
+    "warriorsJoined": "Krieger beigetreten",
+    "price": "9,99 $/Monat",
+    "cancelAnytime": "Jederzeit kündbar",
+    "global": "Global",
+    "leaderboard": "Bestenliste",
+    "badgeTypes": "Abzeichentypen",
+    "pullUpsToday": "<0>{{count}}</0> Klimmzüge in den letzten 24 Stunden absolviert",
+    "alt_athlete": "Athlet macht Klimmzüge"
+  },
+  "howItWorks": {
+    "title": "Wie es funktioniert",
+    "subtitle": "Nehmen Sie in drei einfachen Schritten an der Battle Bunker Pull-Up Challenge teil. Zeigen Sie Ihre Stärke und messen Sie sich mit Athleten weltweit.",
+    "step1": {
+      "title": "1. Aufnehmen & Einreichen",
+      "description": "Nehmen Sie Ihre beste Klimmzugleistung auf, veröffentlichen Sie sie und reichen Sie den Videolink zusammen mit einer Gebühr ein."
+    },
+    "step2": {
+      "title": "2. Überprüfung erhalten",
+      "description": "Unser Team überprüft Ihre Einreichung auf korrekte Form und zählt Ihre Klimmzüge."
+    },
+    "step3": {
+      "title": "3. Der Bestenliste beitreten",
+      "description": "Nach der Überprüfung wird Ihre Leistung auf unserer globalen Bestenliste angezeigt."
+    }
+  },
+  "perks": {
+    "title": "Vorteile des Battle Bunker Pull-Up Clubs",
+    "subtitle": "Wenn du dich anmeldest, trittst du nicht nur einem Club bei. Du trittst einer Bewegung bei. Das bekommst du:",
+    "perk1": {
+      "title": "OFFIZIELLES EINTRITTS-PATCH",
+      "description": "Verdiene dir deinen ersten Streifen. Jedes Mitglied erhält ein exklusives Battle Bunker Pull-Up Club-Patch direkt nach Hause geschickt. Dies ist deine Ehrenmedaille – keine Wiederholungen, kein Patch."
+    },
+    "perk2": {
+      "title": "VIERTELJÄHRLICHES SAMMLER-PATCH",
+      "description": "Jedes Quartal bringen wir ein brandneues, limitiertes Patch heraus – Mitglieder des Klimmzug-Clubs erhalten das Patch nach Hause geschickt. Verpasst? Du wirst es nie wieder sehen."
+    },
+    "perk3": {
+      "title": "STUFEN-RANGLISTENSYSTEM",
+      "description": "Du wirst nach Leistung eingestuft – Rekrut, Bewährt, Gehärtet, Operator, Elite. Dies ist keine Teilnahme. Du arbeitest dich nach oben, und die Community sieht es."
+    },
+    "perk4": {
+      "title": "OFFIZIELLE BESTENLISTE",
+      "description": "Nach der Überprüfung ist dein Name fest eingetragen. Messe dich mit den Besten, verfolge deinen Aufstieg und lass die Zahlen für sich sprechen. Die Bestenliste zeigt nur aktive Mitglieder des Klimmzug-Clubs."
+    },
+    "perk5": {
+      "title": "ZUGANG ZU STUFENBESCHRÄNKTER AUSRÜSTUNG",
+      "description": "Willst du die Ausrüstung? Verdiene sie dir. Exklusives Merch wird nur auf bestimmten Stufen freigeschaltet. Keine Abkürzungen, keine Ausreden – du trägst, was du bewiesen hast."
+    },
+    "perk6": {
+      "title": "SOZIALES RAMPENLICHT",
+      "description": "Markiere uns in deinen Einreichungsvideos, Patch-Fotos und Comeback-Geschichten und werde vorgestellt. Wir teilen 100 % der Community."
+    }
+  },
+  "leaderboardPreview": {
+    "title": "Top-Wettkämpfer",
+    "subtitle": "Schauen Sie sich unsere aktuellen Bestenlisten-Champions an. Wird Ihr Name auf dieser Liste stehen?",
+    "viewFull": "Vollständige Bestenliste ansehen"
+  },
+  "testimonials": {
+    "title": "Was Teilnehmer sagen",
+    "testimonial1": {
+      "quote": "Die Klimmzug-Challenge von Battle Bunker hat mich an meine Grenzen gebracht. Ich bin in nur zwei Monaten von 15 auf 25 Klimmzüge gekommen!",
+      "author": "Mike Johnson",
+      "role": "CrossFit-Athlet"
+    },
+    "testimonial2": {
+      "quote": "Die Bestenliste hält mich motiviert. Meinen Namen jede Woche aufsteigen zu sehen, ist unglaublich befriedigend.",
+      "author": "Sarah Williams",
+      "role": "Battle Bunker Elite-Mitglied"
+    },
+    "testimonial3": {
+      "quote": "Diese Plattform hat einen freundschaftlichen Wettbewerb unter meinen Mitgliedern geschaffen. Alle trainieren härter!",
+      "author": "Dave Rodriguez",
+      "role": "Inhaber, Iron Warriors Gym"
+    }
+  },
+  "ctaSection": {
+    "title": "Bereit, deine Stärke zu testen?",
+    "subtitle": "Schließen Sie sich Hunderten von Athleten an, die bereits an der Battle Bunker Pull-Up Challenge teilnehmen. Zeigen Sie der Welt, wozu Sie fähig sind!",
+    "cta": "Anmelden"
+  }
+} 

@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "title": "订阅 | 引体向上俱乐部",
+    "description": "选择您的订阅计划，立即加入引体向上俱乐部。提供月度和年度计划。"
+  },
+  "title": "引体向上俱乐部会员",
+  "subtitle": "加入我们独家的引体向上挑战社区，跟踪您的进度，并在排行榜上竞争。",
+  "completeSubscriptionTitle": "完成您的{{plan}}订阅",
+  "loadingStatus": "加载订阅状态失败",
+  "cancellationNotice": "您的订阅已设置为在当前计费期结束时取消。在此之前您将继续拥有访问权限。",
+  "activeNotice": "您拥有有效的会员资格。请在下方管理您的订阅。",
+  "agreement": "订阅即表示您同意我们的<0>服务条款</0>和<1>隐私政策</1>。",
+  "goToProfile": "转到您的个人资料",
+  "plans": {
+    "title": "选择您的计划",
+    "intro": "在下方选择您的计划。付款后，您将创建帐户以访问平台。",
+    "monthly": "每月",
+    "annual": "每年",
+    "bestValue": "最优惠",
+    "monthlyTitle": "月度会员",
+    "monthlyPrice": "/月 (美元)",
+    "monthlyFeatures": [
+      "排行榜访问权限",
+      "成就徽章",
+      "随时取消"
+    ],
+    "annualTitle": "年度会员",
+    "annualPrice": "/年 (美元)",
+    "annualSavings": "每年节省 ${annualSavings}",
+    "annualFeatures": [
+      "包含月度计划的所有内容",
+      "长期承诺更优惠",
+      "一次性设置，无后顾之忧——无月度账单中断"
+    ],
+    "button": "立即开始",
+    "processing": "处理中..."
+  },
+  "signup": {
+    "verifying": "正在验证付款",
+    "verifyingDesc": "请稍候，我们正在验证您的付款...",
+    "failedTitle": "付款验证失败",
+    "failedDesc": "我们无法验证您的付款。请重试。",
+    "backButton": "返回订阅",
+    "successTitle": "付款成功！",
+    "successDesc": "现在创建您的帐户以访问引体向上俱乐部平台。",
+    "passwordPlaceholder": "密码",
+    "confirmPasswordPlaceholder": "确认密码",
+    "requirementsTitle": "密码要求：",
+    "reqMinLength": "至少8个字符",
+    "reqUpperCase": "一个大写字母",
+    "reqLowerCase": "一个小写字母",
+    "reqNumber": "一个数字",
+    "reqMatch": "密码匹配",
+    "createButton": "创建帐户并访问平台",
+    "creatingButton": "正在创建帐户..."
+  },
+  "securePayment": "由Stripe提供安全支付处理。随时取消您的订阅。"
+} 

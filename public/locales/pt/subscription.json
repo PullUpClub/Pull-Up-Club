@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "title": "Assinatura | Pull-Up Club",
+    "description": "Escolha seu plano de assinatura e junte-se ao Pull-Up Club hoje. Planos mensais e anuais disponíveis."
+  },
+  "title": "Assinatura do Pull-Up Club",
+  "subtitle": "Junte-se à nossa comunidade exclusiva de desafios de barra fixa, acompanhe seu progresso e compita no quadro de líderes.",
+  "completeSubscriptionTitle": "Complete sua Assinatura {{plan}}",
+  "loadingStatus": "Falha ao carregar o status da assinatura",
+  "cancellationNotice": "Sua assinatura foi configurada para ser cancelada no final do seu período de faturamento atual. Você continuará a ter acesso até lá.",
+  "activeNotice": "Você tem uma assinatura ativa. Gerencie sua assinatura abaixo.",
+  "agreement": "Ao se inscrever, você concorda com nossos <0>Termos de Serviço</0> e nossa <1>Política de Privacidade</1>.",
+  "goToProfile": "Ir para o seu perfil",
+  "plans": {
+    "title": "Escolha seu Plano",
+    "intro": "Escolha seu plano abaixo. Após o pagamento, você criará sua conta para acessar a plataforma.",
+    "monthly": "Mensal",
+    "annual": "Anual",
+    "bestValue": "MELHOR VALOR",
+    "monthlyTitle": "Assinatura Mensal",
+    "monthlyPrice": "/mês (USD)",
+    "monthlyFeatures": [
+      "Acesso ao quadro de líderes",
+      "Emblemas de conquista",
+      "Cancele a qualquer momento"
+    ],
+    "annualTitle": "Assinatura Anual",
+    "annualPrice": "/ano (USD)",
+    "annualSavings": "Economize ${{annualSavings}} por ano",
+    "annualFeatures": [
+      "Tudo no plano mensal",
+      "Melhor valor para compromisso de longo prazo",
+      "Configure e esqueça — sem interrupções de cobrança mensal"
+    ],
+    "button": "Comece Agora",
+    "processing": "Processando..."
+  },
+  "signup": {
+    "verifying": "Verificando Pagamento",
+    "verifyingDesc": "Aguarde enquanto verificamos seu pagamento...",
+    "failedTitle": "Falha na Verificação do Pagamento",
+    "failedDesc": "Não foi possível verificar seu pagamento. Por favor, tente novamente.",
+    "backButton": "Voltar para a Assinatura",
+    "successTitle": "Pagamento Bem-sucedido!",
+    "successDesc": "Agora crie sua conta para acessar a plataforma do Pull-Up Club.",
+    "passwordPlaceholder": "Senha",
+    "confirmPasswordPlaceholder": "Confirmar Senha",
+    "requirementsTitle": "Requisitos de senha:",
+    "reqMinLength": "Pelo menos 8 caracteres",
+    "reqUpperCase": "Uma letra maiúscula",
+    "reqLowerCase": "Uma letra minúscula",
+    "reqNumber": "Um número",
+    "reqMatch": "As senhas correspondem",
+    "createButton": "Criar Conta e Acessar a Plataforma",
+    "creatingButton": "Criando Conta..."
+  },
+  "securePayment": "Processamento de pagamento seguro pela Stripe. Cancele sua assinatura a qualquer momento."
+} 

@@ -1,0 +1,41 @@
+{
+  "title": "Règles de la Compétition",
+  "meta": {
+    "title": "Règles de la Compétition | Pull-Up Club",
+    "description": "Règles officielles de la compétition du Battle Bunker Pull-Up Club. Lisez les directives pour la soumission des vidéos, les normes des tractions et les critères de jugement."
+  },
+  "mainTitle": "Règles Officielles de Soumission des Vidéos",
+  "introduction": "Pour garantir l'équité, la cohérence et l'intégrité de toutes les participations, tous les participants doivent respecter les exigences de soumission de vidéo suivantes. Toute soumission de vidéo qui ne répond pas à l'un de ces critères peut être refusée sans préavis. Si vous êtes membre du Pull-Up Club et que vous payez les frais mensuels, vous avez droit à une soumission de vidéo par mois.",
+  "section1": {
+    "title": "1. Vue Claire et Dégagée",
+    "point1": "Le corps entier et la barre doivent être clairement visibles à tout moment tout au long de la vidéo.",
+    "point2": "L'angle de la caméra ne doit pas cacher ou obscurcir les points clés du mouvement (par exemple, le menton, les bras, la position de verrouillage).",
+    "point3": "Évitez l'éclairage sombre, le contre-jour excessif ou une caméra instable. Stabilisez votre prise de vue avant de commencer."
+  },
+  "section2": {
+    "title": "2. Exigences de Forme Correcte",
+    "intro": "Pour qu'une répétition soit valide, chaque répétition doit répondre aux normes suivantes :",
+    "point1": "Menton au-dessus de la Barre : Le menton de l'athlète doit clairement dépasser le plan horizontal de la barre pour chaque répétition.",
+    "point2": "Extension Complète : Les bras doivent atteindre une extension complète (coudes verrouillés) au bas de chaque répétition.",
+    "point3": "Les répétitions effectuées avec du kipping, du balancement ou une amplitude de mouvement partielle peuvent ne pas être comptées à notre discrétion."
+  },
+  "section3": {
+    "title": "3. Enregistrement Continu",
+    "point1": "La vidéo doit être capturée en une seule prise continue du début à la fin, sans coupures, montages, ralentis ou sauts dans le temps.",
+    "point2": "Assurez-vous que l'enregistrement commence avant la première répétition et se poursuit jusqu'à la fin de la dernière répétition.",
+    "point3": "Ne recadrez pas et ne montez pas de séquences en post-production."
+  },
+  "section4": {
+    "title": "4. Authenticité de la Vidéo",
+    "intro": "Votre soumission doit être une séquence 100% réelle et non altérée. En soumettant, vous acceptez que :",
+    "point1": "La vidéo n'est pas générée, améliorée ou modifiée par des outils d'IA.",
+    "point2": "La vidéo n'est pas manipulée à l'aide de boucles, de superpositions ou de montages temporels pour prolonger ou améliorer faussement les performances.",
+    "point3": "Toute soumission jugée en violation de cette règle sera automatiquement disqualifiée."
+  },
+  "section5": {
+    "title": "5. Accès Public",
+    "point1": "Votre vidéo doit être accessible au public sur une plateforme comme Instagram, TikTok, YouTube ou Facebook.",
+    "point2": "Les liens privés, protégés par mot de passe ou expirés ne seront pas examinés ni comptés."
+  },
+  "conclusion": "En soumettant votre vidéo, vous reconnaissez et acceptez l'intégralité de ces règles. Nous nous réservons le droit de refuser toute soumission qui ne respecte pas clairement ces normes."
+} 

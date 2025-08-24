@@ -1,0 +1,99 @@
+{
+  "title": "管理者ダッシュボード",
+  "meta": {
+    "title": "管理者 | プルアップクラブ",
+    "description": "提出物、ユーザー、サイト設定を管理するための管理者ダッシュボード。"
+  },
+  "nav": {
+    "dashboard": "ダッシュボード",
+    "submissions": "提出物",
+    "users": "ユーザー管理"
+  },
+  "stats": {
+    "title": "サイト統計",
+    "totalUsers": "総ユーザー数",
+    "activeSubscriptions": "アクティブなサブスクリプション",
+    "pendingSubmissions": "保留中の提出物",
+    "totalSubmissions": "総提出物数"
+  },
+  "submissions": {
+    "title": "提出物をレビュー",
+    "newSubmissions": "レビューする新しい提出物",
+    "noSubmissions": "レビューする保留中の提出物はありません。",
+    "filterTitle": "フィルター",
+    "filterMonth": "月",
+    "allMonths": "すべての月",
+    "filterStatus": "ステータス",
+    "allStatuses": "すべてのステータス",
+    "search": "検索",
+    "searchPlaceholder": "検索...",
+    "resetFilters": "フィルターをリセット",
+    "loading": "提出物を読み込み中...",
+    "table": {
+      "user": "ユーザー",
+      "date": "提出日",
+      "status": "ステータス",
+      "actions": "アクション"
+    },
+    "actions": {
+      "viewVideo": "ビデオを見る",
+      "approve": "承認",
+      "reject": "拒否",
+      "feature": "特集",
+      "unfeature": "特集を解除",
+      "watchVideo": "ビデオを見る",
+      "infoTitle": "提出情報",
+      "claimed": "申告：",
+      "verified": "検証済み：",
+      "pending": "保留中",
+      "countPlaceholder": "カウント"
+    },
+    "pagination": {
+      "showing": "{{total}}件中{{count}}件の提出物を表示中",
+      "previous": "前へ",
+      "next": "次へ",
+      "page": "ページ{{current}}/{{total}}"
+    },
+    "emailBanner": {
+      "title": "月間提出システムが有効です：",
+      "text": "提出を拒否すると、拒否メールが自動的にユーザーに送信されます。拒否されたユーザーはすぐに再提出できます。承認されたユーザーは来月まで待つ必要があります。",
+      "warning": "send-rejection-email Edge Functionが展開および設定されていることを確認してください。"
+    },
+    "updateSuccess": "提出{{status}}成功",
+    "updateError": "提出の更新に失敗しました"
+  },
+  "users": {
+    "title": "ユーザー管理",
+    "back": "ダッシュボードに戻る",
+    "refresh": "ユーザーを更新",
+    "error": "エラー",
+    "loading": "ユーザーを読み込み中...",
+    "noUsers": "ユーザーが見つかりません",
+    "table": {
+      "email": "Eメール",
+      "name": "名前",
+      "role": "役割",
+      "paid": "支払い済み",
+      "createdAt": "作成日",
+      "actions": "アクション"
+    },
+    "role_user": "ユーザー",
+    "role_admin": "管理者",
+    "paid_yes": "はい",
+    "paid_no": "いいえ",
+    "actions": {
+      "makeAdmin": "管理者に設定",
+      "removeAdmin": "管理者を削除",
+      "delete": "削除",
+      "deleting": "削除中...",
+      "processing": "処理中...",
+      "confirmDelete": "このユーザーを削除してもよろしいですか？この操作は元に戻せません。",
+      "status": {
+        "error": "エラー：{{message}}",
+        "addSuccess": "成功：管理者ロールが追加されました",
+        "removeSuccess": "成功：管理者ロールが削除されました",
+        "deleteSuccess": "成功：ユーザーが削除されました"
+      }
+    }
+  }
+} 
