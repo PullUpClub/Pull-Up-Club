@@ -191,39 +191,39 @@ const AdminPayoutsPage: React.FC = () => {
     }
   };
 
-  const sendPayPalRemindersTest = async () => {
-    try {
-      // Get current user's email for test
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user?.email) {
-        toast.error('No user email found for test');
-        return;
-      }
+  // const sendPayPalRemindersTest = async () => {
+  //   try {
+  //     // Get current user's email for test
+  //     const { data: { user } } = await supabase.auth.getUser();
+  //     if (!user?.email) {
+  //       toast.error('No user email found for test');
+  //       return;
+  //     }
 
-      // Show loading state
-      toast.loading('Sending test PayPal reminder...', { id: 'paypal-reminders-test' });
+  //     // Show loading state
+  //     toast.loading('Sending test PayPal reminder...', { id: 'paypal-reminders-test' });
       
-      const { data, error } = await supabase.functions.invoke('send-paypal-reminders', {
-        body: { 
-          target_month: selectedMonth,
-          test_email: user.email 
-        }
-      });
+  //     const { data, error } = await supabase.functions.invoke('send-paypal-reminders', {
+  //       body: { 
+  //         target_month: selectedMonth,
+  //         test_email: user.email 
+  //       }
+  //     });
 
-      if (error) {
-        console.error('Error sending test reminder:', error);
-        toast.error('Failed to send test PayPal reminder', { id: 'paypal-reminders-test' });
-        return;
-      }
+  //     if (error) {
+  //       console.error('Error sending test reminder:', error);
+  //       toast.error('Failed to send test PayPal reminder', { id: 'paypal-reminders-test' });
+  //       return;
+  //     }
 
-      toast.success(`✅ Test PayPal reminder sent to ${user.email}`, { id: 'paypal-reminders-test' });
-      console.log('Test PayPal reminder response:', data);
+  //     toast.success(`✅ Test PayPal reminder sent to ${user.email}`, { id: 'paypal-reminders-test' });
+  //     console.log('Test PayPal reminder response:', data);
       
-    } catch (error) {
-      console.error('Error sending test reminder:', error);
-      toast.error('Failed to send test PayPal reminder', { id: 'paypal-reminders-test' });
-    }
-  };
+  //   } catch (error) {
+  //     console.error('Error sending test reminder:', error);
+  //     toast.error('Failed to send test PayPal reminder', { id: 'paypal-reminders-test' });
+  //   }
+  // };
 
   const markAsPaid = async (payoutId: string) => {
     try {

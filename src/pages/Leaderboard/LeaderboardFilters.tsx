@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { LeaderboardFilters as FiltersType, Submission } from '../../types';
-import badges, { getAgeGroups, femaleBadges } from '../../data/mockData';
+import badges, { getAgeGroups } from '../../data/mockData';
 import { useTranslation } from 'react-i18next';
 
 interface LeaderboardFiltersProps {

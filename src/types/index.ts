@@ -68,7 +68,7 @@ export interface Profile {
   user_id: string;
   email: string;
   full_name?: string;
-  social_media?: string;
+  social_media?: string | null;
   age?: number;
   gender?: string;
   organization?: string;

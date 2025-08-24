@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
-import { validateProfileCompletion, getProfileCompletionMessage, ProfileValidationResult } from '../utils/profileValidation';
+import { validateProfileCompletion, getProfileCompletionMessage } from '../utils/profileValidation';
 
 export const useProfileValidation = () => {
   const { profile } = useAuth();
