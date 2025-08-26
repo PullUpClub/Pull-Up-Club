@@ -196,7 +196,10 @@ async function verifyStripeSignature(req: Request) {
       return { valid: false };
     }
 
-    const body = await req.text();
+    // Get the raw body as ArrayBuffer first, then convert to string
+    const bodyBuffer = await req.arrayBuffer();
+    const body = new TextDecoder().decode(bodyBuffer);
+    
     const event = await stripe.webhooks.constructEventAsync(
       body,
       signature,
@@ -412,6 +415,48 @@ Deno.serve(async (req: Request) => {
           }
         } else {
           console.log('User not found for recurring payment customer:', invoice.customer);
+        }
+        break;
+      }
+
+      case 'invoice.payment_failed': {
+        const invoice = event.data.object as Stripe.Invoice;
+        
+        if (!invoice.customer || typeof invoice.customer !== 'string') {
+          break;
+        }
+        
+        if (!invoice.subscription || typeof invoice.subscription !== 'string') {
+          break;
+        }
+        
+        console.log(`Payment failed for customer: ${invoice.customer}`);
+        
+        // For failed payments, find user by stripe_customer_id
+        const { data: user, error } = await supabaseAdmin
+          .from('profiles')
+          .select('id, email')
+          .eq('stripe_customer_id', invoice.customer)
+          .maybeSingle();
+        
+        if (user) {
+          try {
+            const subscription = await stripe.subscriptions.retrieve(invoice.subscription);
+            await supabaseAdmin
+              .from('subscriptions')
+              .update({
+                status: subscription.status,
+                current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
+                current_period_end: new Date(subscription.current_period_end * 1000).toISOString()
+              })
+              .eq('stripe_subscription_id', subscription.id);
+              
+            console.log('Updated subscription for failed payment');
+          } catch (error) {
+            console.error('Error updating subscription:', error);
+          }
+        } else {
+          console.log('User not found for failed payment customer:', invoice.customer);
         }
         break;
       }
