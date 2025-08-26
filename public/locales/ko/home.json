@@ -7,7 +7,7 @@
   },
   "hero": {
     "title": "풀업 클럽에 오신 것을 환영합니다",
-    "subtitle": "1회당 1달러 획득. 첫 제출은 무료.",
+    "subtitle": "한 달에 한 번 제출. 1회당 1달러. 첫 달은 무료!",
     "cta": "지금 가입하세요",
     "secondaryCta": "리더보드 보기",
     "liveActivity": "{{location}}의 <0>{{name}}</0>님이 <1>{{pullUps}}</1>회 풀업을 완료했습니다",

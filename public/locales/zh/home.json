@@ -7,7 +7,7 @@
   },
   "hero": {
     "title": "欢迎来到引体向上俱乐部",
-    "subtitle": "每次赚取1美元。首次提交免费。",
+    "subtitle": "每月一次提交。每次1美元。您的第一个月免费！",
     "cta": "立即注册",
     "secondaryCta": "查看排行榜",
     "liveActivity": "<0>{{name}}</0> 来自 {{location}} 完成了 <1>{{pullUps}}</1> 次引体向上",

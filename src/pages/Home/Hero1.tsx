@@ -233,11 +233,8 @@ const Hero1: React.FC = () => {
           {/* Main headline - bigger and bolder */}
           <div className={`mb-6 transition-all duration-700 ${headlineVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <h1 className="text-6xl font-black tracking-tight leading-none">
-              <span className="block text-white mb-2">
-                Welcome to
-              </span>
               <span className="block text-[#9b9b6f]">
-                Pull-Up Club
+                {t('hero.title')}
               </span>
             </h1>
           </div>

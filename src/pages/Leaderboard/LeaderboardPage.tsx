@@ -133,10 +133,11 @@ const LeaderboardPage: React.FC = () => {
         const pullUps = s.actualPullUpCount ?? s.pullUpCount;
         const badges = getBadgesForSubmission(pullUps, s.gender);
         
-        // Check if the user has earned this specific badge (gender-specific criteria is built into getBadgesForSubmission)
-        const hasBadge = badges.some(badge => badge.id === filters.badge);
+        // Find the highest badge achieved by this user
+        const highestBadge = badges.length > 0 ? badges[badges.length - 1] : null;
         
-        return hasBadge;
+        // Check if the user's highest badge matches the selected filter
+        return highestBadge && highestBadge.id === filters.badge;
       });
     }
   }
