@@ -221,7 +221,7 @@ const Hero1: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 text-center">
           <div className={`transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
             <span className="block text-lg font-medium tracking-wide uppercase">
-              <span className="text-white">{displayedUserCount.toLocaleString()}+</span> <span className="text-[#9b9b6f]">warriors joined</span>
+              <span className="text-white">{displayedUserCount.toLocaleString()}+</span> <span className="text-[#9b9b6f]">{t('hero.warriorsJoined')}</span>
             </span>
           </div>
         </div>
@@ -254,12 +254,12 @@ const Hero1: React.FC = () => {
                 className="w-full bg-[#9b9b6f] hover:bg-[#8f8f66] text-white font-bold rounded-full px-8 py-4 text-lg transform transition-all duration-200 hover:scale-[1.02] hover:shadow-lg"
                 onClick={handleSignUpClick}
               >
-                Sign Up Now
+                {t('hero.cta')}
               </Button>
             </Link>
             <Link href="/leaderboard" className="block w-full">
               <Button variant="outline" size="lg" className="w-full bg-[#1a1a1a] hover:bg-[#2a2a2a] text-white rounded-full px-8 py-4 text-lg font-semibold transform transition-all duration-200 hover:scale-[1.02]">
-                View Leaderboard
+                {t('hero.secondaryCta')}
               </Button>
             </Link>
           </div>
