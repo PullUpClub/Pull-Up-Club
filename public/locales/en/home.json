@@ -24,17 +24,21 @@
   },
   "howItWorks": {
     "title": "How It Works",
-    "subtitle": "Join the Battle Bunker Pull-Up Challenge in three simple steps. Show your strength and compete with athletes worldwide.",
+    "subtitle": "Join the Battle Bunker Pull-Up Challenge in three simple steps. Train for your first pull-up or push your limits - compete and connect with athletes worldwide.",
+    "downloadButtons": {
+      "pdfGuide": "Download PDF Guide",
+      "freeCourse": "Free Course in App"
+    },
     "step1": {
-      "title": "1. Record & Submit",
+      "title": "Record & Submit",
       "description": "Record your best pull-up performance, post it publicly and submit the video link along with a fee."
     },
     "step2": {
-      "title": "2. Get Reviewed",
+      "title": "Get Reviewed",
       "description": "Our team will review your submission for proper form and count your pull-ups."
     },
     "step3": {
-      "title": "3. Join the Leaderboard",
+      "title": "Join the Leaderboard",
       "description": "Once verified, your performance will be featured on our global leaderboard."
     }
   },
@@ -94,4 +98,4 @@
     "subtitle": "Join hundreds of athletes already competing in the Battle Bunker Pull-Up Challenge. Show the world what you're capable of!",
     "cta": "Sign Up"
   }
-} 
+}

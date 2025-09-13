@@ -24,17 +24,21 @@
   },
   "howItWorks": {
     "title": "Cómo Funciona",
-    "subtitle": "Únete al Battle Bunker Pull-Up Challenge en tres sencillos pasos. Demuestra tu fuerza y compite con atletas de todo el mundo.",
+    "subtitle": "Únete al Battle Bunker Pull-Up Challenge en tres sencillos pasos. Entrena para tu primera dominada o empuja tus límites - compite y conecta con atletas de todo el mundo.",
+    "downloadButtons": {
+      "pdfGuide": "Descargar Guía PDF",
+      "freeCourse": "Curso Gratuito en la App"
+    },
     "step1": {
-      "title": "1. Graba y Envía",
+      "title": "Graba y Envía",
       "description": "Graba tu mejor rendimiento en dominadas, publícalo y envía el enlace del video junto con una tarifa."
     },
     "step2": {
-      "title": "2. Sé Revisado",
+      "title": "Sé Revisado",
       "description": "Nuestro equipo revisará tu envío para verificar la forma correcta y contar tus dominadas."
     },
     "step3": {
-      "title": "3. Únete a la Clasificación",
+      "title": "Únete a la Clasificación",
       "description": "Una vez verificado, tu rendimiento aparecerá en nuestra clasificación mundial."
     }
   },

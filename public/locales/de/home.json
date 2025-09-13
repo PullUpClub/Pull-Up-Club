@@ -24,17 +24,21 @@
   },
   "howItWorks": {
     "title": "Wie es funktioniert",
-    "subtitle": "Nehmen Sie in drei einfachen Schritten an der Battle Bunker Pull-Up Challenge teil. Zeigen Sie Ihre Stärke und messen Sie sich mit Athleten weltweit.",
+    "subtitle": "Nehmen Sie in drei einfachen Schritten an der Battle Bunker Pull-Up Challenge teil. Trainieren Sie für Ihren ersten Klimmzug oder überschreiten Sie Ihre Grenzen - konkurrieren und verbinden Sie sich mit Athleten weltweit.",
+    "downloadButtons": {
+      "pdfGuide": "PDF-Leitfaden herunterladen",
+      "freeCourse": "Kostenloser Kurs in der App"
+    },
     "step1": {
-      "title": "1. Aufnehmen & Einreichen",
+      "title": "Aufnehmen & Einreichen",
       "description": "Nehmen Sie Ihre beste Klimmzugleistung auf, veröffentlichen Sie sie und reichen Sie den Videolink zusammen mit einer Gebühr ein."
     },
     "step2": {
-      "title": "2. Überprüfung erhalten",
+      "title": "Überprüfung erhalten",
       "description": "Unser Team überprüft Ihre Einreichung auf korrekte Form und zählt Ihre Klimmzüge."
     },
     "step3": {
-      "title": "3. Der Bestenliste beitreten",
+      "title": "Der Bestenliste beitreten",
       "description": "Nach der Überprüfung wird Ihre Leistung auf unserer globalen Bestenliste angezeigt."
     }
   },
