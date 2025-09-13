@@ -21,5 +21,25 @@
     "badgeTypes": "Badge Types",
     "pullUpsToday": "<0>{{count}}</0> pull-ups completed in the last 24 hours",
     "alt_athlete": "Athlete performing pull-ups"
+  },
+  "howItWorks": {
+    "title": "How It Works",
+    "subtitle": "Join the Battle Bunker Pull-Up Challenge in three simple steps. Train for your first pull-up or push your limits - compete and connect with athletes worldwide.",
+    "downloadButtons": {
+      "pdfGuide": "Download PDF Guide",
+      "freeCourse": "Free Course in App"
+    },
+    "step1": {
+      "title": "Record & Submit",
+      "description": "Record your best pull-up performance, post it publicly and submit the video link along with a fee."
+    },
+    "step2": {
+      "title": "Get Reviewed",
+      "description": "Our team will review your submission for proper form and count your pull-ups."
+    },
+    "step3": {
+      "title": "Join the Leaderboard",
+      "description": "Once verified, your performance will be featured on our global leaderboard."
+    }
   }
 } 
