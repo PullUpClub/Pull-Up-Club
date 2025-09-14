@@ -1,5 +1,5 @@
 // Enhanced service worker with browser extension protection
-const CACHE_NAME = 'pull-up-club-v3'; // Increment version to force cache refresh
+const CACHE_NAME = 'pull-up-club-v4'; // Increment version to force cache refresh
 const STATIC_ASSETS = [
   // HTML shell deliberately excluded to always fetch latest version
   '/pullup_header_desktop.webp',
