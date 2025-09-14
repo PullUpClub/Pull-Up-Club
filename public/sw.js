@@ -102,6 +102,26 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Special handling for locale files - network first with fallback
+  if (event.request.url.includes('/locales/') && event.request.url.endsWith('.json')) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          // Clone the response before using it
+          const responseToCache = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+          return response;
+        })
+        .catch(() => {
+          // If network fails, try cache as fallback
+          return caches.match(event.request);
+        })
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((response) => {
       if (response) {
