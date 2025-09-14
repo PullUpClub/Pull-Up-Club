@@ -1,5 +1,5 @@
 // Enhanced service worker with browser extension protection
-const CACHE_NAME = 'pull-up-club-v5'; // Force cache refresh for new translations
+const CACHE_NAME = 'pull-up-club-v4'; // Increment version to force cache refresh
 const STATIC_ASSETS = [
   // HTML shell deliberately excluded to always fetch latest version
   '/pullup_header_desktop.webp',
@@ -99,33 +99,6 @@ self.addEventListener('fetch', (event) => {
     event.request.url.includes('sentry.io') ||
     event.request.url.includes('vercel.app')
   ) {
-    return;
-  }
-
-  // Special handling for locale files - network first with fallback
-  if (event.request.url.includes('/locales/') && event.request.url.endsWith('.json')) {
-    event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          // Clone the response before using it
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-          return response;
-        })
-        .catch(() => {
-          // If network fails, try cache as fallback
-          return caches.match(event.request);
-        })
-    );
-    return;
-  }
-
-  // Force refresh JavaScript files to get new translations
-  if (event.request.url.includes('/assets/') && event.request.url.endsWith('.js')) {
-    console.log('SW: Skipping cache for JS file:', event.request.url);
-    event.respondWith(fetch(event.request));
     return;
   }
 

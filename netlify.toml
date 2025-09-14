@@ -56,14 +56,6 @@
     Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
-  # Apply to locale JSON files - special handling
-  for = "/locales/*/*.json"
-  
-  [headers.values]
-    # Short cache with must-revalidate for locale files
-    Cache-Control = "public, max-age=300, must-revalidate"
-    
-[[headers]]
   # Apply to API routes (if you have serverless functions)
   for = "/api/*"
   
