@@ -1,5 +1,5 @@
 // Enhanced service worker with browser extension protection
-const CACHE_NAME = 'pull-up-club-v4'; // Increment version to force cache refresh
+const CACHE_NAME = 'pull-up-club-v5'; // Force cache refresh for new translations
 const STATIC_ASSETS = [
   // HTML shell deliberately excluded to always fetch latest version
   '/pullup_header_desktop.webp',
@@ -119,6 +119,13 @@ self.addEventListener('fetch', (event) => {
           return caches.match(event.request);
         })
     );
+    return;
+  }
+
+  // Force refresh JavaScript files to get new translations
+  if (event.request.url.includes('/assets/') && event.request.url.endsWith('.js')) {
+    console.log('SW: Skipping cache for JS file:', event.request.url);
+    event.respondWith(fetch(event.request));
     return;
   }
 
