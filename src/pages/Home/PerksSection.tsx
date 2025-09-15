@@ -1,5 +1,5 @@
 import React from 'react';
-import { Award, Shield, Trophy, Medal, ShoppingBag, Share2 } from 'lucide-react';
+import { Award, Shield, Trophy, Medal, BookOpen, Share2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const PerksSection: React.FC = () => {
@@ -27,7 +27,7 @@ const PerksSection: React.FC = () => {
       description: t('perks.perk4.description')
     },
     {
-      icon: <ShoppingBag size={48} className="text-[#9b9b6f]" />,
+      icon: <BookOpen size={48} className="text-[#9b9b6f]" />,
       title: t('perks.perk5.title'),
       description: t('perks.perk5.description')
     },
