@@ -24,21 +24,17 @@
   },
   "howItWorks": {
     "title": "Comment Ça Marche",
-    "subtitle": "Rejoignez le Battle Bunker Pull-Up Challenge en trois étapes simples. Entraînez-vous pour votre première traction ou repoussez vos limites - concourez et connectez-vous avec des athlètes du monde entier.",
-    "downloadButtons": {
-      "pdfGuide": "Télécharger le Guide PDF",
-      "freeCourse": "Cours Gratuit dans l'App"
-    },
+    "subtitle": "Rejoignez le Battle Bunker Pull-Up Challenge en trois étapes simples. Montrez votre force et affrontez des athlètes du monde entier.",
     "step1": {
-      "title": "Enregistrez et Soumettez",
+      "title": "1. Enregistrez et Soumettez",
       "description": "Enregistrez votre meilleure performance de tractions, publiez-la et soumettez le lien de la vidéo avec les frais."
     },
     "step2": {
-      "title": "Soyez Évalué",
+      "title": "2. Soyez Évalué",
       "description": "Notre équipe examinera votre soumission pour vérifier la bonne forme et compter vos tractions."
     },
     "step3": {
-      "title": "Rejoignez le Classement",
+      "title": "3. Rejoignez le Classement",
       "description": "Une fois vérifiée, votre performance sera affichée sur notre classement mondial."
     }
   },

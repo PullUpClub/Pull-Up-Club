@@ -1,5 +1,5 @@
 import React from 'react';
-import { Camera, Award, Medal } from 'lucide-react';
+import { Camera, Award, Medal, Download, Smartphone } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import VideoEmbed from '../../components/ui/VideoEmbed';
 import VideoErrorBoundary from '../../components/ui/VideoErrorBoundary';
@@ -36,41 +36,29 @@ const HowItWorks: React.FC = () => {
           </p>
         </div>
         
-        {/* Enhanced Download Buttons */}
-        <div className="flex flex-col lg:flex-row gap-6 justify-center items-center mb-16">
-          {/* PDF Download Button - Primary CTA */}
-          <div className="group relative">
-            <a
-              href="https://cdn.shopify.com/s/files/1/0567/5237/3945/files/4_Week_First_Pullup.pdf?v=1757540144"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative bg-gradient-to-r from-[#9b9b6f] to-[#8f8f66] hover:from-[#8f8f66] hover:to-[#7d7d5c] text-white px-10 py-5 rounded-xl font-bold text-lg transition-all duration-300 flex items-center gap-4 min-w-[280px] justify-center shadow-2xl hover:shadow-[#9b9b6f]/25 hover:scale-105 transform border-2 border-[#9b9b6f]/20"
-            >
-              <div className="text-2xl">📘</div>
-              <div className="flex flex-col items-start">
-                <span className="text-xl">{t('howItWorks.downloadButtons.pdfGuide')}</span>
-                <span className="text-sm text-[#f0f0e6] font-normal">Instant download • No signup required</span>
-              </div>
-              <div className="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </a>
-          </div>
+        {/* Download Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+          {/* PDF Download Button */}
+          <a
+            href="https://cdn.shopify.com/s/files/1/0567/5237/3945/files/4_Week_First_Pullup.pdf?v=1757540144"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-[#9b9b6f] hover:bg-[#8f8f66] text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center gap-3 min-w-[250px] justify-center"
+          >
+            <Download size={24} />
+            <span>{t('howItWorks.downloadButtons.pdfGuide')}</span>
+          </a>
 
-          {/* App Course Button - Secondary CTA */}
-          <div className="group relative">
-            <a
-              href="https://urlgeni.us/BattleBunkerTraining"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 text-white px-10 py-5 rounded-xl font-bold text-lg transition-all duration-300 flex items-center gap-4 min-w-[280px] justify-center shadow-2xl hover:shadow-gray-500/25 hover:scale-105 transform border-2 border-gray-600/30"
-            >
-              <div className="text-2xl">🎯</div>
-              <div className="flex flex-col items-start">
-                <span className="text-xl">{t('howItWorks.downloadButtons.freeCourse')}</span>
-                <span className="text-sm text-gray-300 font-normal">Free inside Battle Bunker app • Start today</span>
-              </div>
-              <div className="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </a>
-          </div>
+          {/* App Store Button */}
+          <a
+            href="https://urlgeni.us/BattleBunkerTraining"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-gray-800 hover:bg-gray-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center gap-3 min-w-[250px] justify-center border border-gray-600"
+          >
+            <Smartphone size={24} />
+            <span>{t('howItWorks.downloadButtons.freeCourse')}</span>
+          </a>
         </div>
         
         {/* Video Section - Full Width */}

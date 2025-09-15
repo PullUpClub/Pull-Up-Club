@@ -24,21 +24,17 @@
   },
   "howItWorks": {
     "title": "Como Funciona",
-    "subtitle": "Junte-se ao Battle Bunker Pull-Up Challenge em três passos simples. Treine para sua primeira barra ou supere seus limites - compita e conecte-se com atletas de todo o mundo.",
-    "downloadButtons": {
-      "pdfGuide": "Baixar Guia PDF",
-      "freeCourse": "Curso Gratuito no App"
-    },
+    "subtitle": "Junte-se ao Desafio de Barra Fixa do Battle Bunker em três passos simples. Mostre sua força e compita com atletas de todo o mundo.",
     "step1": {
-      "title": "Grave e Envie",
+      "title": "1. Grave e Envie",
       "description": "Grave seu melhor desempenho em barra fixa, poste publicamente e envie o link do vídeo juntamente com uma taxa."
     },
     "step2": {
-      "title": "Seja Avaliado",
+      "title": "2. Seja Avaliado",
       "description": "Nossa equipe irá rever sua submissão para a forma correta e contar suas barras."
     },
     "step3": {
-      "title": "Junte-se ao Quadro de Líderes",
+      "title": "3. Junte-se ao Quadro de Líderes",
       "description": "Uma vez verificado, seu desempenho será destacado em nosso quadro de líderes global."
     }
   },
