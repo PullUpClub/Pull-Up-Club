@@ -7,6 +7,7 @@
     "rules": "Regras",
     "faq": "FAQ",
     "ethos": "Nosso Ethos",
+    "firstPullUpCourse": "Primeiro Curso de Flexões",
     "login": "Entrar",
     "logout": "Sair",
     "adminDashboard": "Painel do Administrador",
@@ -77,5 +78,16 @@
   },
   "errors": {
     "generic": "Ocorreu um erro inesperado. Por favor, tente novamente mais tarde."
+  },
+  "firstPullUpCourse": {
+    "subtitle": "Domine sua primeira flexão com nosso programa de treinamento abrangente e recursos.",
+    "buttons": {
+      "downloadGuide": "Baixar Guia de 4 Semanas",
+      "freeCourse": "Acessar Curso Gratuito"
+    },
+    "authNotice": {
+      "message": "Inscreva-se para acesso total para baixar o guia e acessar o curso gratuito.",
+      "signUpButton": "Inscreva-se Agora"
+    }
   }
 } 

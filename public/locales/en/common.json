@@ -7,6 +7,7 @@
     "rules": "Rules",
     "faq": "FAQ",
     "ethos": "Ethos",
+    "firstPullUpCourse": "First Pull Up Course",
     "login": "Login",
     "logout": "Logout",
     "adminDashboard": "Admin Dashboard",
@@ -78,5 +79,16 @@
   },
   "errors": {
     "generic": "An unexpected error occurred. Please try again later."
+  },
+  "firstPullUpCourse": {
+    "subtitle": "Master your first pull-up with our comprehensive training program and resources.",
+    "buttons": {
+      "downloadGuide": "Download 4 Week Guide",
+      "freeCourse": "Access Free Course"
+    },
+    "authNotice": {
+      "message": "Sign up for full access to download the guide and access the free course.",
+      "signUpButton": "Sign Up Now"
+    }
   }
 } 

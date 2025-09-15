@@ -7,6 +7,7 @@
     "rules": "Rules",
     "faq": "FAQ",
     "ethos": "Our Ethos",
+    "firstPullUpCourse": "First Pull Up Course",
     "login": "Login",
     "logout": "Logout",
     "adminDashboard": "Admin Dashboard",
@@ -41,5 +42,16 @@
     "inactive": "Inactive",
     "connecting": "Connecting...",
     "connected": "Connected"
+  },
+  "firstPullUpCourse": {
+    "subtitle": "Master your first pull-up with our comprehensive training program and resources.",
+    "buttons": {
+      "downloadGuide": "Download 4 Week Guide",
+      "freeCourse": "Access Free Course"
+    },
+    "authNotice": {
+      "message": "Sign up for full access to download the guide and access the free course.",
+      "signUpButton": "Sign Up Now"
+    }
   }
 } 

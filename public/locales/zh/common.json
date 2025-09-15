@@ -7,6 +7,7 @@
     "rules": "规则",
     "faq": "常见问题",
     "ethos": "我们的理念",
+    "firstPullUpCourse": "第一次引体向上课程",
     "login": "登录",
     "logout": "登出",
     "adminDashboard": "管理员仪表板",
@@ -58,6 +59,17 @@
     "videoUrl": "视频网址",
     "pullUpCount": "引体向上次数",
     "notes": "笔记"
+  },
+  "firstPullUpCourse": {
+    "subtitle": "通过我们全面的训练计划和资源掌握您的第一个引体向上。",
+    "buttons": {
+      "downloadGuide": "下载4周指南",
+      "freeCourse": "访问免费课程"
+    },
+    "authNotice": {
+      "message": "注册以获得完整访问权限来下载指南和访问免费课程。",
+      "signUpButton": "立即注册"
+    }
   },
   "status": {
     "loading": "加载中...",

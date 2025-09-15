@@ -1,5 +1,5 @@
 import React from 'react';
-import { Camera, Award, Medal, Download, Smartphone } from 'lucide-react';
+import { Camera, Award, Medal } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import VideoEmbed from '../../components/ui/VideoEmbed';
 import VideoErrorBoundary from '../../components/ui/VideoErrorBoundary';
@@ -36,54 +36,31 @@ const HowItWorks: React.FC = () => {
           </p>
         </div>
         
-        {/* Download Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-          {/* PDF Download Button */}
-          <a
-            href="https://cdn.shopify.com/s/files/1/0567/5237/3945/files/4_Week_First_Pullup.pdf?v=1757540144"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-[#9b9b6f] hover:bg-[#8f8f66] text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center gap-3 min-w-[250px] justify-center"
-          >
-            <Download size={24} />
-            <span>{t('howItWorks.downloadButtons.pdfGuide')}</span>
-          </a>
+        <div className="flex flex-col lg:flex-row gap-12 items-center">
+          {/* YouTube Video */}
+          <div className="w-full lg:w-1/2 order-last lg:order-first">
+            <VideoErrorBoundary>
+              <VideoEmbed embedId="1099844021" platform="vimeo" autoplayOnScroll={true} />
+            </VideoErrorBoundary>
+          </div>
 
-          {/* App Store Button */}
-          <a
-            href="https://urlgeni.us/BattleBunkerTraining"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-gray-800 hover:bg-gray-700 text-white px-8 py-4 rounded-lg font-semibold transition-colors flex items-center gap-3 min-w-[250px] justify-center border border-gray-600"
-          >
-            <Smartphone size={24} />
-            <span>{t('howItWorks.downloadButtons.freeCourse')}</span>
-          </a>
-        </div>
-        
-        {/* Video Section - Full Width */}
-        <div className="max-w-4xl mx-auto mb-12">
-          <VideoErrorBoundary>
-            <VideoEmbed embedId="1117592929" platform="vimeo" autoplayOnScroll={true} />
-          </VideoErrorBoundary>
-        </div>
-
-        {/* Steps - Horizontal on Desktop, Vertical on Mobile */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {steps.map((step, index) => (
-            <div 
-              key={index} 
-              className="bg-gray-900 p-6 rounded-lg text-center transform transition-transform hover:scale-105"
-            >
-              <div className="flex justify-center mb-4">
-                {step.icon}
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2">
-                {index + 1}. {step.title}
-              </h3>
-              <p className="text-gray-400">{step.description}</p>
+          {/* Steps */}
+          <div className="w-full lg:w-1/2">
+            <div className="grid grid-cols-1 gap-8">
+              {steps.map((step, index) => (
+                <div 
+                  key={index} 
+                  className="bg-gray-900 p-6 rounded-lg text-center transform transition-transform hover:scale-105"
+                >
+                  <div className="flex justify-center mb-4">
+                    {step.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2">{step.title}</h3>
+                  <p className="text-gray-400">{step.description}</p>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </section>

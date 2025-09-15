@@ -7,6 +7,7 @@
     "rules": "규칙",
     "faq": "자주 묻는 질문",
     "ethos": "우리의 정신",
+    "firstPullUpCourse": "첫 번째 풀업 코스",
     "login": "로그인",
     "logout": "로그아웃",
     "adminDashboard": "관리자 대시보드",
@@ -77,5 +78,16 @@
   },
   "errors": {
     "generic": "예상치 못한 오류가 발생했습니다. 나중에 다시 시도해 주세요."
+  },
+  "firstPullUpCourse": {
+    "subtitle": "종합적인 트레이닝 프로그램과 리소스로 첫 번째 풀업을 마스터하세요.",
+    "buttons": {
+      "downloadGuide": "4주 가이드 다운로드",
+      "freeCourse": "무료 코스 접근"
+    },
+    "authNotice": {
+      "message": "가이드 다운로드 및 무료 코스 접근을 위해 가입하여 완전한 접근 권한을 얻으세요.",
+      "signUpButton": "지금 가입"
+    }
   }
 } 

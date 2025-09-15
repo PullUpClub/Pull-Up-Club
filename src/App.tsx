@@ -39,6 +39,7 @@ const SignupAccessPage = lazy(() => import("./pages/Subscription/SignupAccessPag
 const VideoSubmissionPage = lazy(() => import("./pages/VideoSubmission/VideoSubmissionPage.tsx"));
 const AdminUserManagement = lazy(() => import("./pages/AdminUserManagement.tsx"));
 const EthosPage = lazy(() => import("./pages/EthosPage.tsx"));
+const FirstPullUpCourse = lazy(() => import("./pages/FirstPullUpCourse/FirstPullUpCourse.tsx"));
 
 // Loading component
 const LoadingFallback = () => (
@@ -334,6 +335,16 @@ function App() {
                   <Route path="/cookies" element={<CookiesPolicyPage />} />
                   <Route path="/leaderboard" element={<LeaderboardPage />} />
                   <Route path="/ethos" element={<EthosPage />} />
+                  
+                  {/* Protected First Pull Up Course - requires authentication */}
+                  <Route
+                    path="/first-pull-up-course"
+                    element={
+                      <ProtectedRoute requireAuth={true} redirectTo="/subscription">
+                        <FirstPullUpCourse />
+                      </ProtectedRoute>
+                    }
+                  />
 
                   {/* Authentication routes - redirect if already logged in */}
                   <Route

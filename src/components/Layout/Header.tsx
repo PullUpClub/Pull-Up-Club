@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.tsx';
-import { User, Menu, X, Trophy, Home, UserPlus, LogIn, LogOut, Shield } from 'lucide-react';
+import { User, Menu, X, Trophy, Home, UserPlus, LogIn, LogOut, Shield, BookOpen } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { LanguageSelector } from '../LanguageSelector';
 
@@ -39,6 +39,10 @@ const Header: React.FC = () => {
             <Link to="/ethos" className="font-medium hover:text-[#9b9b6f] transition-colors flex items-center">
               <svg className="h-4 w-4 mr-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 20h9" /><path strokeLinecap="round" strokeLinejoin="round" d="M12 4h9" /><path strokeLinecap="round" strokeLinejoin="round" d="M4 6v12a2 2 0 002 2h8V4H6a2 2 0 00-2 2z" /></svg>
               {t('navigation.ethos')}
+            </Link>
+            <Link to="/first-pull-up-course" className="font-medium hover:text-[#9b9b6f] transition-colors flex items-center">
+              <BookOpen className="h-4 w-4 mr-1" />
+              {t('navigation.firstPullUpCourse')}
             </Link>
             {user ? (
               <div className="flex items-center space-x-4">
@@ -116,6 +120,14 @@ const Header: React.FC = () => {
               >
                 <svg className="h-4 w-4 mr-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 20h9" /><path strokeLinecap="round" strokeLinejoin="round" d="M12 4h9" /><path strokeLinecap="round" strokeLinejoin="round" d="M4 6v12a2 2 0 002 2h8V4H6a2 2 0 00-2 2z" /></svg>
                 {t('navigation.ethos')}
+              </Link>
+              <Link 
+                to="/first-pull-up-course" 
+                className="font-medium hover:text-[#9b9b6f] transition-colors flex items-center"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <BookOpen className="h-4 w-4 mr-1" />
+                {t('navigation.firstPullUpCourse')}
               </Link>
               {user ? (
                 <>

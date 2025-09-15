@@ -7,6 +7,7 @@
     "rules": "Regeln",
     "faq": "FAQ",
     "ethos": "Unser Ethos",
+    "firstPullUpCourse": "Erster Klimmzug-Kurs",
     "login": "Anmelden",
     "logout": "Abmelden",
     "adminDashboard": "Admin-Dashboard",
@@ -77,5 +78,16 @@
   },
   "errors": {
     "generic": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."
+  },
+  "firstPullUpCourse": {
+    "subtitle": "Meistere deinen ersten Klimmzug mit unserem umfassenden Trainingsprogramm und Ressourcen.",
+    "buttons": {
+      "downloadGuide": "4-Wochen-Anleitung herunterladen",
+      "freeCourse": "Kostenlosen Kurs aufrufen"
+    },
+    "authNotice": {
+      "message": "Melde dich an, um vollen Zugang zu erhalten, um die Anleitung herunterzuladen und auf den kostenlosen Kurs zuzugreifen.",
+      "signUpButton": "Jetzt anmelden"
+    }
   }
 } 

@@ -7,6 +7,7 @@
     "rules": "Règles",
     "faq": "FAQ",
     "ethos": "Notre Éthique",
+    "firstPullUpCourse": "Premier Cours de Tractions",
     "login": "Connexion",
     "logout": "Déconnexion",
     "adminDashboard": "Tableau de Bord Admin",
@@ -77,5 +78,16 @@
   },
   "errors": {
     "generic": "Une erreur inattendue est survenue. Veuillez réessayer plus tard."
+  },
+  "firstPullUpCourse": {
+    "subtitle": "Maîtrisez votre première traction avec notre programme d'entraînement complet et nos ressources.",
+    "buttons": {
+      "downloadGuide": "Télécharger le Guide de 4 Semaines",
+      "freeCourse": "Accéder au Cours Gratuit"
+    },
+    "authNotice": {
+      "message": "Inscrivez-vous pour un accès complet pour télécharger le guide et accéder au cours gratuit.",
+      "signUpButton": "S'inscrire Maintenant"
+    }
   }
 } 

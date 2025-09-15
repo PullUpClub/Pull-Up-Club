@@ -7,6 +7,7 @@
     "rules": "ルール",
     "faq": "よくある質問",
     "ethos": "私たちの理念",
+    "firstPullUpCourse": "初回懸垂コース",
     "login": "ログイン",
     "logout": "ログアウト",
     "adminDashboard": "管理者ダッシュボード",
@@ -77,5 +78,16 @@
   },
   "errors": {
     "generic": "予期せぬエラーが発生しました。後でもう一度お試しください。"
+  },
+  "firstPullUpCourse": {
+    "subtitle": "包括的なトレーニングプログラムとリソースで初めてのプルアップをマスターしましょう。",
+    "buttons": {
+      "downloadGuide": "4週間ガイドをダウンロード",
+      "freeCourse": "無料コースにアクセス"
+    },
+    "authNotice": {
+      "message": "ガイドをダウンロードして無料コースにアクセスするには、サインアップして完全なアクセス権を取得してください。",
+      "signUpButton": "今すぐサインアップ"
+    }
   }
 } 

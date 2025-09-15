@@ -7,6 +7,7 @@
     "rules": "Reglas",
     "faq": "Preguntas Frecuentes",
     "ethos": "Nuestra Filosofía",
+    "firstPullUpCourse": "Primer Curso de Dominadas",
     "login": "Iniciar Sesión",
     "logout": "Cerrar Sesión",
     "adminDashboard": "Panel de Administrador",
@@ -77,5 +78,16 @@
   },
   "errors": {
     "generic": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde."
+  },
+  "firstPullUpCourse": {
+    "subtitle": "Domina tu primera dominada con nuestro programa de entrenamiento integral y recursos.",
+    "buttons": {
+      "downloadGuide": "Descargar Guía de 4 Semanas",
+      "freeCourse": "Acceder al Curso Gratuito"
+    },
+    "authNotice": {
+      "message": "Regístrate para obtener acceso completo para descargar la guía y acceder al curso gratuito.",
+      "signUpButton": "Registrarse Ahora"
+    }
   }
 } 
