@@ -41,6 +41,9 @@ const AdminUserManagement = lazy(() => import("./pages/AdminUserManagement.tsx")
 const EthosPage = lazy(() => import("./pages/EthosPage.tsx"));
 const FirstPullUpCourse = lazy(() => import("./pages/FirstPullUpCourse/FirstPullUpCourse.tsx"));
 
+// Community feature - lazy loaded for optimal performance  
+const CommunityPage = lazy(() => import("./pages/Community/CommunityPage.tsx"));
+
 // Loading component
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-screen bg-black">
@@ -93,7 +96,13 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const lenis = new Lenis();
+    const lenis = new Lenis({
+      // Exclude chat containers from Lenis smooth scrolling
+      prevent: (node) => {
+        return node.classList.contains('chat-scroll-container') || 
+               node.closest('.chat-scroll-container') !== null;
+      }
+    });
 
     // Create a simple raf loop that works with Deno/TypeScript
     let rafId: number;
@@ -342,6 +351,16 @@ function App() {
                     element={
                       <ProtectedRoute requireAuth={true} redirectTo="/subscription">
                         <FirstPullUpCourse />
+                      </ProtectedRoute>
+                    }
+                  />
+
+                  {/* Protected Community - requires authentication */}
+                  <Route
+                    path="/community"
+                    element={
+                      <ProtectedRoute requireAuth={true} redirectTo="/subscription">
+                        <CommunityPage />
                       </ProtectedRoute>
                     }
                   />

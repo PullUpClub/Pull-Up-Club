@@ -8,6 +8,7 @@
     "faq": "FAQ",
     "ethos": "Ethos",
     "firstPullUpCourse": "First Pull Up Course",
+    "community": "Community",
     "login": "Login",
     "logout": "Logout",
     "adminDashboard": "Admin Dashboard",
@@ -89,6 +90,25 @@
     "authNotice": {
       "message": "Sign up for full access to download the guide and access the free course.",
       "signUpButton": "Sign Up Now"
+    }
+  },
+  "community": {
+    "sort": {
+      "recent": "Recent",
+      "popular": "Popular", 
+      "trending": "Trending"
+    },
+    "forms": {
+      "postPlaceholder": "Share your pull-up journey...",
+      "replyPlaceholder": "Share your thoughts on this...",
+      "post": "Post",
+      "reply": "Reply",
+      "posting": "Posting..."
+    },
+    "actions": {
+      "like": "Like",
+      "reply": "Reply",
+      "refresh": "Refresh"
     }
   }
 } 

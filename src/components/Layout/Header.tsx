@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.tsx';
-import { User, Menu, X, Trophy, Home, UserPlus, LogIn, LogOut, Shield, BookOpen } from 'lucide-react';
+import { User, Menu, X, Trophy, Home, UserPlus, LogIn, LogOut, Shield, BookOpen, MessageCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { LanguageSelector } from '../LanguageSelector';
 
@@ -43,6 +43,10 @@ const Header: React.FC = () => {
             <Link to="/first-pull-up-course" className="font-medium hover:text-[#9b9b6f] transition-colors flex items-center">
               <BookOpen className="h-4 w-4 mr-1" />
               {t('navigation.firstPullUpCourse')}
+            </Link>
+            <Link to="/community" className="font-medium hover:text-[#9b9b6f] transition-colors flex items-center">
+              <MessageCircle className="h-4 w-4 mr-1" />
+              {t('navigation.community') || 'Community'}
             </Link>
             {user ? (
               <div className="flex items-center space-x-4">
@@ -128,6 +132,14 @@ const Header: React.FC = () => {
               >
                 <BookOpen className="h-4 w-4 mr-1" />
                 {t('navigation.firstPullUpCourse')}
+              </Link>
+              <Link 
+                to="/community" 
+                className="font-medium hover:text-[#9b9b6f] transition-colors flex items-center"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <MessageCircle className="h-4 w-4 mr-1" />
+                {t('navigation.community') || 'Community'}
               </Link>
               {user ? (
                 <>
