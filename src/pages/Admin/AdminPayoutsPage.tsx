@@ -304,6 +304,12 @@ const AdminPayoutsPage: React.FC = () => {
             <span className="px-6 py-2 rounded-md bg-[#9b9b6f] text-black font-semibold">
               Monthly Payouts
             </span>
+            <Link
+              to="/admin-monthly-graphics"
+              className="px-6 py-2 rounded-md text-[#9a9871] hover:text-[#ededed] transition-colors"
+            >
+              Monthly Graphics
+            </Link>
           </div>
         </div>
 

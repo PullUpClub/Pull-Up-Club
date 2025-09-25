@@ -694,7 +694,7 @@ const AdminDashboardPage: React.FC = () => {
             <Link
               to="/admin-dashboard"
               className={`px-6 py-2 rounded-md transition-colors ${
-                !isPayoutsPage 
+                location.pathname === '/admin-dashboard' 
                   ? 'bg-[#9b9b6f] text-black font-semibold' 
                   : 'text-[#9a9871] hover:text-[#ededed]'
               }`}
@@ -704,12 +704,22 @@ const AdminDashboardPage: React.FC = () => {
             <Link
               to="/admin-payouts"
               className={`px-6 py-2 rounded-md transition-colors ${
-                isPayoutsPage 
+                location.pathname === '/admin-payouts' 
                   ? 'bg-[#9b9b6f] text-black font-semibold' 
                   : 'text-[#9a9871] hover:text-[#ededed]'
               }`}
             >
               Monthly Payouts
+            </Link>
+            <Link
+              to="/admin-monthly-graphics"
+              className={`px-6 py-2 rounded-md transition-colors ${
+                location.pathname === '/admin-monthly-graphics' 
+                  ? 'bg-[#9b9b6f] text-black font-semibold' 
+                  : 'text-[#9a9871] hover:text-[#ededed]'
+              }`}
+            >
+              Monthly Graphics
             </Link>
           </div>
         </div>

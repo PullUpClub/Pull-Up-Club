@@ -80,6 +80,8 @@ const CommunityPostForm: React.FC<CommunityPostFormProps> = ({
         disabled={isSubmitting}
         autoFocus={autoFocus}
         rows={1}
+        // Prevent iOS zoom on focus - critical for mobile UX
+        style={{ fontSize: '16px' }}
       />
       
       {content.trim() && (

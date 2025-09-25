@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Heart, MessageCircle, Trophy } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 import CommunityPostForm from './CommunityPostForm';
 import type { CommunityPost } from '../../hooks/useCommunityFeed';
 import BadgeAvatar from './BadgeAvatar';
@@ -22,7 +21,6 @@ const CommunityPostItem: React.FC<CommunityPostItemProps> = ({
   onToggleThread,
   depth = 0
 }) => {
-  useTranslation('community');
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
 
@@ -43,6 +41,7 @@ const CommunityPostItem: React.FC<CommunityPostItemProps> = ({
 
   return (
     <div 
+      id={`post-${post.id}`}
       className={cn("mb-3", {
         "ml-8": depth > 0, // Subtle indentation for replies
         "ml-16": depth > 1, // Slightly more for nested replies

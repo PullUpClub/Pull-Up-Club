@@ -68,7 +68,7 @@ export const useCommunityFeed = (options: UseCommunityFeedOptions = {}) => {
       const startTime = Date.now();
       
       const { data, error: fetchError } = await supabase.rpc(
-        'get_community_feed_optimized',
+        'get_community_feed_cached',
         {
           limit_count: pageSize,
           offset_count: offset,
@@ -132,39 +132,77 @@ export const useCommunityFeed = (options: UseCommunityFeedOptions = {}) => {
   const optimisticLikeToggle = useCallback(async (postId: string, currentlyLiked: boolean) => {
     if (!profile) return;
 
-    // Optimistic update
-    setPosts(prev => prev.map(post => 
-      post.id === postId
-        ? {
-            ...post,
-            like_count: currentlyLiked ? post.like_count - 1 : post.like_count + 1,
-            user_has_liked: !currentlyLiked
-          }
-        : post
-    ));
+    // Discord-level instant feedback: Optimistic update
+    setPosts(prev => prev.map(post => {
+      if (post.id === postId) {
+        return {
+          ...post,
+          like_count: currentlyLiked ? Math.max(0, post.like_count - 1) : post.like_count + 1,
+          user_has_liked: !currentlyLiked
+        };
+      }
+      // Also update in replies for Discord-level responsiveness
+      if (post.replies) {
+        return {
+          ...post,
+          replies: post.replies.map(reply => 
+            reply.id === postId 
+              ? {
+                  ...reply,
+                  like_count: currentlyLiked ? Math.max(0, reply.like_count - 1) : reply.like_count + 1,
+                  user_has_liked: !currentlyLiked
+                }
+              : reply
+          )
+        };
+      }
+      return post;
+    }));
 
     try {
       if (currentlyLiked) {
-        await supabase
+        const { error } = await supabase
           .from('community_post_likes')
           .delete()
           .match({ user_id: profile.id, post_id: postId });
+        
+        if (error) throw error;
       } else {
-        await supabase
+        const { error } = await supabase
           .from('community_post_likes')
           .insert([{ user_id: profile.id, post_id: postId }]);
+        
+        if (error) throw error;
       }
+
+      // Real-time subscription + 2-minute cache refresh will sync everyone else
+
     } catch (error) {
-      // Revert optimistic update on error
-      setPosts(prev => prev.map(post => 
-        post.id === postId
-          ? {
-              ...post,
-              like_count: currentlyLiked ? post.like_count + 1 : post.like_count - 1,
-              user_has_liked: currentlyLiked
-            }
-          : post
-      ));
+      // Discord-level error handling: Revert immediately
+      setPosts(prev => prev.map(post => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            like_count: currentlyLiked ? post.like_count + 1 : Math.max(0, post.like_count - 1),
+            user_has_liked: currentlyLiked
+          };
+        }
+        if (post.replies) {
+          return {
+            ...post,
+            replies: post.replies.map(reply => 
+              reply.id === postId 
+                ? {
+                    ...reply,
+                    like_count: currentlyLiked ? reply.like_count + 1 : Math.max(0, reply.like_count - 1),
+                    user_has_liked: currentlyLiked
+                  }
+                : reply
+            )
+          };
+        }
+        return post;
+      }));
       console.error('Error toggling like:', error);
     }
   }, [profile]);
@@ -173,46 +211,183 @@ export const useCommunityFeed = (options: UseCommunityFeedOptions = {}) => {
     if (!profile) return;
 
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('community_posts')
         .insert([{
           content: content.trim(),
           user_id: profile.id,
           parent_id: parentId || null,
           post_type: 'user_post'
-        }]);
+        }])
+        .select('*')
+        .single();
 
       if (error) throw error;
 
-      // Refresh feed after successful post
-      setTimeout(() => loadPosts(0, true), 500);
+      // INSTANT FEEDBACK: Add your post immediately to UI
+      if (data) {
+        if (parentId) {
+          // It's a reply - add to thread immediately for Discord feel
+          setPosts(current => current.map(post => {
+            if (post.id === parentId) {
+              const replyData: CommunityPost = {
+                id: data.id,
+                user_id: data.user_id,
+                parent_id: data.parent_id,
+                content: data.content,
+                post_type: data.post_type,
+                submission_id: data.submission_id || null,
+                created_at: data.created_at,
+                full_name: profile.full_name || 'You',
+                organization: profile.organization || '',
+                region: profile.region || '',
+                user_badges: (profile.badges || []).map(badge => ({
+                  name: badge.name,
+                  image_url: badge.imageUrl,
+                  min_pull_ups: badge.criteria?.value || 0
+                })),
+                like_count: 0,
+                reply_count: 0,
+                engagement_score: 0,
+                user_has_liked: false,
+                submission_data: null,
+                load_time_ms: 0
+              };
+
+              return {
+                ...post,
+                reply_count: post.reply_count + 1,
+                replies: post.replies ? [...post.replies, replyData] : [replyData],
+                isExpanded: true // Auto-expand to show your reply
+              };
+            }
+            return post;
+          }));
+        } else {
+          // It's a main post - add to top of feed immediately
+          const newPostData: CommunityPost = {
+            id: data.id,
+            user_id: data.user_id,
+            parent_id: data.parent_id,
+            content: data.content,
+            post_type: data.post_type,
+            submission_id: data.submission_id || null,
+            created_at: data.created_at,
+            full_name: profile.full_name || 'You',
+            organization: profile.organization || '',
+            region: profile.region || '',
+            user_badges: (profile.badges || []).map(badge => ({
+              name: badge.name,
+              image_url: badge.imageUrl,
+              min_pull_ups: badge.criteria?.value || 0
+            })),
+            like_count: 0,
+            reply_count: 0,
+            engagement_score: 0,
+            user_has_liked: false,
+            submission_data: null,
+            load_time_ms: 0
+          };
+
+          setPosts(current => {
+            // Check if post already exists (avoid duplicates)
+            if (current.some(p => p.id === newPostData.id)) {
+              return current;
+            }
+            return [newPostData, ...current];
+          });
+        }
+      }
 
     } catch (error) {
       console.error('Error creating post:', error);
       throw error;
     }
-  }, [profile, loadPosts]);
+  }, [profile]);
 
-  // Real-time subscription with throttling
+  // Discord-level real-time: Light notifications + optimistic updates
   useEffect(() => {
     if (!enableRealtime || !profile) return;
 
-    const throttledRefresh = () => {
-      const now = Date.now();
-      if (now - lastLoadTime.current > 2000) { // Throttle to max every 2 seconds
-        loadPosts(0, true);
-      }
-    };
-
     realtimeSubscription.current = supabase
-      .channel('community_realtime')
+      .channel('community_discord_realtime')
       .on('postgres_changes', 
         { event: 'INSERT', schema: 'public', table: 'community_posts' },
-        throttledRefresh
+        async (payload) => {
+          const newPost = payload.new as any;
+          
+          if (newPost.user_id !== profile.id) {
+            // Someone else posted - light refresh from cache in 5 seconds
+            setTimeout(() => {
+              loadPosts(0, true);
+            }, 5000);
+          }
+          // Note: Your own posts are handled immediately in createPost function
+        }
       )
-      .on('postgres_changes', 
-        { event: 'UPDATE', schema: 'public', table: 'community_posts' },
-        throttledRefresh
+      .on('postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'community_post_likes' },
+        (payload) => {
+          const like = payload.new as any;
+          // Instant like feedback for Discord feel
+          setPosts(current => current.map(post => {
+            if (post.id === like.post_id) {
+              return {
+                ...post,
+                like_count: post.like_count + 1,
+                user_has_liked: like.user_id === profile.id ? true : post.user_has_liked
+              };
+            }
+            // Also update in replies
+            if (post.replies) {
+              return {
+                ...post,
+                replies: post.replies.map(reply =>
+                  reply.id === like.post_id
+                    ? {
+                        ...reply,
+                        like_count: reply.like_count + 1,
+                        user_has_liked: like.user_id === profile.id ? true : reply.user_has_liked
+                      }
+                    : reply
+                )
+              };
+            }
+            return post;
+          }));
+        }
+      )
+      .on('postgres_changes',
+        { event: 'DELETE', schema: 'public', table: 'community_post_likes' },
+        (payload) => {
+          const like = payload.old as any;
+          // Instant unlike feedback for Discord feel
+          setPosts(current => current.map(post => {
+            if (post.id === like.post_id) {
+              return {
+                ...post,
+                like_count: Math.max(0, post.like_count - 1),
+                user_has_liked: like.user_id === profile.id ? false : post.user_has_liked
+              };
+            }
+            // Also update in replies
+            if (post.replies) {
+              return {
+                ...post,
+                replies: post.replies.map(reply =>
+                  reply.id === like.post_id
+                    ? {
+                        ...reply,
+                        like_count: Math.max(0, reply.like_count - 1),
+                        user_has_liked: like.user_id === profile.id ? false : reply.user_has_liked
+                      }
+                    : reply
+                )
+              };
+            }
+            return post;
+          }));
+        }
       )
       .subscribe();
 
@@ -246,10 +421,9 @@ export const useCommunityFeed = (options: UseCommunityFeedOptions = {}) => {
     // If expanding and no replies loaded yet, fetch them
     if (newExpanded && (!post.replies || post.replies.length === 0) && post.reply_count > 0) {
       try {
-        const { data: replies, error } = await supabase.rpc('get_thread', {
-          p_parent_id: postId,
-          p_limit: 20,
-          p_offset: 0
+        const { data: replies, error } = await supabase.rpc('get_thread_cached', {
+          parent_post_id: postId,
+          user_context_id: profile?.id || null
         });
 
         if (error) throw error;

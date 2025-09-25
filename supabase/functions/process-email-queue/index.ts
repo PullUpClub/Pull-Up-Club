@@ -43,7 +43,11 @@ Deno.serve(async (req) => {
         'resubmission', 
         'paypal_reminder', 
         'paypal_reminder_test', 
-        'account_setup_reminder'
+        'account_setup_reminder',
+        'monthly_graphic',
+        'community_reply',
+        'community_reply_immediate',
+        'community_reply_simple'
       ])
       .limit(50);
 
@@ -98,8 +102,8 @@ Deno.serve(async (req) => {
               </div>
             </div>
           `;
-        } else if (email.email_type === 'rejection' || email.email_type === 'resubmission') {
-          // Rejection and resubmission emails already have full HTML - use as is
+        } else if (email.email_type === 'rejection' || email.email_type === 'resubmission' || email.email_type === 'community_reply' || email.email_type === 'community_reply_immediate' || email.email_type === 'community_reply_simple') {
+          // These email types already have full HTML - use as is
           emailHTML = email.message;
         } else if (!email.message.includes('<div') && !email.message.includes('<html')) {
           // Other plain text emails get basic HTML wrapper

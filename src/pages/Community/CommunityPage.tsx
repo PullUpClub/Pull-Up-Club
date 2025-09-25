@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, RefreshCw } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import Layout from '../../components/Layout/Layout';
 import { useCommunityFeed } from '../../hooks/useCommunityFeed';
 import CommunityPostForm from '../../components/Community/CommunityPostForm';
@@ -10,6 +11,7 @@ import { useAuth } from '../../context/AuthContext';
 const CommunityPage: React.FC = () => {
   useTranslation('common');
   const { profile } = useAuth();
+  const location = useLocation();
   const observerRef = useRef<HTMLDivElement>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
@@ -61,6 +63,58 @@ const CommunityPage: React.FC = () => {
     return () => observer.disconnect();
   }, [hasMore, loadingMore, actions]);
 
+  // Handle direct navigation to specific posts via URL hash (email links)
+  useEffect(() => {
+    const hash = location.hash;
+    if (hash.startsWith('#post-')) {
+      const postId = hash.replace('#post-', '');
+      
+      // Wait for posts to load then scroll to target post
+      const scrollToPost = () => {
+        const targetElement = document.getElementById(`post-${postId}`);
+        if (targetElement) {
+          // Expand thread if it's a reply
+          const parentPost = posts.find(p => p.id === postId || (p.replies && p.replies.some(r => r.id === postId)));
+          if (parentPost && !parentPost.isExpanded && parentPost.reply_count > 0) {
+            actions.toggleThreadExpansion(parentPost.id);
+            // Wait a bit for the thread to expand before scrolling
+            setTimeout(() => {
+              const updatedElement = document.getElementById(`post-${postId}`);
+              if (updatedElement) {
+                updatedElement.scrollIntoView({ 
+                  behavior: 'smooth', 
+                  block: 'center' 
+                });
+                
+                // Highlight the post briefly
+                updatedElement.classList.add('ring-2', 'ring-blue-500', 'ring-opacity-50');
+                setTimeout(() => {
+                  updatedElement.classList.remove('ring-2', 'ring-blue-500', 'ring-opacity-50');
+                }, 3000);
+              }
+            }, 300);
+          } else {
+            targetElement.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'center' 
+            });
+            
+            // Highlight the post briefly
+            targetElement.classList.add('ring-2', 'ring-blue-500', 'ring-opacity-50');
+            setTimeout(() => {
+              targetElement.classList.remove('ring-2', 'ring-blue-500', 'ring-opacity-50');
+            }, 3000);
+          }
+        }
+      };
+      
+      // If posts are already loaded, scroll immediately
+      if (posts.length > 0 && !loading) {
+        setTimeout(scrollToPost, 100);
+      }
+    }
+  }, [location.hash, posts.length, loading, posts, actions]);
+
   const handleRefresh = async () => {
     setIsRefreshing(true);
     await actions.refresh();
@@ -107,7 +161,7 @@ const CommunityPage: React.FC = () => {
     <Layout>
       <div className="bg-black min-h-screen py-8">
         <div className="container mx-auto px-4 max-w-4xl">
-          {/* Header */}
+          {/* Header - Responsive branding for mobile */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-white flex items-center justify-center">
               <img 
@@ -115,11 +169,15 @@ const CommunityPage: React.FC = () => {
                 alt="Pull-Up Club" 
                 className="h-10 w-10 mr-3"
               />
-              The Arena
+              {/* Desktop: "The Arena", Mobile: "Message Board" */}
+              <span className="hidden md:inline">The Arena</span>
+              <span className="md:hidden">Message Board</span>
             </h1>
             <div className="w-20 h-1 bg-[#9b9b6f] mx-auto mt-4 mb-4"></div>
             <p className="text-gray-400">
-              Where champions connect and legends are made
+              {/* Responsive subtitles */}
+              <span className="hidden md:inline">Where champions connect and legends are made</span>
+              <span className="md:hidden">Connect with fellow athletes</span>
             </p>
           </div>
 
