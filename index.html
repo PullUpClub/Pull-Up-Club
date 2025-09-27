@@ -3,6 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     
+    <!-- Performance: Preload critical resources -->
+    <link rel="preload" href="/locales/en/common.json" as="fetch" crossorigin>
+    <link rel="preload" href="/locales/en/home.json" as="fetch" crossorigin>
+    <link rel="preload" href="/battlebunker-logo-optimized.webp" as="image">
+    <link rel="preload" href="/pullup_header-mobile.webp" as="image" media="(max-width: 768px)">
+    <link rel="preload" href="/pullup_header_desktop.webp" as="image" media="(min-width: 769px)">
+    <link rel="dns-prefetch" href="//supabase.co">
+    <link rel="dns-prefetch" href="//js.stripe.com">
+    
     <!-- Favicon links -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -99,8 +108,8 @@
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       
-      // Enable debug mode for troubleshooting (remove in production)
-      fbq('set', 'debug', true);
+      // Debug mode (only in development - automatically detected by Meta Pixel)
+      // fbq('set', 'debug', true); // Removed: causes console warnings
       
       // Initialize pixel
       fbq('init', '1512318086417813');

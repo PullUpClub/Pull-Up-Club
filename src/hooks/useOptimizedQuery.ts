@@ -42,11 +42,24 @@ export function useLeaderboardWithCache(filters: LeaderboardFilters = {}) {
           console.log('Leaderboard cache hit', cacheKey);
           return cached;
         }
-        // Query Supabase (replace with your materialized view/table)
-        const { data, error } = await supabase
+        // Try authenticated materialized view first, fallback to public view
+        let { data, error } = await supabase
           .from('leaderboard_cache')
           .select('*')
           .order('leaderboard_position', { ascending: true });
+        
+        // If permission denied (401/42501), fallback to public view
+        if (error && (error.code === '42501' || error.message?.includes('permission denied'))) {
+          console.log('🔄 Falling back to user_best_submissions due to auth requirement');
+          const fallbackResult = await supabase
+            .from('user_best_submissions')
+            .select('*')
+            .order('actual_pull_up_count', { ascending: false })
+            .limit(100);
+          data = fallbackResult.data;
+          error = fallbackResult.error;
+        }
+        
         if (error) throw error;
         let filtered = data || [];
         // Apply filters client-side

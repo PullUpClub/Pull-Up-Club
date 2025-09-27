@@ -172,10 +172,8 @@ export function trackPixelEvent(eventName: string, parameters: Record<string, an
 
     const trackMethod = standardEvents.includes(eventName) ? 'track' : 'trackCustom';
     
-    // Add debug mode for troubleshooting
-    if (window.fbq && !window.fbq.debug) {
-      window.fbq('set', 'debug', true);
-    }
+    // Debug mode is automatically enabled by Meta Pixel in development
+    // No need to manually set it as it causes console warnings
     
     window.fbq(trackMethod, eventName, parameters);
     

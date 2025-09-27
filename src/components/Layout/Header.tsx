@@ -27,7 +27,7 @@ const Header: React.FC = () => {
             <span className="text-xl font-bold tracking-wider"></span>
           </Link>
           
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-8" role="navigation" aria-label="Main navigation">
             <Link to="/" className="font-medium hover:text-[#9b9b6f] transition-colors flex items-center">
               <Home className="h-4 w-4 mr-1" />
               {t('navigation.home')}
@@ -84,23 +84,50 @@ const Header: React.FC = () => {
             <LanguageSelector />
           </nav>
           
-          <button 
-            className="md:hidden text-white focus:outline-none" 
-            onClick={toggleMobileMenu}
-            aria-label={t('navigation.toggleMenu')}
-          >
-            {isMobileMenuOpen ? (
-              <X size={24} />
+          {/* Mobile: Show auth buttons + menu toggle */}
+          <nav className="md:hidden flex items-center space-x-2" role="navigation" aria-label="Mobile navigation">
+            {/* Always show auth buttons when not authenticated - debug mobile */}
+            {!user ? (
+              <>
+                <Link 
+                  to="/login" 
+                  className="text-white font-medium hover:text-[#9b9b6f] transition-colors px-2 py-1 block"
+                  data-testid="mobile-login"
+                >
+                  {t('navigation.login')}
+                </Link>
+                <Link 
+                  to="/subscription" 
+                  className="bg-[#9b9b6f] hover:bg-[#8f8f66] text-black px-3 py-2 rounded-full font-semibold transition-colors block"
+                  data-testid="mobile-signup"
+                >
+                  {t('buttons.signUp')}
+                </Link>
+              </>
             ) : (
-              <Menu size={24} />
+              /* Show user profile link when authenticated */
+              <Link to="/profile" className="text-white font-medium hover:text-[#9b9b6f] transition-colors px-2 py-1">
+                <User size={20} />
+              </Link>
             )}
-          </button>
+            <button 
+              className="text-white focus:outline-none" 
+              onClick={toggleMobileMenu}
+              aria-label={t('navigation.toggleMenu')}
+            >
+              {isMobileMenuOpen ? (
+                <X size={24} />
+              ) : (
+                <Menu size={24} />
+              )}
+            </button>
+          </nav>
         </div>
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-black border-t border-gray-800 shadow-lg">
-            <nav className="flex flex-col space-y-4 p-4">
+            <nav className="flex flex-col space-y-4 p-4" role="navigation" aria-label="Mobile navigation menu">
               <Link 
                 to="/" 
                 className="font-medium hover:text-[#9b9b6f] transition-colors flex items-center"
@@ -141,7 +168,7 @@ const Header: React.FC = () => {
                 <MessageCircle className="h-4 w-4 mr-1" />
                 {t('navigation.community') || 'Community'}
               </Link>
-              {user ? (
+              {user && (
                 <>
                   <Link 
                     to="/profile" 
@@ -172,25 +199,6 @@ const Header: React.FC = () => {
                     <LogOut className="h-4 w-4 mr-1" />
                     {t('navigation.logout')}
                   </button>
-                </>
-              ) : (
-                <>
-                  <Link 
-                    to="/subscription" 
-                    className="font-medium hover:text-[#9b9b6f] transition-colors flex items-center"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <UserPlus className="h-4 w-4 mr-1" />
-                    {t('buttons.signUp')}
-                  </Link>
-                  <Link 
-                    to="/login" 
-                    className="font-medium hover:text-[#9b9b6f] transition-colors flex items-center"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <LogIn className="h-4 w-4 mr-1" />
-                    {t('navigation.login')}
-                  </Link>
                 </>
               )}
               <LanguageSelector />

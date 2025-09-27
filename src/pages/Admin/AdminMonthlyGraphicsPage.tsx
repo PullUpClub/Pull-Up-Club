@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layout/Layout";
 import { Button } from "../../components/ui/Button";
 import { LoadingState } from "../../components/ui/LoadingState";
-import { Mail, Send, CheckCircle2, AlertCircle, Calendar, TrendingUp, Award, Hash, Users } from "lucide-react";
+import { Mail, Send, CheckCircle2, AlertCircle, Calendar, TrendingUp, Award, Hash, Users, Eye } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { useTranslation } from 'react-i18next';
 import Head from "../../components/Layout/Head";
@@ -48,6 +48,12 @@ const AdminMonthlyGraphicsPage: React.FC = () => {
   const [selectedEmails, setSelectedEmails] = useState<Set<string>>(new Set());
   const [isSending, setIsSending] = useState(false);
   const [sendingProgress, setSendingProgress] = useState({ current: 0, total: 0 });
+  
+  // Preview functionality state
+  const [previewData, setPreviewData] = useState<MonthlyGraphicData | null>(null);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [previewHtml, setPreviewHtml] = useState<string | null>(null);
+  const [isGeneratingPreview, setIsGeneratingPreview] = useState(false);
 
   // Fetch available months using RPC (consistent with payouts page)
   const fetchAvailableMonths = async () => {
@@ -86,6 +92,63 @@ const AdminMonthlyGraphicsPage: React.FC = () => {
       toast.error('Failed to load monthly graphics data');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Generate preview for a monthly graphic
+  const generatePreview = async (graphic: MonthlyGraphicData) => {
+    setIsGeneratingPreview(true);
+    setPreviewData(graphic);
+    setShowPreviewModal(true);
+    setPreviewHtml(null);
+    
+    try {
+      // Get user earnings for the graphic
+      const { data: earningsData } = await supabase
+        .from('user_earnings')
+        .select('total_earned_dollars')
+        .eq('user_id', graphic.user_id)
+        .eq('month_year', graphic.month_year)
+        .single();
+
+      // Get user profile for gender
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('gender')
+        .eq('id', graphic.user_id)
+        .single();
+
+      const graphicData = {
+        full_name: graphic.full_name,
+        month_year: graphic.month_year,
+        current_pullups: graphic.current_pullups,
+        current_badge_name: graphic.current_badge_name,
+        pullup_increase: graphic.pullup_increase,
+        previous_pullups: graphic.previous_pullups,
+        total_earned: earningsData?.total_earned_dollars || 0,
+        gender: profileData?.gender || 'Male',
+        current_leaderboard_position: graphic.current_leaderboard_position
+      };
+
+      const response = await supabase.functions.invoke('generate-monthly-graphic', {
+        body: { graphicData }
+      });
+
+      if (response.error) {
+        throw new Error(response.error.message);
+      }
+      
+      if (response.data?.success) {
+        setPreviewHtml(response.data.html);
+        toast.success('Preview generated successfully!');
+      } else {
+        throw new Error('Failed to generate preview');
+      }
+    } catch (error) {
+      console.error('Error generating preview:', error);
+      toast.error('Error generating preview: ' + (error as Error).message);
+    } finally {
+      setIsGeneratingPreview(false);
     }
   };
 
@@ -491,18 +554,29 @@ const AdminMonthlyGraphicsPage: React.FC = () => {
                           </td>
                           
                           <td className="p-3">
-                            {!graphic.email_sent && (
+                            <div className="flex space-x-2">
                               <Button
                                 size="sm"
                                 variant="outline"
-                                onClick={() => sendIndividualEmail(graphic)}
-                                disabled={isSending}
+                                onClick={() => generatePreview(graphic)}
+                                disabled={isGeneratingPreview}
                                 className="text-xs"
                               >
-                                <Mail className="h-3 w-3 mr-1" />
-                                Send
+                                <Eye className="h-3 w-3 mr-1" />
+                                Preview
                               </Button>
-                            )}
+                              {!graphic.email_sent && (
+                                <Button
+                                  size="sm"
+                                  onClick={() => sendIndividualEmail(graphic)}
+                                  disabled={isSending}
+                                  className="text-xs"
+                                >
+                                  <Mail className="h-3 w-3 mr-1" />
+                                  Send
+                                </Button>
+                              )}
+                            </div>
                           </td>
                         </tr>
                       );
@@ -514,6 +588,80 @@ const AdminMonthlyGraphicsPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Preview Modal */}
+      {showPreviewModal && previewData && (
+        <div className="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onClick={() => setShowPreviewModal(false)}></div>
+            
+            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            
+            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div className="sm:flex sm:items-start">
+                  <div className="w-full">
+                    <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4" id="modal-title">
+                      Preview: {previewData.full_name}'s Monthly Graphic
+                    </h3>
+                    
+                    {isGeneratingPreview ? (
+                      <div className="flex items-center justify-center p-8">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                        <span className="ml-2 text-gray-600">Generating preview...</span>
+                      </div>
+                    ) : previewHtml ? (
+                      <div className="text-center">
+                        <div className="inline-block border border-gray-300 rounded-lg overflow-hidden" style={{width: '600px', height: '800px'}}>
+                          <iframe 
+                            srcDoc={previewHtml} 
+                            style={{width: '600px', height: '800px', border: 'none'}}
+                            title={`${previewData.full_name}'s monthly graphic`}
+                          />
+                        </div>
+                        <p className="text-sm text-gray-500 mt-4">
+                          This is exactly how the graphic will look in the email
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="text-center p-8">
+                        <AlertCircle className="mx-auto h-12 w-12 text-gray-400" />
+                        <p className="mt-2 text-gray-500">Failed to generate preview</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button
+                  type="button"
+                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+                  onClick={() => {
+                    if (previewHtml) {
+                      sendIndividualEmail(previewData);
+                      setShowPreviewModal(false);
+                    }
+                  }}
+                  disabled={!previewHtml || isSending}
+                >
+                  {isSending ? 'Sending...' : 'Send This Email'}
+                </button>
+                <button
+                  type="button"
+                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                  onClick={() => {
+                    setShowPreviewModal(false);
+                    setPreviewHtml(null);
+                  }}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 };

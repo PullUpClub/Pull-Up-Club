@@ -11,11 +11,21 @@ i18n
     fallbackLng: 'en',
     debug: false,
     interpolation: { escapeValue: false },
-    backend: { loadPath: '/locales/{{lng}}/{{ns}}.json' },
+    backend: { 
+      loadPath: '/locales/{{lng}}/{{ns}}.json',
+      // Add caching and preload optimizations
+      requestOptions: {
+        cache: 'force-cache',
+      },
+    },
     detection: {
       order: ['localStorage', 'navigator', 'htmlTag'],
       caches: ['localStorage'],
     },
+    // Preload critical namespaces
+    preload: ['en'],
+    ns: ['common', 'home'],
+    defaultNS: 'common',
     // Helpful log in dev when a key is missing
     saveMissing: process.env.NODE_ENV === 'development',
     missingKeyHandler: (lng, ns, key) => {

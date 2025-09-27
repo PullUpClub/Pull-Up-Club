@@ -41,6 +41,12 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
   if (mobileCardMode) {
     return (
       <div className="space-y-4">
+        {/* Mobile Headers - show what we're displaying */}
+        <div className="bg-gray-800 rounded-lg px-4 py-2 mb-4">
+          <div className="text-xs uppercase tracking-widest text-gray-400 font-mono">
+            Rank • Name • Club • Region • Pull-Ups • Badge • Video
+          </div>
+        </div>
         {data.map((submission, index) => {
           const rank = (currentPage - 1) * itemsPerPage + index + 1;
           const badges = getBadgesForSubmission(submission.actualPullUpCount ?? submission.pullUpCount, submission.gender);

@@ -129,3 +129,11 @@ supabase/functions/.temp/
 
 # Production builds
 /dist
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+/.playwright-mcp/
