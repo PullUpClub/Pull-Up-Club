@@ -24,89 +24,81 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const requestBody = await req.json();
-    console.log('Request body:', JSON.stringify(requestBody));
+    const { graphicData } = await req.json() as { graphicData: GraphicData };
     
-    const { graphicData } = requestBody as { graphicData: GraphicData };
+    // Generate HTML template
+    const html = generateProfessionalGraphic(graphicData);
     
-    if (!graphicData) {
-      throw new Error('Missing graphicData in request body');
+    // Try to convert HTML to PNG using htmlcsstoimage.com API
+    const API_KEY = Deno.env.get('HTMLCSSTOIMAGE_API_KEY');
+    
+    if (API_KEY) {
+      try {
+        const API_URL = 'https://hcti.io/v1/image';
+        
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Basic ${btoa(`${API_KEY}:`)}`,
+          },
+          body: JSON.stringify({
+            html: html,
+            width: 600,
+            height: 800,
+            device_scale: 2,
+            format: 'png'
+          })
+        });
+
+        const result = await response.json();
+        
+        if (response.ok && result.url) {
+          return new Response(
+            JSON.stringify({ 
+              success: true, 
+              imageUrl: result.url,
+              imageId: result.id,
+              html: html
+            }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+      } catch (imageError) {
+        console.error('Image generation failed, falling back to HTML:', imageError);
+      }
     }
     
-    console.log('Processing graphic for:', graphicData.full_name);
-    
-    // Generate high-quality graphic using HTML/CSS to Image
-    const imageUrl = await generateHighQualityGraphic(graphicData);
-    console.log('Image URL generated:', imageUrl);
-    
-    // Generate HTML for preview
-    const html = generateProfessionalGraphic(graphicData);
-    console.log('HTML generated, length:', html.length);
-    
+    // Fallback: Return HTML for preview (when no API key or API fails)
     return new Response(
       JSON.stringify({ 
         success: true, 
-        imageUrl: imageUrl,
-        html: html // Return HTML for preview
+        html: html,
+        imageUrl: null,
+        message: 'HTML generated successfully. Set HTMLCSSTOIMAGE_API_KEY for PNG generation.'
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
   } catch (error) {
-    console.error('Error generating graphic:', error);
-    console.error('Error stack:', error.stack);
     return new Response(
-      JSON.stringify({ 
-        error: error.message,
-        details: error.stack 
-      }),
+      JSON.stringify({ error: error.message }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });
 
-async function generateHighQualityGraphic(data: GraphicData): Promise<string> {
-  const HTMLCSSTOIMAGE_KEY = Deno.env.get('HTMLCSSTOIMAGE_API_KEY');
-  
-  if (!HTMLCSSTOIMAGE_KEY) {
-    // For development, return a placeholder URL since we're returning HTML separately
-    return 'data:text/html,<h1>Preview Generated</h1>';
-  }
-  
-  const html = generateProfessionalGraphic(data);
-  
-  const response = await fetch('https://hcti.io/v1/image', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Basic ${btoa(`${HTMLCSSTOIMAGE_KEY}:`)}`,
-    },
-    body: JSON.stringify({
-      html: html,
-      width: 1200,
-      height: 1600,
-      device_scale: 2, // High DPI for crisp quality
-      format: 'png',
-      quality: 95,
-      ms_delay: 1000 // Wait for fonts and images to load
-    })
-  });
-
-  const result = await response.json();
-  
-  if (!result.url) {
-    throw new Error('Failed to generate image: ' + (result.error || 'Unknown error'));
-  }
-  
-  return result.url;
-}
-
 function generateProfessionalGraphic(data: GraphicData): string {
   const hasImprovement = data.pullup_increase && data.pullup_increase > 0;
   const isFirstMonth = !data.previous_pullups;
   const monthName = formatMonth(data.month_year);
-  const badgeImageUrl = getSupabaseBadgeImageUrl(data.current_badge_name, data.gender || 'Male');
-  const logoUrl = getSupabaseLogoUrl();
+  
+  // Calculate correct badge based on pull-ups (double-check accuracy)
+  const correctBadge = calculateCorrectBadge(data.current_pullups, data.gender || 'Male');
+  const badgeImageUrl = getBadgeImageUrl(correctBadge, data.gender || 'Male');
+  
+  const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
+  const pucLogoUrl = `${SUPABASE_URL}/storage/v1/object/public/graphics-assets/logos/puc-logo.webp`;
   
   return `
     <!DOCTYPE html>
@@ -128,10 +120,6 @@ function generateProfessionalGraphic(data: GraphicData): string {
                 height: 800px;
                 overflow: hidden;
                 position: relative;
-                /* Force high quality rendering */
-                -webkit-font-smoothing: antialiased;
-                -moz-osx-font-smoothing: grayscale;
-                text-rendering: optimizeLegibility;
             }
 
             .graphic-container {
@@ -139,15 +127,17 @@ function generateProfessionalGraphic(data: GraphicData): string {
                 height: 100%;
                 position: relative;
                 background: 
-                    linear-gradient(180deg, #000000 0%, #1a1a1a 30%, #2a2a2a 60%, #1a1a1a 90%, #000000 100%);
+                    radial-gradient(ellipse at top, rgba(145, 143, 111, 0.15) 0%, transparent 50%),
+                    linear-gradient(135deg, #000000 0%, #0f0f0f 25%, #1a1a1a 50%, #111111 75%, #000000 100%);
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                padding: 30px 40px;
+                padding: 25px 40px;
                 color: #ffffff;
+                border: 1px solid rgba(145, 143, 111, 0.2);
             }
 
-            /* Military texture overlay */
+            /* Professional military texture overlay */
             .graphic-container::before {
                 content: '';
                 position: absolute;
@@ -156,16 +146,9 @@ function generateProfessionalGraphic(data: GraphicData): string {
                 right: 0;
                 bottom: 0;
                 background: 
-                    radial-gradient(ellipse at 20% 20%, rgba(145, 143, 111, 0.08) 0%, transparent 60%),
-                    radial-gradient(ellipse at 80% 80%, rgba(145, 143, 111, 0.08) 0%, transparent 60%),
-                    linear-gradient(45deg, transparent 48%, rgba(145, 143, 111, 0.02) 49%, rgba(145, 143, 111, 0.03) 50%, rgba(145, 143, 111, 0.02) 51%, transparent 52%),
-                    repeating-linear-gradient(
-                        0deg,
-                        transparent,
-                        transparent 2px,
-                        rgba(145, 143, 111, 0.01) 2px,
-                        rgba(145, 143, 111, 0.01) 4px
-                    );
+                    radial-gradient(circle at 30% 30%, rgba(145, 143, 111, 0.08) 0%, transparent 40%),
+                    radial-gradient(circle at 70% 70%, rgba(145, 143, 111, 0.06) 0%, transparent 40%),
+                    linear-gradient(45deg, transparent 49%, rgba(255, 255, 255, 0.005) 50%, transparent 51%);
                 z-index: 1;
             }
 
@@ -179,7 +162,7 @@ function generateProfessionalGraphic(data: GraphicData): string {
                 align-items: center;
             }
 
-            /* Header - Matching your examples exactly */
+            /* Header */
             .header {
                 text-align: center;
                 margin-bottom: 25px;
@@ -187,45 +170,35 @@ function generateProfessionalGraphic(data: GraphicData): string {
 
             .site-title {
                 font-family: 'Orbitron', monospace;
-                font-size: 36px;
+                font-size: 32px;
                 font-weight: 900;
                 color: #ffffff;
-                letter-spacing: 4px;
+                letter-spacing: 3px;
                 margin-bottom: 8px;
                 text-shadow: 
-                    0 0 10px rgba(255, 255, 255, 0.4),
-                    0 0 20px rgba(255, 255, 255, 0.2),
-                    0 3px 8px rgba(0, 0, 0, 0.9),
-                    0 1px 3px rgba(145, 143, 111, 0.3);
-                background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 50%, #ffffff 100%);
-                background-clip: text;
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
+                    0 0 5px rgba(255, 255, 255, 0.3),
+                    0 0 10px rgba(255, 255, 255, 0.2);
             }
 
             .subtitle {
-                font-size: 20px;
-                font-weight: 800;
+                font-size: 18px;
+                font-weight: 700;
                 color: #918f6f;
-                letter-spacing: 3px;
+                letter-spacing: 2px;
                 text-transform: uppercase;
-                text-shadow: 
-                    0 2px 6px rgba(0, 0, 0, 0.7),
-                    0 0 8px rgba(145, 143, 111, 0.3);
             }
 
-            /* Logo Section - Using actual PUC logo */
+            /* Logo Section */
             .logo-section {
-                margin-bottom: 20px;
+                margin-bottom: 25px;
                 position: relative;
             }
 
             .puc-logo {
-                width: 140px;
-                height: 140px;
-                filter: 
-                    drop-shadow(0 6px 20px rgba(0, 0, 0, 0.6))
-                    drop-shadow(0 0 15px rgba(145, 143, 111, 0.2));
+                width: 120px;
+                height: 120px;
+                filter: drop-shadow(0 8px 25px rgba(0, 0, 0, 0.7));
+                object-fit: contain;
             }
 
             /* Month Display */
@@ -235,43 +208,21 @@ function generateProfessionalGraphic(data: GraphicData): string {
                 font-weight: 700;
                 color: #ffffff;
                 margin-bottom: 25px;
-                text-shadow: 
-                    0 0 20px rgba(255, 255, 255, 0.4),
-                    0 2px 8px rgba(0, 0, 0, 0.8);
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
                 letter-spacing: 3px;
                 text-align: center;
             }
 
-            /* Main Content Area - Matching your tactical styling */
+            /* Main Content Area */
             .main-content {
-                background: 
-                    linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(26, 26, 26, 0.5) 50%, rgba(0, 0, 0, 0.8) 100%),
-                    linear-gradient(45deg, rgba(145, 143, 111, 0.03) 0%, transparent 25%, rgba(145, 143, 111, 0.02) 75%, transparent 100%);
-                border: 2px solid rgba(145, 143, 111, 0.4);
+                background: rgba(0, 0, 0, 0.4);
+                border: 2px solid rgba(145, 143, 111, 0.3);
                 border-radius: 15px;
-                padding: 30px 25px;
+                padding: 25px;
                 width: 100%;
                 max-width: 480px;
                 margin-bottom: 25px;
-                backdrop-filter: blur(10px);
-                box-shadow: 
-                    0 10px 30px rgba(0, 0, 0, 0.5),
-                    0 4px 15px rgba(0, 0, 0, 0.3),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-                    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
-                position: relative;
-            }
-
-            .main-content::before {
-                content: '';
-                position: absolute;
-                top: -1px;
-                left: -1px;
-                right: -1px;
-                bottom: -1px;
-                background: linear-gradient(45deg, rgba(145, 143, 111, 0.2) 0%, transparent 25%, rgba(145, 143, 111, 0.1) 50%, transparent 75%, rgba(145, 143, 111, 0.2) 100%);
-                border-radius: 15px;
-                z-index: -1;
+                backdrop-filter: blur(5px);
             }
 
             .user-name {
@@ -280,14 +231,12 @@ function generateProfessionalGraphic(data: GraphicData): string {
                 color: #ffffff;
                 margin-bottom: 25px;
                 text-align: center;
-                text-shadow: 
-                    0 2px 10px rgba(0, 0, 0, 0.8),
-                    0 0 5px rgba(255, 255, 255, 0.1);
+                text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
                 letter-spacing: 1px;
                 text-transform: uppercase;
             }
 
-            /* Stats Boxes - Exactly like your examples */
+            /* Stats Boxes */
             .stats-container {
                 display: flex;
                 gap: 15px;
@@ -299,9 +248,8 @@ function generateProfessionalGraphic(data: GraphicData): string {
                 width: 180px;
                 height: 75px;
                 background: 
-                    linear-gradient(135deg, #a19f7f 0%, #918f6f 25%, #8a8764 50%, #918f6f 75%, #a19f7f 100%),
-                    linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(0,0,0,0.1) 100%);
-                border-radius: 30px;
+                    linear-gradient(135deg, #918f6f 0%, #a19f7f 50%, #b5b395 100%);
+                border-radius: 25px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -311,8 +259,7 @@ function generateProfessionalGraphic(data: GraphicData): string {
                 box-shadow: 
                     0 6px 20px rgba(145, 143, 111, 0.5),
                     0 2px 8px rgba(0, 0, 0, 0.3),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-                    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+                    inset 0 1px 0 rgba(255, 255, 255, 0.3);
                 border: 1px solid rgba(255, 255, 255, 0.1);
             }
 
@@ -335,56 +282,42 @@ function generateProfessionalGraphic(data: GraphicData): string {
                 line-height: 1;
             }
 
-            /* Progress Section - Dynamic messaging */
+            /* Progress Section */
             .progress-section {
                 margin-bottom: 30px;
                 text-align: center;
             }
 
             .pullup-increase {
-                font-size: 36px;
-                font-weight: 900;
+                font-size: 32px;
+                font-weight: 800;
                 color: #00ff88;
                 text-shadow: 
-                    0 0 20px rgba(0, 255, 136, 0.8),
-                    0 0 40px rgba(0, 255, 136, 0.4),
-                    0 0 60px rgba(0, 255, 136, 0.2),
-                    0 3px 8px rgba(0, 0, 0, 0.8);
-                letter-spacing: 3px;
+                    0 0 10px rgba(0, 255, 136, 0.6),
+                    0 0 20px rgba(0, 255, 136, 0.3);
+                letter-spacing: 2px;
                 text-transform: uppercase;
-                background: linear-gradient(45deg, #00ff88, #00cc6a, #00ff88);
-                background-clip: text;
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
             }
 
             .first-month-badge {
-                font-size: 32px;
-                font-weight: 900;
+                font-size: 28px;
+                font-weight: 800;
                 color: #ffd700;
                 text-shadow: 
-                    0 0 20px rgba(255, 215, 0, 0.8),
-                    0 0 40px rgba(255, 215, 0, 0.4),
-                    0 3px 8px rgba(0, 0, 0, 0.8);
-                letter-spacing: 2px;
-                background: linear-gradient(45deg, #ffd700, #ffed4a, #ffd700);
-                background-clip: text;
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
+                    0 0 10px rgba(255, 215, 0, 0.6),
+                    0 0 20px rgba(255, 215, 0, 0.3);
+                letter-spacing: 1px;
             }
 
             .keep-pushing {
-                font-size: 28px;
-                font-weight: 800;
+                font-size: 24px;
+                font-weight: 700;
                 color: #918f6f;
-                letter-spacing: 3px;
+                letter-spacing: 2px;
                 text-transform: uppercase;
-                text-shadow: 
-                    0 3px 8px rgba(0, 0, 0, 0.8),
-                    0 0 10px rgba(145, 143, 111, 0.3);
             }
 
-            /* Badge Section - Real badge images */
+            /* Badge Section - Exact match to leaderboard styling */
             .badge-section {
                 display: flex;
                 flex-direction: column;
@@ -393,114 +326,105 @@ function generateProfessionalGraphic(data: GraphicData): string {
                 padding-bottom: 20px;
             }
 
-            .badge-image {
-                width: 100px;
-                height: 100px;
-                margin-bottom: 12px;
-                filter: 
-                    drop-shadow(0 6px 20px rgba(0, 0, 0, 0.7))
-                    drop-shadow(0 0 15px rgba(145, 143, 111, 0.3))
-                    drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5))
-                    brightness(1.1)
-                    contrast(1.1);
+            .badge-container {
+                position: relative;
+                margin-bottom: 15px;
+            }
+
+            .badge-circle {
+                width: 128px;
+                height: 128px;
                 border-radius: 50%;
-                border: 2px solid rgba(145, 143, 111, 0.2);
+                border: 4px solid #9b9b6f;
+                box-shadow: 
+                    0 0 30px rgba(155, 155, 111, 0.4),
+                    0 8px 25px rgba(0, 0, 0, 0.6);
+                overflow: hidden;
+                background: rgba(17, 24, 39, 0.9);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+            }
+
+            .badge-image {
+                width: 90%;
+                height: 90%;
+                object-fit: contain;
+                padding: 4px;
+                transform: scale(1.25);
+            }
+
+            .badge-label {
+                position: absolute;
+                bottom: -8px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #9b9b6f;
+                color: #000000;
+                padding: 2px 8px;
+                border-radius: 12px;
+                font-size: 12px;
+                font-weight: 800;
+                font-family: 'Orbitron', monospace;
+                letter-spacing: 1px;
+                text-transform: uppercase;
             }
 
             .badge-name {
-                font-size: 32px;
-                font-weight: 900;
+                font-size: 28px;
+                font-weight: 800;
                 color: #ffffff;
-                letter-spacing: 4px;
-                text-shadow: 
-                    0 3px 12px rgba(0, 0, 0, 0.9),
-                    0 0 8px rgba(255, 255, 255, 0.2),
-                    0 1px 3px rgba(145, 143, 111, 0.5);
+                letter-spacing: 3px;
+                text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
                 text-transform: uppercase;
-                margin-bottom: 5px;
+                margin-top: 10px;
             }
 
-            /* Tactical corner decorations */
+            /* Military corner decorations */
             .corner-decoration {
                 position: absolute;
                 width: 50px;
                 height: 50px;
                 border: 3px solid rgba(145, 143, 111, 0.6);
-                z-index: 3;
-            }
-
-            .corner-decoration::before {
-                content: '';
-                position: absolute;
-                width: 20px;
-                height: 20px;
-                border: 1px solid rgba(145, 143, 111, 0.4);
             }
 
             .corner-decoration.top-left {
-                top: 15px;
-                left: 15px;
+                top: 20px;
+                left: 20px;
                 border-right: none;
                 border-bottom: none;
-                border-top-left-radius: 3px;
-            }
-
-            .corner-decoration.top-left::before {
-                top: 10px;
-                left: 10px;
-                border-right: none;
-                border-bottom: none;
+                border-top-left-radius: 2px;
             }
 
             .corner-decoration.top-right {
-                top: 15px;
-                right: 15px;
+                top: 20px;
+                right: 20px;
                 border-left: none;
                 border-bottom: none;
-                border-top-right-radius: 3px;
-            }
-
-            .corner-decoration.top-right::before {
-                top: 10px;
-                right: 10px;
-                border-left: none;
-                border-bottom: none;
+                border-top-right-radius: 2px;
             }
 
             .corner-decoration.bottom-left {
-                bottom: 15px;
-                left: 15px;
+                bottom: 20px;
+                left: 20px;
                 border-right: none;
                 border-top: none;
-                border-bottom-left-radius: 3px;
-            }
-
-            .corner-decoration.bottom-left::before {
-                bottom: 10px;
-                left: 10px;
-                border-right: none;
-                border-top: none;
+                border-bottom-left-radius: 2px;
             }
 
             .corner-decoration.bottom-right {
-                bottom: 15px;
-                right: 15px;
+                bottom: 20px;
+                right: 20px;
                 border-left: none;
                 border-top: none;
-                border-bottom-right-radius: 3px;
-            }
-
-            .corner-decoration.bottom-right::before {
-                bottom: 10px;
-                right: 10px;
-                border-left: none;
-                border-top: none;
+                border-bottom-right-radius: 2px;
             }
         </style>
     </head>
     <body>
         <div class="graphic-container">
-            <!-- Tactical corner decorations -->
+            <!-- Decorative corners -->
             <div class="corner-decoration top-left"></div>
             <div class="corner-decoration top-right"></div>
             <div class="corner-decoration bottom-left"></div>
@@ -513,9 +437,9 @@ function generateProfessionalGraphic(data: GraphicData): string {
                     <h2 class="subtitle">MONTH IN REVIEW</h2>
                 </div>
 
-                <!-- Logo - Using your actual logo -->
+                <!-- Logo -->
                 <div class="logo-section">
-                    <img src="${logoUrl}" alt="Pull-Up Club Logo" class="puc-logo" crossorigin="anonymous" />
+                    <img src="${pucLogoUrl}" alt="Pull-Up Club Logo" class="puc-logo" />
                 </div>
 
                 <!-- Month Display -->
@@ -530,7 +454,7 @@ function generateProfessionalGraphic(data: GraphicData): string {
                         ${data.full_name.toUpperCase()}
                     </div>
 
-                    <!-- Stats Boxes - Matching your examples -->
+                    <!-- Stats Boxes -->
                     <div class="stats-container">
                         <div class="stat-box">
                             <div class="stat-icon">🏦</div>
@@ -554,10 +478,15 @@ function generateProfessionalGraphic(data: GraphicData): string {
                     </div>
                 </div>
 
-                <!-- Badge Section - Using your actual badge images -->
+                <!-- Badge Section -->
                 <div class="badge-section">
-                    <img src="${badgeImageUrl}" alt="${data.current_badge_name} Badge" class="badge-image" crossorigin="anonymous" />
-                    <div class="badge-name">${data.current_badge_name?.toUpperCase() || 'RECRUIT'}</div>
+                    <div class="badge-container">
+                        <div class="badge-circle">
+                            <img src="${badgeImageUrl}" alt="${data.current_badge_name} Badge" class="badge-image" />
+                        </div>
+                        <div class="badge-label">${correctBadge.toUpperCase()}</div>
+                    </div>
+                    <div class="badge-name">${correctBadge.toUpperCase()}</div>
                 </div>
             </div>
         </div>
@@ -566,26 +495,44 @@ function generateProfessionalGraphic(data: GraphicData): string {
   `;
 }
 
-function getSupabaseBadgeImageUrl(badgeName: string, gender: string): string {
-  const baseUrl = 'https://yqnikgupiaghgjtsaypr.supabase.co/storage/v1/object/public/graphics-assets';
-  const genderFolder = gender?.toLowerCase() === 'female' ? 'female' : 'male';
-  const badgeFile = badgeName?.toLowerCase() || 'recruit';
+function getBadgeImageUrl(badgeName: string, gender: string): string {
+  const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
+  const baseUrl = `${SUPABASE_URL}/storage/v1/object/public/graphics-assets`;
   
-  // Map extensions correctly based on uploaded files
-  const extensionMap: { [key: string]: string } = {
-    'recruit': gender?.toLowerCase() === 'female' ? 'webp' : 'png',
-    'hardened': 'png', // Both genders use PNG for hardened
-    'operator': gender?.toLowerCase() === 'female' ? 'webp' : 'png', 
-    'proven': gender?.toLowerCase() === 'female' ? 'webp' : 'png',
-    'elite': gender?.toLowerCase() === 'female' ? 'webp' : 'png'
-  };
-  
-  const extension = extensionMap[badgeFile] || 'png';
-  return `${baseUrl}/badges/${genderFolder}/${badgeFile}.${extension}`;
+  if (gender?.toLowerCase() === 'female') {
+    // Female badges have mixed extensions - use exact mapping from storage
+    const femaleMapping: { [key: string]: string } = {
+      'elite': 'elite.webp',
+      'hardened': 'hardened.png',  // Different extension!
+      'operator': 'operator.webp',
+      'proven': 'proven.webp',
+      'recruit': 'recruit.webp'
+    };
+    
+    const filename = femaleMapping[badgeName.toLowerCase()] || 'recruit.webp';
+    return `${baseUrl}/badges/female/${filename}`;
+  } else {
+    // Male badges are all .png
+    return `${baseUrl}/badges/male/${badgeName.toLowerCase()}.png`;
+  }
 }
 
-function getSupabaseLogoUrl(): string {
-  return 'https://yqnikgupiaghgjtsaypr.supabase.co/storage/v1/object/public/graphics-assets/logos/puc-logo.webp';
+function calculateCorrectBadge(pullUps: number, gender: string): string {
+  if (gender?.toLowerCase() === 'female') {
+    // Female badge thresholds
+    if (pullUps >= 20) return 'Elite';
+    if (pullUps >= 15) return 'Operator';
+    if (pullUps >= 12) return 'Hardened';
+    if (pullUps >= 7) return 'Proven';
+    return 'Recruit'; // 3+ pull-ups
+  } else {
+    // Male badge thresholds
+    if (pullUps >= 25) return 'Elite';
+    if (pullUps >= 20) return 'Operator';
+    if (pullUps >= 15) return 'Hardened';
+    if (pullUps >= 10) return 'Proven';
+    return 'Recruit'; // 5+ pull-ups
+  }
 }
 
 function formatMonth(monthYear: string): string {

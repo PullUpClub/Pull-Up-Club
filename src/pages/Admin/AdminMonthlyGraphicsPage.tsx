@@ -49,7 +49,7 @@ const AdminMonthlyGraphicsPage: React.FC = () => {
   const [isSending, setIsSending] = useState(false);
   const [sendingProgress, setSendingProgress] = useState({ current: 0, total: 0 });
   
-  // Preview functionality state
+  // Preview state
   const [previewData, setPreviewData] = useState<MonthlyGraphicData | null>(null);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [previewHtml, setPreviewHtml] = useState<string | null>(null);
@@ -95,7 +95,17 @@ const AdminMonthlyGraphicsPage: React.FC = () => {
     }
   };
 
-  // Generate preview for a monthly graphic
+  useEffect(() => {
+    fetchAvailableMonths();
+  }, []);
+
+  useEffect(() => {
+    if (selectedMonth) {
+      fetchGraphicsData();
+    }
+  }, [selectedMonth]);
+
+  // Generate preview function
   const generatePreview = async (graphic: MonthlyGraphicData) => {
     setIsGeneratingPreview(true);
     setPreviewData(graphic);
@@ -130,37 +140,28 @@ const AdminMonthlyGraphicsPage: React.FC = () => {
         current_leaderboard_position: graphic.current_leaderboard_position
       };
 
+      const { data: session } = await supabase.auth.getSession();
+      
       const response = await supabase.functions.invoke('generate-monthly-graphic', {
-        body: { graphicData }
+        body: { graphicData },
+        headers: {
+          'Authorization': `Bearer ${session.session?.access_token}`
+        }
       });
 
-      if (response.error) {
-        throw new Error(response.error.message);
-      }
-      
-      if (response.data?.success) {
+      if (response.data?.success && response.data?.html) {
         setPreviewHtml(response.data.html);
         toast.success('Preview generated successfully!');
       } else {
-        throw new Error('Failed to generate preview');
+        toast.error('Failed to generate preview');
       }
     } catch (error) {
       console.error('Error generating preview:', error);
-      toast.error('Error generating preview: ' + (error as Error).message);
+      toast.error('Error generating preview');
     } finally {
       setIsGeneratingPreview(false);
     }
   };
-
-  useEffect(() => {
-    fetchAvailableMonths();
-  }, []);
-
-  useEffect(() => {
-    if (selectedMonth) {
-      fetchGraphicsData();
-    }
-  }, [selectedMonth]);
 
   // Handle individual email send
   const sendIndividualEmail = async (graphic: MonthlyGraphicData) => {
@@ -176,7 +177,10 @@ const AdminMonthlyGraphicsPage: React.FC = () => {
 
       if (error) throw error;
       
-      toast.success(`Email sent to ${graphic.full_name}`);
+      toast.success(graphic.email_sent 
+        ? `Email resent to ${graphic.full_name}` 
+        : `Email sent to ${graphic.full_name}`
+      );
       fetchGraphicsData(); // Refresh to show updated status
     } catch (error) {
       console.error('Error sending email:', error);
@@ -562,20 +566,22 @@ const AdminMonthlyGraphicsPage: React.FC = () => {
                                 disabled={isGeneratingPreview}
                                 className="text-xs"
                               >
-                                <Eye className="h-3 w-3 mr-1" />
+                                <Eye className="w-3 h-3 mr-1" />
                                 Preview
                               </Button>
-                              {!graphic.email_sent && (
-                                <Button
-                                  size="sm"
-                                  onClick={() => sendIndividualEmail(graphic)}
-                                  disabled={isSending}
-                                  className="text-xs"
-                                >
-                                  <Mail className="h-3 w-3 mr-1" />
-                                  Send
-                                </Button>
-                              )}
+                              <Button
+                                size="sm"
+                                onClick={() => sendIndividualEmail(graphic)}
+                                disabled={isSending}
+                                className={`text-xs ${graphic.email_sent 
+                                  ? 'bg-orange-600 hover:bg-orange-700 text-white' 
+                                  : 'bg-[#9b9b6f] hover:bg-[#a5a575] text-black'
+                                }`}
+                                title={graphic.email_sent ? 'Resend email' : 'Send email'}
+                              >
+                                <Mail className="h-3 w-3 mr-1" />
+                                {graphic.email_sent ? 'Resend' : 'Send'}
+                              </Button>
                             </div>
                           </td>
                         </tr>
@@ -620,7 +626,7 @@ const AdminMonthlyGraphicsPage: React.FC = () => {
                           />
                         </div>
                         <p className="text-sm text-gray-500 mt-4">
-                          This is exactly how the graphic will look in the email
+                          This is exactly how the graphic will look when sent to {previewData.full_name}
                         </p>
                       </div>
                     ) : (

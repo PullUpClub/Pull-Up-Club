@@ -3,7 +3,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type'
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS'
 };
 
 interface MonthlyGraphicData {
@@ -45,10 +46,13 @@ Deno.serve(async (req) => {
     // Process each graphic ID
     for (const graphicId of graphicIds) {
       try {
-        // Fetch graphic data
+        // Fetch graphic data with profile info for gender
         const { data: graphic, error } = await supabase
           .from('monthly_graphics')
-          .select('*')
+          .select(`
+            *,
+            profiles!monthly_graphics_user_id_fkey(gender)
+          `)
           .eq('id', graphicId)
           .single();
 
@@ -57,8 +61,29 @@ Deno.serve(async (req) => {
           continue;
         }
 
-        // Create email HTML
-        const emailHtml = generateEmailHtml(graphic as MonthlyGraphicData);
+        // Get user earnings
+        const { data: earningsData } = await supabase
+          .from('user_earnings')
+          .select('total_earned_dollars')
+          .eq('user_id', graphic.user_id)
+          .eq('month_year', graphic.month_year)
+          .single();
+
+        // Generate the graphic image
+        const graphicImageUrl = await generateGraphicImage({
+          full_name: graphic.full_name,
+          month_year: graphic.month_year,
+          current_pullups: graphic.current_pullups,
+          current_badge_name: graphic.current_badge_name,
+          pullup_increase: graphic.pullup_increase,
+          previous_pullups: graphic.previous_pullups,
+          total_earned: earningsData?.total_earned_dollars || 0,
+          gender: graphic.profiles?.gender || 'Male',
+          current_leaderboard_position: graphic.current_leaderboard_position
+        });
+        
+        // Create email HTML with embedded graphic
+        const emailHtml = generateEmailWithGraphic(graphic as MonthlyGraphicData, graphicImageUrl);
 
         // Queue in email_notifications table
         const { error: insertError } = await supabase
@@ -67,27 +92,37 @@ Deno.serve(async (req) => {
             user_id: graphic.user_id,
             email_type: 'monthly_graphic',
             recipient_email: graphic.email,
-            subject: `Your ${formatMonth(graphic.month_year)} Pull-Up Club Results 💪`,
+            subject: `Your ${formatMonth(graphic.month_year)} Pull-Up Club Achievement`,
             message: emailHtml,
             metadata: {
               graphic_id: graphic.id,
               month_year: graphic.month_year,
               current_pullups: graphic.current_pullups,
-              badge_name: graphic.current_badge_name
+              badge_name: graphic.current_badge_name,
+              graphic_image_url: graphicImageUrl
             }
           });
 
         if (!insertError) {
           queuedCount++;
           
-          // Mark as sent in monthly_graphics
-          await supabase
-            .from('monthly_graphics')
-            .update({ 
-              email_sent: true, 
-              email_sent_at: new Date().toISOString() 
-            })
-            .eq('id', graphicId);
+          // Mark as sent in monthly_graphics (only if not already sent)
+          if (!graphic.email_sent) {
+            const { error: updateError } = await supabase
+              .from('monthly_graphics')
+              .update({ 
+                email_sent: true, 
+                email_sent_at: new Date().toISOString() 
+              })
+              .eq('id', graphicId);
+              
+            if (updateError) {
+              console.error(`Failed to update monthly_graphics for ID ${graphicId}:`, updateError);
+              errors.push(`Warning: Email queued for ${graphic.full_name} but failed to update status: ${updateError.message}`);
+            }
+          } else {
+            console.log(`Resending email for ${graphic.full_name} - not updating monthly_graphics status`);
+          }
         } else {
           errors.push(`Failed to queue email for ${graphic.full_name}: ${insertError.message}`);
         }
@@ -96,7 +131,6 @@ Deno.serve(async (req) => {
       }
     }
 
-    // The existing process-email-queue function will handle actual sending
     return new Response(
       JSON.stringify({ 
         success: true, 
@@ -116,122 +150,89 @@ Deno.serve(async (req) => {
   }
 });
 
-function generateEmailHtml(graphic: MonthlyGraphicData): string {
-  const hasImprovement = graphic.pullup_increase && graphic.pullup_increase > 0;
-  const isFirstMonth = !graphic.previous_pullups;
+async function generateGraphicImage(graphicData: any): Promise<string> {
+  try {
+    const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
+    const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+
+    const response = await fetch(`${SUPABASE_URL}/functions/v1/generate-monthly-graphic`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ graphicData })
+    });
+
+    const result = await response.json();
+    
+    if (!result.success) {
+      throw new Error(`Failed to generate graphic: ${result.error}`);
+    }
+
+    return result.imageUrl || '';
+  } catch (error) {
+    console.error('Error generating graphic image:', error);
+    return '';
+  }
+}
+
+function generateEmailWithGraphic(graphic: MonthlyGraphicData, graphicImageUrl: string): string {
   const monthName = formatMonth(graphic.month_year);
 
   return `
-    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #000000; color: #ffffff;">
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #ffffff;">
       <!-- Header -->
-      <div style="text-align: center; margin-bottom: 30px; padding: 30px 20px; background: linear-gradient(135deg, #111111 0%, #1a1a1a 100%); border-radius: 12px; border: 1px solid #333333;">
-        <h1 style="color: #918f6f; margin: 0; font-size: 32px; font-weight: bold; letter-spacing: -0.5px;">Pull-Up Club</h1>
-        <p style="color: #999999; margin: 8px 0 0 0; font-size: 16px;">Your Monthly Performance Report</p>
+      <div style="text-align: center; margin-bottom: 40px;">
+        <h1 style="color: #2c3e50; margin: 0 0 10px 0; font-size: 24px; font-weight: 600;">Hi ${graphic.full_name}!</h1>
+        <p style="color: #666666; margin: 0; font-size: 16px;">Your ${monthName} Pull-Up Club graphic is ready</p>
       </div>
 
-      <!-- Main Content -->
-      <div style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); padding: 30px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #333333;">
-        <h2 style="color: #918f6f; margin: 0 0 20px 0; font-size: 24px; font-weight: 600;">
-          ${monthName} Results
-        </h2>
-        
-        <p style="color: #ffffff; font-size: 18px; margin-bottom: 20px; line-height: 1.5;">
-          Hi <strong style="color: #918f6f;">${graphic.full_name}</strong>,
-        </p>
-
-        ${isFirstMonth ? `
-          <p style="color: #cccccc; font-size: 16px; margin-bottom: 25px; line-height: 1.6;">
-            🎉 Congratulations on completing your first month with Pull-Up Club!
+      <!-- Download Section -->
+      <div style="text-align: center; background: #f8f9fa; padding: 40px 30px; border-radius: 12px; border: 1px solid #e9ecef;">
+        ${graphicImageUrl ? `
+          <p style="color: #495057; font-size: 16px; margin: 0 0 30px 0;">
+            Click the button below to download your personalized graphic
           </p>
-        ` : hasImprovement ? `
-          <p style="color: #cccccc; font-size: 16px; margin-bottom: 25px; line-height: 1.6;">
-            🚀 Amazing progress! You improved by ${graphic.pullup_increase} pull-ups from last month!
-          </p>
-        ` : `
-          <p style="color: #cccccc; font-size: 16px; margin-bottom: 25px; line-height: 1.6;">
-            Keep pushing! Consistency is key to reaching your goals.
-          </p>
-        `}
-
-        <!-- Stats Box -->
-        <div style="background: rgba(145, 143, 111, 0.1); border: 1px solid #918f6f; border-radius: 8px; padding: 20px; margin: 20px 0;">
-          <h3 style="color: #918f6f; margin: 0 0 15px 0; font-size: 18px; font-weight: 600;">Your Performance:</h3>
           
-          <div style="display: table; width: 100%;">
-            <div style="display: table-row;">
-              <div style="display: table-cell; padding: 8px 0; color: #cccccc; font-weight: 500;">This Month:</div>
-              <div style="display: table-cell; padding: 8px 0; text-align: right;">
-                <span style="color: #918f6f; font-size: 24px; font-weight: bold;">${graphic.current_pullups}</span>
-                <span style="color: #cccccc; font-size: 14px; margin-left: 4px;">pull-ups</span>
-              </div>
-            </div>
-
-            ${!isFirstMonth ? `
-              <div style="display: table-row;">
-                <div style="display: table-cell; padding: 8px 0; color: #cccccc;">Last Month:</div>
-                <div style="display: table-cell; padding: 8px 0; text-align: right; color: #ffffff;">
-                  ${graphic.previous_pullups} pull-ups
-                </div>
-              </div>
-
-              ${hasImprovement ? `
-                <div style="display: table-row;">
-                  <div style="display: table-cell; padding: 8px 0; color: #cccccc;">Improvement:</div>
-                  <div style="display: table-cell; padding: 8px 0; text-align: right;">
-                    <span style="color: #4ade80; font-weight: bold; font-size: 18px;">+${graphic.pullup_increase} 🎯</span>
-                  </div>
-                </div>
-              ` : ''}
-            ` : ''}
-
-            <div style="display: table-row;">
-              <div style="display: table-cell; padding: 8px 0; color: #cccccc;">Leaderboard:</div>
-              <div style="display: table-cell; padding: 8px 0; text-align: right;">
-                <span style="color: #918f6f; font-weight: bold; font-size: 18px;">#${graphic.current_leaderboard_position || 'N/A'}</span>
-              </div>
-            </div>
-
-            <div style="display: table-row;">
-              <div style="display: table-cell; padding: 8px 0; color: #cccccc;">Badge:</div>
-              <div style="display: table-cell; padding: 8px 0; text-align: right;">
-                <span style="color: #918f6f; font-weight: bold;">${graphic.current_badge_name}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <p style="color: #ffffff; font-size: 16px; margin-top: 25px; line-height: 1.6;">
-          Ready for next month? Keep training and submit your next video to continue tracking your progress!
-        </p>
+          <a href="${graphicImageUrl}" 
+             download="${graphic.full_name.replace(/\s+/g, '_')}_${graphic.month_year}_PullUpClub.png"
+             style="display: inline-block; 
+                    background: #28a745; 
+                    color: #ffffff; 
+                    padding: 16px 32px; 
+                    text-decoration: none; 
+                    border-radius: 6px; 
+                    font-weight: 600; 
+                    font-size: 16px;">
+            Download My Graphic
+          </a>
+        ` : `
+          <p style="color: #dc3545; font-size: 16px; margin: 0;">We couldn't generate your graphic. Please contact support.</p>
+        `}
       </div>
 
-      <!-- CTA Button -->
-      <div style="text-align: center; margin: 30px 0;">
-        <a href="https://pullupclub.com/leaderboard" 
-           style="display: inline-block; 
-                  background: linear-gradient(135deg, #918f6f 0%, #a19f7f 100%); 
-                  color: #000000; 
-                  padding: 16px 32px; 
-                  text-decoration: none; 
-                  border-radius: 8px; 
-                  font-weight: 600; 
-                  font-size: 16px; 
-                  transition: all 0.3s ease;
-                  box-shadow: 0 4px 12px rgba(145, 143, 111, 0.3);">
-          View Full Leaderboard →
-        </a>
+      <!-- Social Sharing -->
+      <div style="text-align: center; margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;">
+        <h3 style="color: #2c3e50; margin: 0 0 15px 0; font-size: 18px; font-weight: 600;">Share Your Achievement</h3>
+        <p style="color: #495057; font-size: 14px; line-height: 1.6; margin: 0;">
+          Download your graphic and share it on social media to inspire others and showcase your dedication to fitness. Tag us <strong>@PullUpClub</strong> to be featured!
+        </p>
       </div>
 
       <!-- Footer -->
-      <div style="text-align: center; padding-top: 20px; border-top: 1px solid #333333;">
-        <p style="color: #ffffff; font-size: 18px; margin: 0 0 10px 0; font-weight: 500;">
-          Keep pushing your limits!
-        </p>
-        <p style="color: #918f6f; font-size: 16px; margin: 0 0 20px 0;">
-          The Pull-Up Club Team
-        </p>
-        <p style="color: #666666; font-size: 12px; margin: 0; line-height: 1.4;">
-          Pull-Up Club • <a href="https://pullupclub.com" style="color: #918f6f; text-decoration: none;">pullupclub.com</a>
+      <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e9ecef;">
+        <p style="color: #2c3e50; font-size: 18px; font-weight: 600; margin: 0 0 10px 0;">Pull-Up Club</p>
+        <p style="color: #6c757d; font-size: 14px; margin: 0 0 15px 0;">Building stronger communities, one pull-up at a time</p>
+        
+        <div style="margin: 15px 0;">
+          <a href="https://pullupclub.com" style="color: #28a745; text-decoration: none; margin: 0 15px; font-size: 14px;">Visit Website</a>
+          <a href="https://pullupclub.com/leaderboard" style="color: #28a745; text-decoration: none; margin: 0 15px; font-size: 14px;">View Leaderboard</a>
+        </div>
+        
+        <p style="color: #6c757d; font-size: 12px; margin: 15px 0 0 0; line-height: 1.4;">
+          Keep pushing your limits. See you next month!<br>
+          <em>If you have any questions, reply to this email or contact our support team.</em>
         </p>
       </div>
     </div>

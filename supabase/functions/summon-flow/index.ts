@@ -110,7 +110,7 @@ serve(async (req) => {
       processed++;
       try {
         // Prepare messages
-        const emailSubject = `🔥 Your Pull-Up Club Challenge Awaits!`;
+        const emailSubject = `Your Pull-Up Club Challenge Awaits`;
         const emailMessage = `\
 Hey ${user.full_name || 'there'},\
 \

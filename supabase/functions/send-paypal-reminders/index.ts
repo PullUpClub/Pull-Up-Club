@@ -120,11 +120,11 @@ serve(async (req) => {
           .insert({
             recipient_email: user.email,
             email_type: test_email ? 'paypal_reminder_test' : 'paypal_reminder',
-            subject: test_email ? `[TEST] Your Pull-Up Club Earnings Are Ready! 💰` : `Your Pull-Up Club Earnings Are Ready! 💰`,
+            subject: test_email ? `[TEST] Your Pull-Up Club Earnings Are Ready` : `Your Pull-Up Club Earnings Are Ready`,
             message: `
               <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #000000; color: #ffffff;">
                 ${test_email ? 
-                  '<div style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); color: #000000; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: bold;">🧪 TEST EMAIL - PayPal Reminder System</div>' 
+                  '<div style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); color: #000000; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: bold;">TEST EMAIL - PayPal Reminder System</div>' 
                   : ''
                 }
                 
@@ -136,7 +136,7 @@ serve(async (req) => {
 
                 <!-- Main Content -->
                 <div style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); padding: 30px; border-radius: 12px; border-left: 4px solid #22c55e; margin-bottom: 30px; border: 1px solid #333333;">
-                  <h2 style="color: #22c55e; margin: 0 0 20px 0; font-size: 24px; font-weight: 600;">💰 Your Earnings Are Ready!</h2>
+                  <h2 style="color: #22c55e; margin: 0 0 20px 0; font-size: 24px; font-weight: 600;">Your Earnings Are Ready!</h2>
                   
                   <p style="color: #ffffff; font-size: 18px; margin-bottom: 20px; line-height: 1.5;">
                     Great news, <strong style="color: #918f6f;">${user.full_name || 'there'}</strong>!
@@ -150,13 +150,13 @@ serve(async (req) => {
                       $${payout.amount_dollars}
                     </p>
                     <p style="color: #22c55e; margin: 10px 0 0 0; font-size: 14px;">
-                      🎉 Congratulations!
+                      Congratulations!
                     </p>
                   </div>
 
                   <div style="background: linear-gradient(135deg, #2d1b0d 0%, #1a1a1a 100%); padding: 25px; border-radius: 12px; border-left: 4px solid #918f6f; margin: 25px 0; border: 1px solid #333333;">
                     <h3 style="color: #918f6f; margin: 0 0 15px 0; font-size: 18px; font-weight: 600;">
-                      💳 To receive your payout:
+                      To receive your payout:
                     </h3>
                     <ol style="color: #cccccc; font-size: 16px; margin: 0; padding-left: 20px; line-height: 1.8;">
                       <li style="margin-bottom: 8px;"><strong style="color: #ffffff;">Log into Pull-Up Club</strong></li>
@@ -199,7 +199,7 @@ serve(async (req) => {
                 <!-- Footer -->
                 <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #333333; text-align: center;">
                   <p style="color: #ffffff; font-size: 18px; margin: 0 0 10px 0; font-weight: 500;">
-                    You've earned it! 💪
+                    You've earned it!
                   </p>
                   <p style="color: #918f6f; font-size: 16px; margin: 0 0 20px 0;">
                     The Pull-Up Club Team

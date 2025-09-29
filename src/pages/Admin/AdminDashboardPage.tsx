@@ -3,7 +3,7 @@ import Layout from "../../components/Layout/Layout";
 import { Button } from "../../components/ui/Button";
 import { Badge } from "../../components/ui/Badge";
 import { LoadingState, ErrorState } from "../../components/ui/LoadingState";
-import { Eye, CheckCircle, XCircle, Star, Filter, Search, ChevronDown, Save, MessageSquare, Clock, DollarSign } from "lucide-react";
+import { Eye, CheckCircle, XCircle, Star, Filter, Search, ChevronDown, Save, MessageSquare } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { useTranslation } from 'react-i18next';
 import Head from "../../components/Layout/Head";
@@ -11,179 +11,6 @@ import toast from 'react-hot-toast';
 import { Link, useLocation } from 'react-router-dom';
 
 const LOGO_PATH = "/PUClogo-optimized.webp";
-
-// Weekly Pool Countdown Component for Admin Dashboard
-const WeeklyPoolCountdown: React.FC = () => {
-  const [timeLeft, setTimeLeft] = useState<{
-    days: number;
-    hours: number;
-    minutes: number;
-    seconds: number;
-  }>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-  
-  const [poolStatus, setPoolStatus] = useState<{
-    remaining: number;
-    total: number;
-    spent: number;
-    isLoading: boolean;
-  }>({ remaining: 250, total: 250, spent: 0, isLoading: true });
-
-  // Calculate time until next Monday 12:00 AM UTC
-  const calculateTimeLeft = () => {
-    const now = new Date();
-    const nextMonday = new Date();
-    
-    // Find next Monday at 12:00 AM UTC
-    const daysUntilMonday = (1 + 7 - now.getUTCDay()) % 7 || 7; // Days until next Monday
-    nextMonday.setUTCDate(now.getUTCDate() + daysUntilMonday);
-    nextMonday.setUTCHours(0, 0, 0, 0); // Set to midnight UTC
-    
-    const difference = nextMonday.getTime() - now.getTime();
-    
-    if (difference > 0) {
-      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-      
-      return { days, hours, minutes, seconds };
-    }
-    
-    return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-  };
-
-  // Fetch current pool status
-  const fetchPoolStatus = async () => {
-    try {
-      const { data, error } = await supabase.functions.invoke('get-pool-status');
-      
-      if (error) throw error;
-      
-      if (data?.success) {
-        setPoolStatus({
-          remaining: Math.max(0, data.poolRemaining || 0),
-          total: data.poolTotal || 250,
-          spent: data.poolSpent || 0,
-          isLoading: false
-        });
-      }
-    } catch (err) {
-      console.error('Error fetching pool status:', err);
-      setPoolStatus(prev => ({ ...prev, isLoading: false }));
-    }
-  };
-
-  useEffect(() => {
-    // Update countdown every second
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
-
-    // Initial calculation
-    setTimeLeft(calculateTimeLeft());
-    
-    // Fetch pool status initially and every 30 seconds
-    fetchPoolStatus();
-    const poolTimer = setInterval(fetchPoolStatus, 30000);
-
-    return () => {
-      clearInterval(timer);
-      clearInterval(poolTimer);
-    };
-  }, []);
-
-  const formatTime = (value: number) => value.toString().padStart(2, '0');
-  const isPoolDepleted = poolStatus.remaining <= 0;
-  const progressPercentage = poolStatus.total > 0 ? 
-    ((poolStatus.total - poolStatus.remaining) / poolStatus.total) * 100 : 0;
-
-  return (
-    <div className="bg-gradient-to-r from-[#18181b] to-[#1a1a1d] border border-[#918f6f]/20 rounded-xl p-6 mb-6 shadow-lg">
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-        
-        {/* Pool Status Section */}
-        <div className="flex-1">
-          <div className="flex items-center mb-3">
-            <DollarSign className="h-5 w-5 text-[#918f6f] mr-2" />
-            <h3 className="text-lg font-semibold text-[#ededed]">Weekly Pool Status</h3>
-            {isPoolDepleted && (
-              <Badge variant="danger" className="ml-2">DEPLETED</Badge>
-            )}
-          </div>
-          
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-[#9a9871] text-sm">Available / Total</span>
-              <span className="text-[#ededed] font-bold text-lg">
-                ${poolStatus.remaining.toFixed(0)} / ${poolStatus.total.toFixed(0)}
-              </span>
-            </div>
-            
-            <div className="w-full bg-[#23231f] rounded-full h-3 overflow-hidden">
-              <div 
-                className={`h-full transition-all duration-500 ${
-                  isPoolDepleted ? 'bg-red-500' : 'bg-gradient-to-r from-[#918f6f] to-[#a19f7f]'
-                }`}
-                style={{ width: `${Math.min(100, progressPercentage)}%` }}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-[#9a9871]">Spent: ${poolStatus.spent.toFixed(0)}</span>
-              <span className="text-[#9a9871]">{progressPercentage.toFixed(1)}% used</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Countdown Section */}
-        <div className="flex-1 lg:text-right">
-          <div className="flex items-center justify-start lg:justify-end mb-3">
-            <Clock className="h-5 w-5 text-[#918f6f] mr-2" />
-            <h3 className="text-lg font-semibold text-[#ededed]">Pool Reset Countdown</h3>
-          </div>
-          
-          <div className="flex items-center justify-start lg:justify-end gap-4">
-            <div className="text-center">
-              <div className="bg-[#23231f] border border-[#918f6f]/30 rounded-lg p-3 min-w-[60px]">
-                <div className="text-2xl font-bold text-[#918f6f]">{formatTime(timeLeft.days)}</div>
-                <div className="text-xs text-[#9a9871] uppercase">Days</div>
-              </div>
-            </div>
-            <span className="text-[#918f6f] text-xl">:</span>
-            
-            <div className="text-center">
-              <div className="bg-[#23231f] border border-[#918f6f]/30 rounded-lg p-3 min-w-[60px]">
-                <div className="text-2xl font-bold text-[#918f6f]">{formatTime(timeLeft.hours)}</div>
-                <div className="text-xs text-[#9a9871] uppercase">Hours</div>
-              </div>
-            </div>
-            <span className="text-[#918f6f] text-xl">:</span>
-            
-            <div className="text-center">
-              <div className="bg-[#23231f] border border-[#918f6f]/30 rounded-lg p-3 min-w-[60px]">
-                <div className="text-2xl font-bold text-[#918f6f]">{formatTime(timeLeft.minutes)}</div>
-                <div className="text-xs text-[#9a9871] uppercase">Min</div>
-              </div>
-            </div>
-            <span className="text-[#918f6f] text-xl">:</span>
-            
-            <div className="text-center">
-              <div className="bg-[#23231f] border border-[#918f6f]/30 rounded-lg p-3 min-w-[60px]">
-                <div className="text-2xl font-bold text-[#918f6f]">{formatTime(timeLeft.seconds)}</div>
-                <div className="text-xs text-[#9a9871] uppercase">Sec</div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="mt-3 text-sm text-[#9a9871]">
-            Resets Monday 12:00 AM UTC<br />
-            <span className="text-xs">(Sunday 7:00 PM CT)</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 // Add index signature for STATUS_MAP
 const STATUS_MAP: Record<string, { label: string; variant: string; icon?: string }> = {
@@ -702,18 +529,10 @@ const AdminDashboardPage: React.FC = () => {
           } else if (earningsResult?.success) {
             console.log('Earnings processed successfully:', earningsResult);
             
-            // Show success notification with earnings info - FIXED: Handle 0 values correctly
-            const earnedAmount = Math.max(0, parseInt(earningsResult?.dollars_earned) || verifiedCount || 0);
-            
-            // 🔧 FIX: Use nullish coalescing to handle 0 values correctly (no more "Unknown"!)
-            const poolRemaining = typeof earningsResult?.pool_remaining_after === 'number' 
-              ? Math.max(0, earningsResult.pool_remaining_after)
-              : typeof earningsResult?.pool_remaining_after === 'string'
-              ? Math.max(0, parseInt(earningsResult.pool_remaining_after) || 0)
-              : 0; // Safe default - never show "Unknown"
-              
-            const poolTotal = Math.max(250, parseInt(earningsResult?.pool_total) || 250);
-            const poolDepleted = poolRemaining <= 0;
+            // Show success notification with earnings info
+            const earnedAmount = earningsResult.dollars_earned || verifiedCount;
+            const poolRemaining = earningsResult.pool_remaining_after || 'Unknown';
+            const poolDepleted = earningsResult.pool_depleted || false;
             const monthlyCapReached = earningsResult.monthly_cap_reached || false;
             const monthlyTotalSpent = earningsResult.monthly_total_spent || 0;
             
@@ -722,9 +541,9 @@ const AdminDashboardPage: React.FC = () => {
             if (monthlyCapReached) {
               message += ' 🚫 Monthly cap reached!';
             } else if (poolDepleted) {
-              message += ` Pool: $0/$${poolTotal} (depleted)`;
+              message += ' Pool depleted!';
             } else {
-              message += ` Pool: $${poolRemaining}/$${poolTotal} remaining`;
+              message += ` Pool: $${poolRemaining} remaining`;
             }
             
             if (monthlyTotalSpent > 0) {
@@ -1184,11 +1003,6 @@ const AdminDashboardPage: React.FC = () => {
             <span className="text-[#ededed] text-sm">{t('submissions.pagination.page', { current: currentPage, total: totalPages })}</span>
             <Button variant="outline" size="sm" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages}>{t('submissions.pagination.next')}</Button>
           </div>
-        </div>
-
-        {/* 🆕 Weekly Pool Countdown Widget - Moved to bottom for better admin workflow */}
-        <div className="mt-8">
-          <WeeklyPoolCountdown />
         </div>
           </>
         )}

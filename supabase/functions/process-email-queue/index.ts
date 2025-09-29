@@ -95,7 +95,7 @@ Deno.serve(async (req) => {
           emailHTML = `
             <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
               ${email.email_type.includes('test') ? 
-                '<div style="background: #ffeb3b; color: #333; padding: 10px; border-radius: 4px; margin-bottom: 20px;"><strong>🧪 TEST EMAIL</strong></div>' : ''
+                '<div style="background: #ffeb3b; color: #333; padding: 10px; border-radius: 4px; margin-bottom: 20px;"><strong>TEST EMAIL</strong></div>' : ''
               }
               <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                 ${email.message.replace(/\n/g, '<br>')}
@@ -145,6 +145,7 @@ Deno.serve(async (req) => {
             .from('email_notifications')
             .update({
               sent_at: new Date().toISOString(),
+              status: 'sent',
               resend_id: resendResult.id || null
             })
             .eq('id', email.id);
@@ -157,6 +158,24 @@ Deno.serve(async (req) => {
           }
         } else {
           console.error('❌ Resend API error:', resendResult);
+          
+          // Update email as failed
+          const { error: failUpdateError } = await supabase
+            .from('email_notifications')
+            .update({
+              status: 'failed',
+              metadata: { 
+                ...email.metadata, 
+                error: resendResult.message || 'Failed to send via Resend',
+                failed_at: new Date().toISOString()
+              }
+            })
+            .eq('id', email.id);
+            
+          if (failUpdateError) {
+            console.error('Failed to update email status to failed:', failUpdateError);
+          }
+          
           errorCount++;
         }
 
