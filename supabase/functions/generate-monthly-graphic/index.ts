@@ -31,29 +31,51 @@ Deno.serve(async (req) => {
     
     // Try to convert HTML to PNG using htmlcsstoimage.com API
     const API_KEY = Deno.env.get('HTMLCSSTOIMAGE_API_KEY');
+    const API_ID = Deno.env.get('HTMLCSSTOIMAGE_API_ID');
     
-    if (API_KEY) {
+    console.log('HTMLCSSTOIMAGE_API_KEY found:', !!API_KEY);
+    console.log('HTMLCSSTOIMAGE_API_ID found:', !!API_ID);
+    
+    if (API_KEY && API_ID) {
       try {
         const API_URL = 'https://hcti.io/v1/image';
+        
+        console.log('Making request to HTMLCSSTOIMAGE API...');
+        
+        // Add AbortController for timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 20000); // 20 second timeout
         
         const response = await fetch(API_URL, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Basic ${btoa(`${API_KEY}:`)}`,
+            'Authorization': `Basic ${btoa(`${API_ID}:${API_KEY}`)}`,
           },
           body: JSON.stringify({
             html: html,
-            width: 600,
-            height: 800,
+            selector: '.graphic-container',
             device_scale: 2,
             format: 'png'
-          })
+          }),
+          signal: controller.signal
         });
 
+        clearTimeout(timeoutId);
+        console.log('HTMLCSSTOIMAGE API response status:', response.status);
+        
         const result = await response.json();
         
+        console.log('HTMLCSSTOIMAGE API response:', { 
+          success: response.ok, 
+          hasUrl: !!result.url, 
+          error: result.error,
+          message: result.message,
+          fullResponse: result
+        });
+        
         if (response.ok && result.url) {
+          console.log('✅ Image generated successfully:', result.url);
           return new Response(
             JSON.stringify({ 
               success: true, 
@@ -63,10 +85,20 @@ Deno.serve(async (req) => {
             }),
             { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           );
+        } else {
+          console.log('❌ HTMLCSSTOIMAGE API failed:', result);
         }
       } catch (imageError) {
         console.error('Image generation failed, falling back to HTML:', imageError);
+        if (imageError.name === 'AbortError') {
+          console.error('❌ HTMLCSSTOIMAGE API timed out after 20 seconds');
+        }
       }
+    } else {
+      console.log('❌ Missing HTMLCSSTOIMAGE credentials:', { 
+        hasApiKey: !!API_KEY, 
+        hasApiId: !!API_ID 
+      });
     }
     
     // Fallback: Return HTML for preview (when no API key or API fails)
@@ -462,6 +494,7 @@ function generateProfessionalGraphic(data: GraphicData): string {
                             <div class="stat-value">$${data.total_earned || 0}</div>
                         </div>
                         <div class="stat-box">
+                            <div class="stat-icon">💪</div>
                             <div class="stat-label">VERIFIED PULLUPS</div>
                             <div class="stat-value">${data.current_pullups}</div>
                         </div>

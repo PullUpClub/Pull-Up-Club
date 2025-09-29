@@ -1,5 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { Resend } from 'https://esm.sh/resend@1.1.0';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -19,6 +20,9 @@ interface MonthlyGraphicData {
   pullup_increase: number | null;
   position_change: number | null;
   user_id: string;
+  email_sent: boolean;
+  email_sent_at: string | null;
+  profiles?: { gender: string };
 }
 
 Deno.serve(async (req) => {
@@ -38,16 +42,17 @@ Deno.serve(async (req) => {
     }
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+    const resend = new Resend(RESEND_API_KEY);
+
     const { action, graphicIds } = await req.json();
 
-    let queuedCount = 0;
+    let sentCount = 0;
+    let queuedCount = 0; // For fallback
     const errors: string[] = [];
 
-    // Process each graphic ID
     for (const graphicId of graphicIds) {
       try {
-        // Fetch graphic data with profile info for gender
-        const { data: graphic, error } = await supabase
+        const { data: graphic, error: fetchError } = await supabase
           .from('monthly_graphics')
           .select(`
             *,
@@ -56,12 +61,11 @@ Deno.serve(async (req) => {
           .eq('id', graphicId)
           .single();
 
-        if (error || !graphic) {
-          errors.push(`Failed to fetch graphic ${graphicId}`);
+        if (fetchError || !graphic) {
+          errors.push(`Failed to fetch graphic ${graphicId}: ${fetchError?.message || 'Not found'}`);
           continue;
         }
 
-        // Get user earnings
         const { data: earningsData } = await supabase
           .from('user_earnings')
           .select('total_earned_dollars')
@@ -69,7 +73,6 @@ Deno.serve(async (req) => {
           .eq('month_year', graphic.month_year)
           .single();
 
-        // Generate the graphic image
         const graphicImageUrl = await generateGraphicImage({
           full_name: graphic.full_name,
           month_year: graphic.month_year,
@@ -82,18 +85,47 @@ Deno.serve(async (req) => {
           current_leaderboard_position: graphic.current_leaderboard_position
         });
         
-        // Create email HTML with embedded graphic
+        console.log(`Generated graphic image URL for ${graphic.full_name}:`, graphicImageUrl);
+        
         const emailHtml = generateEmailWithGraphic(graphic as MonthlyGraphicData, graphicImageUrl);
 
-        // Queue in email_notifications table
-        const { error: insertError } = await supabase
-          .from('email_notifications')
-          .insert({
+        const emailPayload = {
+          from: 'Pull-Up Club <noreply@pullupclub.com>',
+          to: [graphic.email],
+          subject: `Your ${formatMonth(graphic.month_year)} Pull-Up Club Achievement`,
+          html: emailHtml,
+        };
+
+        console.log(`Attempting to send email to ${graphic.email} via Resend...`);
+        const resendResponse = await resend.emails.send(emailPayload);
+
+        if (resendResponse.data?.id) {
+          console.log(`✅ Email sent successfully to ${graphic.email}. Resend ID: ${resendResponse.data.id}`);
+          sentCount++;
+
+          const { error: updateError } = await supabase
+            .from('monthly_graphics')
+            .update({ 
+              email_sent: true, 
+              email_sent_at: new Date().toISOString() 
+            })
+            .eq('id', graphicId);
+            
+          if (updateError) {
+            console.error(`Failed to update monthly_graphics status for ID ${graphicId}:`, updateError);
+            errors.push(`Warning: Email sent to ${graphic.full_name} but failed to update status: ${updateError.message}`);
+          }
+
+          // Also log to email_notifications for record-keeping
+          const { error: insertLogError } = await supabase.from('email_notifications').insert({
             user_id: graphic.user_id,
             email_type: 'monthly_graphic',
             recipient_email: graphic.email,
-            subject: `Your ${formatMonth(graphic.month_year)} Pull-Up Club Achievement`,
+            subject: emailPayload.subject,
             message: emailHtml,
+            sent_at: new Date().toISOString(),
+            resend_id: resendResponse.data.id,
+            status: 'sent',
             metadata: {
               graphic_id: graphic.id,
               month_year: graphic.month_year,
@@ -102,31 +134,45 @@ Deno.serve(async (req) => {
               graphic_image_url: graphicImageUrl
             }
           });
-
-        if (!insertError) {
-          queuedCount++;
-          
-          // Mark as sent in monthly_graphics (only if not already sent)
-          if (!graphic.email_sent) {
-            const { error: updateError } = await supabase
-              .from('monthly_graphics')
-              .update({ 
-                email_sent: true, 
-                email_sent_at: new Date().toISOString() 
-              })
-              .eq('id', graphicId);
-              
-            if (updateError) {
-              console.error(`Failed to update monthly_graphics for ID ${graphicId}:`, updateError);
-              errors.push(`Warning: Email queued for ${graphic.full_name} but failed to update status: ${updateError.message}`);
-            }
-          } else {
-            console.log(`Resending email for ${graphic.full_name} - not updating monthly_graphics status`);
+          if (insertLogError) {
+            console.error(`Failed to log sent email to email_notifications for ID ${graphicId}:`, insertLogError);
           }
+
         } else {
-          errors.push(`Failed to queue email for ${graphic.full_name}: ${insertError.message}`);
+          console.error(`❌ Resend API failed for ${graphic.email}:`, resendResponse.error);
+          errors.push(`Failed to send email to ${graphic.full_name} via Resend: ${resendResponse.error?.message || 'Unknown error'}`);
+          
+          // Fallback to queuing if direct send fails
+          const { error: insertError } = await supabase.from('email_notifications').insert({
+            user_id: graphic.user_id,
+            email_type: 'monthly_graphic',
+            recipient_email: graphic.email,
+            subject: emailPayload.subject,
+            message: emailHtml,
+            metadata: {
+              graphic_id: graphic.id,
+              month_year: graphic.month_year,
+              current_pullups: graphic.current_pullups,
+              badge_name: graphic.current_badge_name,
+              graphic_image_url: graphicImageUrl,
+              error: resendResponse.error?.message || 'Direct send failed, queued as fallback'
+            }
+          });
+          if (!insertError) {
+            queuedCount++;
+            errors.push(`Warning: Email for ${graphic.full_name} queued as fallback due to Resend failure.`);
+          } else {
+            errors.push(`Critical Error: Failed to send and failed to queue email for ${graphic.full_name}: ${insertError.message}`);
+          }
         }
+        
+        // Add delay for bulk operations
+        if (graphicIds.length > 1) {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+
       } catch (err) {
+        console.error(`Error processing graphic ${graphicId}:`, err);
         errors.push(`Error processing graphic ${graphicId}: ${err.message}`);
       }
     }
@@ -134,8 +180,9 @@ Deno.serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         success: true, 
+        sent: sentCount,
         queued: queuedCount,
-        message: `${queuedCount} emails queued for delivery`,
+        message: `${sentCount} emails sent, ${queuedCount} queued`,
         errors: errors.length > 0 ? errors : undefined
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -155,6 +202,8 @@ async function generateGraphicImage(graphicData: any): Promise<string> {
     const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
     const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
+    console.log(`🎨 Generating graphic for ${graphicData.full_name} (${graphicData.month_year})...`);
+
     const response = await fetch(`${SUPABASE_URL}/functions/v1/generate-monthly-graphic`, {
       method: 'POST',
       headers: {
@@ -164,15 +213,35 @@ async function generateGraphicImage(graphicData: any): Promise<string> {
       body: JSON.stringify({ graphicData })
     });
 
-    const result = await response.json();
-    
-    if (!result.success) {
-      throw new Error(`Failed to generate graphic: ${result.error}`);
+    if (!response.ok) {
+      console.error(`❌ Generate-monthly-graphic HTTP error: ${response.status} ${response.statusText}`);
+      return '';
     }
 
-    return result.imageUrl || '';
+    const result = await response.json();
+    
+    console.log('📊 Generate-monthly-graphic response:', { 
+      success: result.success, 
+      hasImageUrl: !!result.imageUrl,
+      hasHtml: !!result.html,
+      imageUrl: result.imageUrl ? result.imageUrl.substring(0, 100) + '...' : null,
+      message: result.message
+    });
+    
+    if (!result.success) {
+      console.error('❌ Generate-monthly-graphic failed:', result.error);
+      return '';
+    }
+
+    if (result.imageUrl && result.imageUrl.trim() !== '') {
+      console.log(`✅ Image URL received for ${graphicData.full_name}:`, result.imageUrl);
+      return result.imageUrl;
+    } else {
+      console.log(`⚠️ No image URL in response for ${graphicData.full_name}, using HTML fallback`);
+      return '';
+    }
   } catch (error) {
-    console.error('Error generating graphic image:', error);
+    console.error(`❌ Error generating graphic image for ${graphicData.full_name}:`, error);
     return '';
   }
 }
@@ -188,27 +257,24 @@ function generateEmailWithGraphic(graphic: MonthlyGraphicData, graphicImageUrl: 
         <p style="color: #666666; margin: 0; font-size: 16px;">Your ${monthName} Pull-Up Club graphic is ready</p>
       </div>
 
-      <!-- Download Section -->
-      <div style="text-align: center; background: #f8f9fa; padding: 40px 30px; border-radius: 12px; border: 1px solid #e9ecef;">
-        ${graphicImageUrl ? `
-          <p style="color: #495057; font-size: 16px; margin: 0 0 30px 0;">
-            Click the button below to download your personalized graphic
+      <!-- Graphic Image -->
+      <div style="text-align: center; margin-bottom: 30px;">
+        ${graphicImageUrl && graphicImageUrl.trim() !== '' ? `
+          <div style="display: inline-block; max-width: 100%; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <img 
+              src="${graphicImageUrl}" 
+              alt="${graphic.full_name}'s Monthly Pull-Up Graphic for ${monthName}" 
+              style="display: block; width: 100%; height: auto; max-width: 600px; border: none;"
+            />
+          </div>
+          <p style="color: #666666; font-size: 12px; margin-top: 15px; font-style: italic; text-align: center;">
+            Your personalized ${monthName} achievement graphic
           </p>
-          
-          <a href="${graphicImageUrl}" 
-             download="${graphic.full_name.replace(/\s+/g, '_')}_${graphic.month_year}_PullUpClub.png"
-             style="display: inline-block; 
-                    background: #28a745; 
-                    color: #ffffff; 
-                    padding: 16px 32px; 
-                    text-decoration: none; 
-                    border-radius: 6px; 
-                    font-weight: 600; 
-                    font-size: 16px;">
-            Download My Graphic
-          </a>
         ` : `
-          <p style="color: #dc3545; font-size: 16px; margin: 0;">We couldn't generate your graphic. Please contact support.</p>
+          <div style="background: #f8f9fa; padding: 30px; border-radius: 8px; border: 1px solid #e9ecef; color: #495057; font-size: 16px; text-align: center;">
+            <p style="margin-bottom: 15px;">Your graphic is being processed. Please check back in a few minutes or contact support if this issue persists.</p>
+            <a href="mailto:support@pullupclub.com" style="display: inline-block; background: #007bff; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: 600;">Contact Support</a>
+          </div>
         `}
       </div>
 
@@ -216,7 +282,7 @@ function generateEmailWithGraphic(graphic: MonthlyGraphicData, graphicImageUrl: 
       <div style="text-align: center; margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;">
         <h3 style="color: #2c3e50; margin: 0 0 15px 0; font-size: 18px; font-weight: 600;">Share Your Achievement</h3>
         <p style="color: #495057; font-size: 14px; line-height: 1.6; margin: 0;">
-          Download your graphic and share it on social media to inspire others and showcase your dedication to fitness. Tag us <strong>@PullUpClub</strong> to be featured!
+          Save this graphic and share it on social media to inspire others and showcase your dedication to fitness. Tag us <strong>@PullUpClub</strong> to be featured!
         </p>
       </div>
 

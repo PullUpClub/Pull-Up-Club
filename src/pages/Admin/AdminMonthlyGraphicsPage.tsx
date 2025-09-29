@@ -168,7 +168,7 @@ const AdminMonthlyGraphicsPage: React.FC = () => {
     try {
       setIsSending(true);
       
-      const { error } = await supabase.functions.invoke('send-monthly-graphics', {
+      const { data, error } = await supabase.functions.invoke('send-monthly-graphics', {
         body: { 
           action: 'send-single',
           graphicIds: [graphic.id]
@@ -177,10 +177,32 @@ const AdminMonthlyGraphicsPage: React.FC = () => {
 
       if (error) throw error;
       
-      toast.success(graphic.email_sent 
-        ? `Email resent to ${graphic.full_name}` 
-        : `Email sent to ${graphic.full_name}`
-      );
+      // Show detailed success message based on response
+      if (data?.sent > 0) {
+        toast.success(graphic.email_sent 
+          ? `Email resent immediately to ${graphic.full_name}` 
+          : `Email sent immediately to ${graphic.full_name}`
+        );
+      } else if (data?.queued > 0) {
+        toast.success(`Email queued for ${graphic.full_name} (fallback mode)`, {
+          duration: 4000
+        });
+      } else {
+        toast.success(graphic.email_sent 
+          ? `Email resent to ${graphic.full_name}` 
+          : `Email sent to ${graphic.full_name}`
+        );
+      }
+      
+      // Show any warnings
+      if (data?.errors && data.errors.length > 0) {
+        data.errors.forEach((err: string) => {
+          if (err.includes('Warning:')) {
+            toast.error(err, { duration: 6000 });
+          }
+        });
+      }
+      
       fetchGraphicsData(); // Refresh to show updated status
     } catch (error) {
       console.error('Error sending email:', error);
@@ -201,14 +223,14 @@ const AdminMonthlyGraphicsPage: React.FC = () => {
       return;
     }
 
-    const confirmMsg = `Send ${emailsToSend.length} monthly graphic emails?`;
+    const confirmMsg = `Send ${emailsToSend.length} monthly graphic emails immediately?`;
     if (!window.confirm(confirmMsg)) return;
 
     try {
       setIsSending(true);
       setSendingProgress({ current: 0, total: emailsToSend.length });
 
-      const { error } = await supabase.functions.invoke('send-monthly-graphics', {
+      const { data, error } = await supabase.functions.invoke('send-monthly-graphics', {
         body: {
           action: 'send-bulk',
           graphicIds: emailsToSend
@@ -217,18 +239,47 @@ const AdminMonthlyGraphicsPage: React.FC = () => {
 
       if (error) throw error;
       
-      toast.success(`Successfully queued ${emailsToSend.length} emails for sending`, {
-        duration: 5000,
-        style: {
-          background: '#1f2937',
-          color: '#ffffff',
-          border: '1px solid #9b9b6f',
-        },
-        iconTheme: {
-          primary: '#9b9b6f',
-          secondary: '#ffffff',
-        },
-      });
+      // Show detailed success message based on response
+      const sentCount = data?.sent || 0;
+      const queuedCount = data?.queued || 0;
+      
+      if (sentCount > 0) {
+        toast.success(`Successfully sent ${sentCount} emails immediately${queuedCount > 0 ? ` (${queuedCount} queued as fallback)` : ''}`, {
+          duration: 6000,
+          style: {
+            background: '#1f2937',
+            color: '#ffffff',
+            border: '1px solid #9b9b6f',
+          },
+          iconTheme: {
+            primary: '#9b9b6f',
+            secondary: '#ffffff',
+          },
+        });
+      } else if (queuedCount > 0) {
+        toast.success(`${queuedCount} emails queued for delivery (fallback mode)`, {
+          duration: 5000,
+          style: {
+            background: '#1f2937',
+            color: '#ffffff',
+            border: '1px solid #f59e0b',
+          },
+          iconTheme: {
+            primary: '#f59e0b',
+            secondary: '#ffffff',
+          },
+        });
+      }
+      
+      // Show any errors
+      if (data?.errors && data.errors.length > 0) {
+        const errorCount = data.errors.length;
+        toast.error(`${errorCount} email${errorCount > 1 ? 's' : ''} had issues. Check console for details.`, {
+          duration: 8000
+        });
+        console.error('Email sending errors:', data.errors);
+      }
+      
       setSelectedEmails(new Set());
       fetchGraphicsData();
     } catch (error) {
@@ -404,7 +455,7 @@ const AdminMonthlyGraphicsPage: React.FC = () => {
                 className="bg-[#9b9b6f] hover:bg-[#a5a575] text-black font-semibold disabled:bg-gray-600 disabled:cursor-not-allowed"
               >
                 <Send className="h-4 w-4 mr-2" />
-                Send All Pending ({stats.pending})
+                Send Immediately ({stats.pending})
               </Button>
               
               <Button
