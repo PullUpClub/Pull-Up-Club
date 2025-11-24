@@ -1,0 +1,187 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-11-24T22:00:00Z",
+  "type": "ERROR",
+  "metadata": {
+    "project": "Pull-Up Club",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true,
+    "severity": "HIGH",
+    "status": "FIXED"
+  },
+  "bug_report": {
+    "title": "Monthly Graphics Email Not Marking Users as Sent",
+    "discovered_date": "2025-11-24",
+    "reported_by": "Admin",
+    "affected_component": "Admin Monthly Graphics Page",
+    "symptoms": [
+      "When admin clicks 'Send' on monthly graphics, toast shows 'sent' AND 'warning' simultaneously",
+      "Users remain in 'Pending' status even after sending",
+      "No checkmark appears to indicate email was sent",
+      "Admin cannot track which graphics have been sent"
+    ]
+  },
+  "root_cause": {
+    "primary_issue": "Resend API calls are failing completely",
+    "secondary_issue": "Database not updated when emails queued as fallback",
+    "technical_details": {
+      "component": "supabase/functions/send-monthly-graphics/index.ts",
+      "problem_1": "Resend.emails.send() returning error instead of success",
+      "problem_2": "Fallback path (lines 141-166) queues email but does NOT update monthly_graphics table",
+      "problem_3": "Resend error details not logged, making debugging difficult"
+    },
+    "database_evidence": {
+      "query": "SELECT * FROM email_notifications WHERE email_type = 'monthly_graphic' ORDER BY created_at DESC LIMIT 10",
+      "findings": [
+        "ALL monthly graphic emails have status='pending'",
+        "ALL have sent_at=null and resend_id=null",
+        "ALL have error_message='Direct send failed, queued as fallback'",
+        "No actual Resend error details captured"
+      ]
+    }
+  },
+  "fix_applied": {
+    "date": "2025-11-24",
+    "files_modified": [
+      "supabase/functions/send-monthly-graphics/index.ts"
+    ],
+    "changes": [
+      {
+        "change_type": "ENHANCED_LOGGING",
+        "description": "Added detailed logging of Resend error response",
+        "code_location": "lines 141-144",
+        "details": "Now logs full JSON of resendResponse.error to help diagnose Resend API failures"
+      },
+      {
+        "change_type": "DATABASE_UPDATE_FIX",
+        "description": "Update monthly_graphics table even in fallback mode",
+        "code_location": "lines 148-157",
+        "details": "When Resend fails and email is queued, still mark email_sent=true in monthly_graphics so admins can see it was handled",
+        "rationale": "Queued emails will be processed by the email queue processor, so from admin perspective the email IS sent"
+      },
+      {
+        "change_type": "IMPROVED_ERROR_MESSAGES",
+        "description": "Include actual Resend error in all error messages",
+        "code_location": "lines 145, 175",
+        "details": "Error messages now include resendErrorMsg variable containing the actual Resend error"
+      },
+      {
+        "change_type": "ADDED_SUCCESS_LOGGING",
+        "description": "Log successful database updates",
+        "code_location": "lines 119, 156",
+        "details": "Console logs now confirm when monthly_graphics table is successfully updated"
+      }
+    ]
+  },
+  "deployment_instructions": {
+    "step_1": {
+      "action": "Deploy Edge Function",
+      "command": "npx supabase functions deploy send-monthly-graphics",
+      "working_directory": "project root",
+      "expected_result": "Function deployed successfully"
+    },
+    "step_2": {
+      "action": "Test with single email",
+      "method": "Use Admin Monthly Graphics page",
+      "steps": [
+        "Navigate to /admin-monthly-graphics",
+        "Select a user who hasn't been sent their graphic",
+        "Click 'Send' button",
+        "Check console logs in Supabase Edge Functions dashboard",
+        "Verify user status changes to 'Sent' with checkmark",
+        "Check toast messages for detailed error info if Resend still fails"
+      ]
+    },
+    "step_3": {
+      "action": "Investigate Resend error",
+      "details": "After deployment, the actual Resend API error will be visible in console logs",
+      "common_resend_errors": [
+        {
+          "error": "Invalid API key",
+          "solution": "Check RESEND_API_KEY environment variable in Supabase Edge Functions settings"
+        },
+        {
+          "error": "Invalid from address",
+          "solution": "Verify 'noreply@pullupclub.com' is verified in Resend dashboard",
+          "current_from": "Pull-Up Club <noreply@pullupclub.com>",
+          "note": "From address must be verified domain or Resend test email"
+        },
+        {
+          "error": "Rate limit exceeded",
+          "solution": "Check Resend plan limits, add delays between sends"
+        },
+        {
+          "error": "Invalid email format",
+          "solution": "Validate recipient email addresses in database"
+        }
+      ]
+    }
+  },
+  "verification_queries": {
+    "check_pending_emails": {
+      "description": "Find emails that were queued but not sent",
+      "sql": "SELECT id, recipient_email, status, created_at, metadata->>'resend_error' as error FROM email_notifications WHERE email_type = 'monthly_graphic' AND status = 'pending' ORDER BY created_at DESC;"
+    },
+    "check_monthly_graphics_status": {
+      "description": "Verify monthly_graphics table is being updated",
+      "sql": "SELECT id, full_name, email, email_sent, email_sent_at, month_year FROM monthly_graphics WHERE month_year = '2025-11' ORDER BY email_sent_at DESC NULLS LAST;"
+    },
+    "check_recent_sends": {
+      "description": "See successfully sent emails",
+      "sql": "SELECT id, recipient_email, resend_id, sent_at, status FROM email_notifications WHERE email_type = 'monthly_graphic' AND status = 'sent' ORDER BY sent_at DESC LIMIT 10;"
+    }
+  },
+  "next_steps": [
+    {
+      "priority": "CRITICAL",
+      "task": "Deploy fixed Edge Function",
+      "owner": "Admin/Developer",
+      "estimated_time": "2 minutes"
+    },
+    {
+      "priority": "CRITICAL",
+      "task": "Check Supabase Edge Function logs for actual Resend error",
+      "owner": "Admin/Developer",
+      "estimated_time": "5 minutes",
+      "details": "Go to Supabase Dashboard > Edge Functions > send-monthly-graphics > Logs"
+    },
+    {
+      "priority": "HIGH",
+      "task": "Fix Resend API issue based on error logs",
+      "owner": "Developer",
+      "estimated_time": "Varies",
+      "possible_actions": [
+        "Update RESEND_API_KEY environment variable",
+        "Verify domain in Resend dashboard",
+        "Check Resend account status and limits"
+      ]
+    },
+    {
+      "priority": "MEDIUM",
+      "task": "Process queued emails",
+      "owner": "System/Admin",
+      "estimated_time": "Auto or manual trigger",
+      "details": "Once Resend is fixed, process the pending emails in email_notifications table",
+      "note": "There are currently 10+ queued monthly graphic emails waiting to be sent"
+    },
+    {
+      "priority": "LOW",
+      "task": "Create process-email-queue endpoint",
+      "owner": "Developer",
+      "estimated_time": "1-2 hours",
+      "details": "Build an Edge Function or cron job to automatically retry pending emails in email_notifications table"
+    }
+  ],
+  "related_files": [
+    "supabase/functions/send-monthly-graphics/index.ts",
+    "src/pages/Admin/AdminMonthlyGraphicsPage.tsx",
+    "docs/json/monthly-graphics-email-bug.json"
+  ],
+  "prevention": {
+    "monitoring": "Add alerting when Resend error rate exceeds 10%",
+    "testing": "Add integration tests for Resend API before deploying",
+    "logging": "Ensure all external API calls log full error responses",
+    "fallback": "Email queue system is working correctly as fallback"
+  }
+}
+

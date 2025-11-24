@@ -1,0 +1,316 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-11-24T00:00:00Z",
+  "type": "MIGRATION",
+  "metadata": {
+    "project": "Pull-Up Club Community System",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true,
+    "status": "ready_to_implement"
+  },
+  "implementation": {
+    "step_1_realtime_authorization": {
+      "description": "Create RLS policies on realtime.messages to enable private channels with Broadcast",
+      "priority": "critical",
+      "file": "supabase/migrations/20251124000000_realtime_broadcast_authorization.sql",
+      "sql": "-- Enable RLS on realtime.messages if not already enabled\nALTER TABLE realtime.messages ENABLE ROW LEVEL SECURITY;\n\n-- Drop existing policies if they exist (for idempotency)\nDROP POLICY IF EXISTS \"authenticated_can_receive_broadcasts\" ON realtime.messages;\nDROP POLICY IF EXISTS \"authenticated_can_send_broadcasts\" ON realtime.messages;\n\n-- Allow authenticated users to receive broadcasts (SELECT)\nCREATE POLICY \"authenticated_can_receive_broadcasts\"\n  ON realtime.messages\n  FOR SELECT\n  TO authenticated\n  USING (true);\n\n-- Allow authenticated users to send broadcasts (INSERT)\nCREATE POLICY \"authenticated_can_send_broadcasts\"\n  ON realtime.messages\n  FOR INSERT\n  TO authenticated\n  WITH CHECK (true);\n\n-- Optional: More restrictive policy based on channel access\n-- You can create additional policies later to restrict based on channel membership\n-- For now, all authenticated users can access all channels",
+      "verification": "-- Verify policies exist\nSELECT \n  schemaname,\n  tablename,\n  policyname,\n  permissive,\n  roles,\n  cmd,\n  qual,\n  with_check\nFROM pg_policies\nWHERE schemaname = 'realtime' AND tablename = 'messages';",
+      "testing": "Test by creating a Realtime channel with private: true from the client and verifying connection succeeds"
+    },
+    "step_2_broadcast_trigger_functions": {
+      "description": "Create trigger functions that broadcast database changes to Realtime channels",
+      "priority": "critical",
+      "file": "supabase/migrations/20251124000001_broadcast_trigger_functions.sql",
+      "sql": "-- Function to broadcast community post changes\n-- This function will be called by triggers on INSERT, UPDATE, DELETE\nCREATE OR REPLACE FUNCTION broadcast_community_post_changes()\nRETURNS TRIGGER\nSECURITY DEFINER\nLANGUAGE plpgsql\nAS $$\nDECLARE\n  channel_slug_var TEXT;\n  topic_name TEXT;\nBEGIN\n  -- Get the channel slug for this post\n  IF TG_OP = 'DELETE' THEN\n    SELECT c.slug INTO channel_slug_var\n    FROM channels c\n    WHERE c.id = OLD.channel_id;\n    \n    -- For DELETE, we only have OLD record\n    topic_name := 'private-channel:' || channel_slug_var;\n    \n    -- Broadcast the deletion\n    PERFORM realtime.broadcast_changes(\n      topic_name,                -- topic\n      TG_OP,                     -- event (DELETE)\n      TG_OP,                     -- operation\n      TG_TABLE_NAME,             -- table name\n      TG_TABLE_SCHEMA,           -- schema\n      NULL,                      -- new record (NULL for DELETE)\n      row_to_json(OLD)::jsonb    -- old record\n    );\n    \n    RETURN OLD;\n  ELSE\n    -- For INSERT and UPDATE, we have NEW record\n    SELECT c.slug INTO channel_slug_var\n    FROM channels c\n    WHERE c.id = NEW.channel_id;\n    \n    topic_name := 'private-channel:' || channel_slug_var;\n    \n    -- Broadcast the change\n    PERFORM realtime.broadcast_changes(\n      topic_name,                -- topic\n      TG_OP,                     -- event (INSERT or UPDATE)\n      TG_OP,                     -- operation\n      TG_TABLE_NAME,             -- table name\n      TG_TABLE_SCHEMA,           -- schema\n      row_to_json(NEW)::jsonb,   -- new record\n      CASE WHEN TG_OP = 'UPDATE' THEN row_to_json(OLD)::jsonb ELSE NULL END  -- old record (for UPDATE)\n    );\n    \n    RETURN NEW;\n  END IF;\nEND;\n$$;\n\n-- Comment on function\nCOMMENT ON FUNCTION broadcast_community_post_changes() IS \n'Broadcasts community post changes (INSERT, UPDATE, DELETE) to the appropriate Realtime channel topic';\n\n\n-- Function to broadcast like changes\nCREATE OR REPLACE FUNCTION broadcast_post_like_changes()\nRETURNS TRIGGER\nSECURITY DEFINER\nLANGUAGE plpgsql\nAS $$\nDECLARE\n  channel_slug_var TEXT;\n  topic_name TEXT;\n  post_record RECORD;\nBEGIN\n  -- Get the channel slug for the post that was liked\n  IF TG_OP = 'DELETE' THEN\n    SELECT c.slug INTO channel_slug_var\n    FROM community_posts cp\n    JOIN channels c ON cp.channel_id = c.id\n    WHERE cp.id = OLD.post_id;\n    \n    topic_name := 'private-channel:' || channel_slug_var;\n    \n    -- Broadcast the unlike event\n    PERFORM realtime.broadcast_changes(\n      topic_name,\n      'UNLIKE',                  -- custom event name\n      TG_OP,                     -- operation (DELETE)\n      TG_TABLE_NAME,\n      TG_TABLE_SCHEMA,\n      NULL,\n      row_to_json(OLD)::jsonb\n    );\n    \n    RETURN OLD;\n  ELSE\n    -- For INSERT (new like)\n    SELECT c.slug INTO channel_slug_var\n    FROM community_posts cp\n    JOIN channels c ON cp.channel_id = c.id\n    WHERE cp.id = NEW.post_id;\n    \n    topic_name := 'private-channel:' || channel_slug_var;\n    \n    -- Broadcast the like event\n    PERFORM realtime.broadcast_changes(\n      topic_name,\n      'LIKE',                    -- custom event name\n      TG_OP,                     -- operation (INSERT)\n      TG_TABLE_NAME,\n      TG_TABLE_SCHEMA,\n      row_to_json(NEW)::jsonb,\n      NULL\n    );\n    \n    RETURN NEW;\n  END IF;\nEND;\n$$;\n\nCOMMENT ON FUNCTION broadcast_post_like_changes() IS \n'Broadcasts like/unlike events to the appropriate Realtime channel topic';",
+      "verification": "-- Check if functions exist\nSELECT \n  proname as function_name,\n  prosrc as source\nFROM pg_proc\nWHERE proname IN ('broadcast_community_post_changes', 'broadcast_post_like_changes')\nORDER BY proname;",
+      "testing": "Insert a test message and verify the broadcast is received by subscribed clients"
+    },
+    "step_3_attach_triggers": {
+      "description": "Attach triggers to tables to automatically broadcast changes",
+      "priority": "critical",
+      "file": "supabase/migrations/20251124000002_attach_broadcast_triggers.sql",
+      "sql": "-- Drop existing triggers if they exist (for idempotency)\nDROP TRIGGER IF EXISTS community_post_broadcast_trigger ON community_posts;\nDROP TRIGGER IF EXISTS community_post_like_broadcast_trigger ON community_post_likes;\n\n-- Trigger for community_posts changes\nCREATE TRIGGER community_post_broadcast_trigger\n  AFTER INSERT OR UPDATE OR DELETE\n  ON community_posts\n  FOR EACH ROW\n  EXECUTE FUNCTION broadcast_community_post_changes();\n\nCOMMENT ON TRIGGER community_post_broadcast_trigger ON community_posts IS\n'Broadcasts INSERT, UPDATE, DELETE events to Realtime subscribers';\n\n-- Trigger for community_post_likes changes\nCREATE TRIGGER community_post_like_broadcast_trigger\n  AFTER INSERT OR DELETE\n  ON community_post_likes\n  FOR EACH ROW\n  EXECUTE FUNCTION broadcast_post_like_changes();\n\nCOMMENT ON TRIGGER community_post_like_broadcast_trigger ON community_post_likes IS\n'Broadcasts LIKE/UNLIKE events to Realtime subscribers';",
+      "verification": "-- Verify triggers are attached\nSELECT \n  tgname as trigger_name,\n  tgrelid::regclass as table_name,\n  tgenabled as enabled,\n  pg_get_triggerdef(oid) as definition\nFROM pg_trigger\nWHERE tgname IN ('community_post_broadcast_trigger', 'community_post_like_broadcast_trigger')\nORDER BY tgname;",
+      "testing": "Insert, update, and delete test messages. Verify broadcasts are sent to correct channels."
+    },
+    "step_4_client_refactor": {
+      "description": "Refactor client code to use Broadcast instead of Postgres Changes",
+      "priority": "high",
+      "file": "src/hooks/useCommunityFeed.ts",
+      "changes": {
+        "current_approach": "postgres_changes subscription on community_posts table",
+        "new_approach": "Broadcast subscription with private channels"
+      },
+      "implementation": "See step_4_client_code_example for full implementation",
+      "key_changes": [
+        "Replace postgres_changes with broadcast subscriptions",
+        "Set private: true for all channel subscriptions",
+        "Listen to broadcast events: INSERT, UPDATE, DELETE, LIKE, UNLIKE",
+        "Parse broadcast payload from realtime.broadcast_changes format",
+        "Maintain optimistic updates (already implemented)",
+        "Ensure proper cleanup with removeChannel()"
+      ]
+    },
+    "step_4_client_code_example": {
+      "description": "Updated client hook using Broadcast",
+      "file": "src/hooks/useCommunityFeed.ts",
+      "code_typescript": "// Updated real-time subscription using Broadcast instead of Postgres Changes\nuseEffect(() => {\n  if (!enableRealtime || !profile || !channelSlug) return;\n\n  const channelName = `private-channel:${channelSlug}`;\n  \n  // Create a private channel for this community channel\n  realtimeSubscription.current = supabase\n    .channel(channelName, {\n      config: { \n        private: true  // CRITICAL: Enables RLS authorization\n      }\n    })\n    // Listen for new messages\n    .on('broadcast', \n      { event: 'INSERT' },\n      (payload) => {\n        console.log('New message received:', payload);\n        const newPost = payload.payload;\n        \n        // Don't add if it's our own post (already added optimistically)\n        if (newPost.user_id === profile.id) return;\n        \n        // Add new post to feed from other users\n        // This will need to be enriched with user data\n        loadPosts(0, true); // Refresh feed to get full post data\n      }\n    )\n    // Listen for message updates\n    .on('broadcast',\n      { event: 'UPDATE' },\n      (payload) => {\n        console.log('Message updated:', payload);\n        const updatedPost = payload.payload;\n        \n        setPosts(current => current.map(post =>\n          post.id === updatedPost.id\n            ? { ...post, content: updatedPost.content, updated_at: updatedPost.updated_at }\n            : post\n        ));\n      }\n    )\n    // Listen for message deletes\n    .on('broadcast',\n      { event: 'DELETE' },\n      (payload) => {\n        console.log('Message deleted:', payload);\n        const deletedPost = payload.payload;\n        \n        setPosts(current => current.filter(post => post.id !== deletedPost.id));\n      }\n    )\n    // Listen for likes\n    .on('broadcast',\n      { event: 'LIKE' },\n      (payload) => {\n        console.log('Post liked:', payload);\n        const like = payload.payload;\n        \n        setPosts(current => current.map(post => {\n          if (post.id === like.post_id) {\n            return {\n              ...post,\n              like_count: post.like_count + 1,\n              user_has_liked: like.user_id === profile.id ? true : post.user_has_liked\n            };\n          }\n          // Also update in replies\n          if (post.replies) {\n            return {\n              ...post,\n              replies: post.replies.map(reply =>\n                reply.id === like.post_id\n                  ? { ...reply, like_count: reply.like_count + 1, user_has_liked: like.user_id === profile.id }\n                  : reply\n              )\n            };\n          }\n          return post;\n        }));\n      }\n    )\n    // Listen for unlikes\n    .on('broadcast',\n      { event: 'UNLIKE' },\n      (payload) => {\n        console.log('Post unliked:', payload);\n        const like = payload.payload;\n        \n        setPosts(current => current.map(post => {\n          if (post.id === like.post_id) {\n            return {\n              ...post,\n              like_count: Math.max(0, post.like_count - 1),\n              user_has_liked: like.user_id === profile.id ? false : post.user_has_liked\n            };\n          }\n          // Also update in replies\n          if (post.replies) {\n            return {\n              ...post,\n              replies: post.replies.map(reply =>\n                reply.id === like.post_id\n                  ? { ...reply, like_count: Math.max(0, reply.like_count - 1), user_has_liked: like.user_id === profile.id ? false : reply.user_has_liked }\n                  : reply\n              )\n            };\n          }\n          return post;\n        }));\n      }\n    )\n    .subscribe((status, err) => {\n      if (status === 'SUBSCRIBED') {\n        console.log(`✅ Subscribed to channel: ${channelName}`);\n      } else if (status === 'CHANNEL_ERROR') {\n        console.error(`❌ Channel error: ${channelName}`, err);\n      } else if (status === 'CLOSED') {\n        console.log(`🔒 Channel closed: ${channelName}`);\n      }\n    });\n\n  // Cleanup: Always remove channel on unmount\n  return () => {\n    if (realtimeSubscription.current) {\n      console.log(`🧹 Cleaning up channel: ${channelName}`);\n      supabase.removeChannel(realtimeSubscription.current);\n    }\n  };\n}, [enableRealtime, profile, channelSlug, loadPosts]);",
+      "notes": [
+        "Broadcast payload format from realtime.broadcast_changes() includes full row data",
+        "For new messages, you may want to refresh the feed to get enriched data (user profile, badges, etc.)",
+        "For likes/unlikes, the optimistic update is sufficient",
+        "Always set private: true for secure channels",
+        "Always clean up subscriptions to prevent memory leaks"
+      ]
+    },
+    "step_5_testing": {
+      "description": "Comprehensive testing of Broadcast-based real-time messaging",
+      "priority": "critical",
+      "test_cases": [
+        {
+          "name": "Single user sends message",
+          "steps": [
+            "User A logs in and navigates to 'The Arena' channel",
+            "User A sends a message",
+            "Verify message appears instantly in User A's feed (optimistic update)",
+            "Verify message is inserted into database",
+            "Verify database trigger broadcasts message",
+            "User A should NOT receive duplicate via Broadcast (own message)"
+          ],
+          "expected": "Message appears once, instantly, no duplicates"
+        },
+        {
+          "name": "Multiple users receive message",
+          "steps": [
+            "User A and User B both subscribed to 'The Arena' channel",
+            "User A sends a message",
+            "User B should receive message via Broadcast within 10-50ms",
+            "Verify message appears in User B's feed"
+          ],
+          "expected": "User B sees User A's message in near real-time (< 100ms)"
+        },
+        {
+          "name": "User likes message",
+          "steps": [
+            "User A sends a message",
+            "User B likes the message",
+            "User B sees like count increment instantly (optimistic)",
+            "User A receives LIKE broadcast and sees like count update",
+            "Verify database has the like record"
+          ],
+          "expected": "Both users see updated like count in real-time"
+        },
+        {
+          "name": "User deletes message",
+          "steps": [
+            "User A sends a message",
+            "User A deletes the message",
+            "User A sees message removed instantly (optimistic)",
+            "All other users receive DELETE broadcast",
+            "Message removed from all feeds"
+          ],
+          "expected": "Message disappears for all users in real-time"
+        },
+        {
+          "name": "Channel switching",
+          "steps": [
+            "User A subscribed to 'The Arena'",
+            "User A switches to 'Wins' channel",
+            "Verify old channel is unsubscribed",
+            "Verify new channel is subscribed",
+            "Send message in 'Wins' - User A should receive it",
+            "Send message in 'The Arena' - User A should NOT receive it"
+          ],
+          "expected": "User only receives messages from active channel"
+        },
+        {
+          "name": "Connection resilience",
+          "steps": [
+            "User A connected to channel",
+            "Simulate network disconnect (DevTools offline mode)",
+            "Wait 5 seconds",
+            "Reconnect network",
+            "Verify channel reconnects automatically",
+            "Send a message - verify it's received"
+          ],
+          "expected": "Connection recovers gracefully after network disruption"
+        },
+        {
+          "name": "Authorization enforcement",
+          "steps": [
+            "Create a private channel (future feature)",
+            "User A has access, User B does not",
+            "User A subscribes successfully",
+            "User B attempts to subscribe",
+            "Verify User B's subscription is rejected by RLS"
+          ],
+          "expected": "Only authorized users can subscribe to private channels"
+        },
+        {
+          "name": "Load testing",
+          "steps": [
+            "Use k6 to simulate 1000 concurrent users",
+            "All users subscribed to 'The Arena'",
+            "Send 100 messages per second",
+            "Measure message delivery latency",
+            "Verify no messages are dropped"
+          ],
+          "expected": "Median latency < 50ms, p95 < 200ms, 0% message loss"
+        }
+      ]
+    },
+    "step_6_rollout": {
+      "description": "Gradual rollout plan to production",
+      "priority": "high",
+      "phases": [
+        {
+          "phase": "1. Development Testing",
+          "environment": "local/dev",
+          "users": "developers only",
+          "duration": "2 days",
+          "success_criteria": [
+            "All test cases pass",
+            "No console errors",
+            "Message delivery < 100ms",
+            "Zero message loss"
+          ]
+        },
+        {
+          "phase": "2. Staging Deployment",
+          "environment": "staging",
+          "users": "beta testers (10-20 users)",
+          "duration": "1 week",
+          "success_criteria": [
+            "Real-world usage validates design",
+            "No critical bugs reported",
+            "Performance metrics within targets",
+            "Positive user feedback"
+          ]
+        },
+        {
+          "phase": "3. Canary Deployment",
+          "environment": "production",
+          "users": "10% of production users",
+          "duration": "3 days",
+          "success_criteria": [
+            "Error rate < 0.1%",
+            "Latency p95 < 200ms",
+            "No increase in support tickets",
+            "Monitoring shows stable metrics"
+          ]
+        },
+        {
+          "phase": "4. Full Rollout",
+          "environment": "production",
+          "users": "100% of users",
+          "duration": "1 day",
+          "success_criteria": [
+            "Same metrics as canary",
+            "No spike in errors or latency",
+            "Positive user sentiment"
+          ]
+        }
+      ],
+      "rollback_triggers": [
+        "Error rate exceeds 1%",
+        "Message delivery latency exceeds 500ms p95",
+        "Any security vulnerability discovered",
+        "Database CPU usage exceeds 80% sustained",
+        "More than 5 critical user reports"
+      ]
+    },
+    "step_7_monitoring": {
+      "description": "Monitoring and alerting for production",
+      "priority": "high",
+      "metrics_to_track": {
+        "realtime": {
+          "active_connections": "Number of WebSocket connections per channel",
+          "message_throughput": "Messages per second per channel",
+          "message_latency": "Time from send to delivery (p50, p95, p99)",
+          "error_rate": "Failed broadcasts, connection errors",
+          "subscription_failures": "Failed channel joins due to auth"
+        },
+        "database": {
+          "trigger_execution_time": "Time for broadcast triggers to execute",
+          "insert_rate": "Messages inserted per second",
+          "query_performance": "get_channel_feed RPC execution time",
+          "connection_pool": "Active database connections"
+        },
+        "client": {
+          "reconnection_rate": "How often clients reconnect",
+          "subscription_latency": "Time to establish channel subscription",
+          "ui_render_time": "Time to render new messages",
+          "optimistic_rollback_rate": "Failed optimistic updates"
+        }
+      },
+      "alerts": [
+        {
+          "name": "High message latency",
+          "condition": "p95 latency > 500ms for 5 minutes",
+          "severity": "warning",
+          "action": "Investigate database or Realtime performance"
+        },
+        {
+          "name": "Connection spike",
+          "condition": "Active connections increase by 50% in 5 minutes",
+          "severity": "info",
+          "action": "Monitor for capacity issues"
+        },
+        {
+          "name": "Broadcast failures",
+          "condition": "Error rate > 1% for 5 minutes",
+          "severity": "critical",
+          "action": "Check RLS policies, trigger functions, Realtime status"
+        },
+        {
+          "name": "Database CPU high",
+          "condition": "CPU > 80% for 10 minutes",
+          "severity": "warning",
+          "action": "Check slow queries, consider upgrading compute"
+        }
+      ]
+    }
+  },
+  "sql_files_to_create": [
+    {
+      "file": "supabase/migrations/20251124000000_realtime_broadcast_authorization.sql",
+      "description": "RLS policies for realtime.messages",
+      "status": "pending"
+    },
+    {
+      "file": "supabase/migrations/20251124000001_broadcast_trigger_functions.sql",
+      "description": "Trigger functions for broadcasting changes",
+      "status": "pending"
+    },
+    {
+      "file": "supabase/migrations/20251124000002_attach_broadcast_triggers.sql",
+      "description": "Attach triggers to tables",
+      "status": "pending"
+    }
+  ],
+  "client_files_to_update": [
+    {
+      "file": "src/hooks/useCommunityFeed.ts",
+      "changes": "Replace postgres_changes with broadcast subscriptions",
+      "status": "pending"
+    },
+    {
+      "file": "src/pages/Community/CommunityPage.tsx",
+      "changes": "Verify channel switching properly cleans up subscriptions",
+      "status": "review"
+    }
+  ],
+  "documentation_to_create": [
+    {
+      "file": "docs/json/community-realtime-runbook.json",
+      "description": "Operational runbook for troubleshooting Realtime issues",
+      "status": "pending"
+    },
+    {
+      "file": "docs/json/community-load-test-results.json",
+      "description": "Results from k6 load testing",
+      "status": "pending"
+    }
+  ]
+}
+

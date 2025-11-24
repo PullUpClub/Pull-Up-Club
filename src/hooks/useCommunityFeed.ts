@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 
 interface CommunityPost {
   id: string;
@@ -28,16 +29,18 @@ interface CommunityPost {
   grouped?: boolean;
   replies?: CommunityPost[];
   isExpanded?: boolean;
+  channel_id?: string;
 }
 
 interface UseCommunityFeedOptions {
   pageSize?: number;
   sortBy?: 'recent' | 'popular' | 'trending';
   enableRealtime?: boolean;
+  channelSlug?: string;
 }
 
 export const useCommunityFeed = (options: UseCommunityFeedOptions = {}) => {
-  const { pageSize = 20, sortBy = 'recent', enableRealtime = true } = options;
+  const { pageSize = 20, sortBy = 'recent', enableRealtime = true, channelSlug = 'the-arena' } = options;
   const { profile } = useAuth();
   
   const [posts, setPosts] = useState<CommunityPost[]>([]);
@@ -45,6 +48,7 @@ export const useCommunityFeed = (options: UseCommunityFeedOptions = {}) => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [channelId, setChannelId] = useState<string | null>(null);
   
   // Performance tracking
   const [performanceMetrics, setPerformanceMetrics] = useState({
@@ -55,6 +59,41 @@ export const useCommunityFeed = (options: UseCommunityFeedOptions = {}) => {
   
   const realtimeSubscription = useRef<any>(null);
   const lastLoadTime = useRef(Date.now());
+
+  // Fetch channel ID when slug changes - CRITICAL FOR SENDING MESSAGES
+  useEffect(() => {
+    const fetchChannelId = async () => {
+      if (!channelSlug) {
+        console.warn('No channel slug provided');
+        return;
+      }
+      
+      console.log('Fetching channel ID for slug:', channelSlug);
+      const { data, error } = await supabase
+        .from('channels')
+        .select('id')
+        .eq('slug', channelSlug)
+        .single();
+      
+      if (error) {
+        console.error('Error fetching channel:', error);
+        setError('Failed to load channel');
+        return;
+      }
+      
+      if (data) {
+        console.log('Channel ID fetched successfully:', data.id);
+        setChannelId(data.id);
+      } else {
+        console.error('Channel not found:', channelSlug);
+        setError(`Channel "${channelSlug}" not found`);
+      }
+    };
+    
+    // Reset channel ID when slug changes
+    setChannelId(null);
+    fetchChannelId();
+  }, [channelSlug]);
 
   const loadPosts = useCallback(async (offset = 0, replace = false) => {
     try {
@@ -68,11 +107,11 @@ export const useCommunityFeed = (options: UseCommunityFeedOptions = {}) => {
       const startTime = Date.now();
       
       const { data, error: fetchError } = await supabase.rpc(
-        'get_community_feed_cached',
+        'get_channel_feed',
         {
+          channel_slug: channelSlug,
           limit_count: pageSize,
           offset_count: offset,
-          sort_by: sortBy,
           user_context_id: profile?.id || null
         }
       );
@@ -127,12 +166,17 @@ export const useCommunityFeed = (options: UseCommunityFeedOptions = {}) => {
       setLoading(false);
       setLoadingMore(false);
     }
-  }, [pageSize, sortBy, profile?.id]);
+  }, [pageSize, sortBy, profile?.id, channelSlug]);
 
   const optimisticLikeToggle = useCallback(async (postId: string, currentlyLiked: boolean) => {
-    if (!profile) return;
+    if (!profile) {
+      toast.error('Please log in to like posts');
+      return;
+    }
 
-    // Discord-level instant feedback: Optimistic update
+    console.log(`[LIKE] User ${profile.id} toggling like on post ${postId}. Currently liked: ${currentlyLiked}`);
+
+    // INSTANT OPTIMISTIC UPDATE - Update UI immediately
     setPosts(prev => prev.map(post => {
       if (post.id === postId) {
         return {
@@ -141,7 +185,7 @@ export const useCommunityFeed = (options: UseCommunityFeedOptions = {}) => {
           user_has_liked: !currentlyLiked
         };
       }
-      // Also update in replies for Discord-level responsiveness
+      // Also update in replies
       if (post.replies) {
         return {
           ...post,
@@ -161,24 +205,43 @@ export const useCommunityFeed = (options: UseCommunityFeedOptions = {}) => {
 
     try {
       if (currentlyLiked) {
-        const { error } = await supabase
+        // UNLIKE - Delete the like record
+        console.log(`[LIKE] Removing like: user_id=${profile.id}, post_id=${postId}`);
+        const { error, count } = await supabase
           .from('community_post_likes')
-          .delete()
-          .match({ user_id: profile.id, post_id: postId });
+          .delete({ count: 'exact' })
+          .eq('user_id', profile.id)
+          .eq('post_id', postId);
         
-        if (error) throw error;
+        if (error) {
+          console.error('[LIKE] Error deleting like:', error);
+          throw error;
+        }
+        
+        console.log(`[LIKE] Deleted ${count} like(s)`);
       } else {
+        // LIKE - Insert new like record
+        console.log(`[LIKE] Adding like: user_id=${profile.id}, post_id=${postId}`);
         const { error } = await supabase
           .from('community_post_likes')
-          .insert([{ user_id: profile.id, post_id: postId }]);
+          .insert({ user_id: profile.id, post_id: postId });
         
-        if (error) throw error;
+        if (error) {
+          console.error('[LIKE] Error inserting like:', error);
+          // If error is duplicate key, user already liked it - ignore error
+          if (error.code === '23505' || error.message.includes('duplicate key') || error.message.includes('unique constraint')) {
+            console.log('[LIKE] Like already exists (duplicate), treating as success');
+            // Not an error - user already liked it
+          } else {
+            throw error;
+          }
+        } else {
+          console.log('[LIKE] Like added successfully');
+        }
       }
-
-      // Real-time subscription + 2-minute cache refresh will sync everyone else
-
     } catch (error) {
-      // Discord-level error handling: Revert immediately
+      console.error('[LIKE] Unexpected error:', error);
+      // REVERT optimistic update on error
       setPosts(prev => prev.map(post => {
         if (post.id === postId) {
           return {
@@ -203,12 +266,69 @@ export const useCommunityFeed = (options: UseCommunityFeedOptions = {}) => {
         }
         return post;
       }));
-      console.error('Error toggling like:', error);
+      toast.error('Failed to update like');
     }
   }, [profile]);
 
   const createPost = useCallback(async (content: string, parentId?: string) => {
-    if (!profile) return;
+    if (!profile) {
+      console.error('No profile found');
+      toast.error('Please log in to post messages');
+      return;
+    }
+    
+    if (!channelId) {
+      console.error('No channel ID found - channel may not be loaded yet');
+      console.error('Current channelSlug:', channelSlug);
+      toast.error('Channel not ready. Refreshing...');
+      // Try to reload the page to force channel fetch
+      window.location.reload();
+      return;
+    }
+
+    // INSTANT OPTIMISTIC UI UPDATE - Add message immediately before API call
+    const optimisticId = `temp-${Date.now()}`;
+    const optimisticPost: CommunityPost = {
+      id: optimisticId,
+      user_id: profile.id,
+      parent_id: parentId || null,
+      content: content.trim(),
+      post_type: 'user_post',
+      submission_id: null,
+      created_at: new Date().toISOString(),
+      full_name: profile.full_name || 'You',
+      organization: profile.organization || '',
+      region: profile.region || '',
+      user_badges: (profile.badges || []).map(badge => ({
+        name: badge.name,
+        image_url: badge.imageUrl,
+        min_pull_ups: badge.criteria?.value || 0
+      })),
+      like_count: 0,
+      reply_count: 0,
+      engagement_score: 0,
+      user_has_liked: false,
+      submission_data: null,
+      load_time_ms: 0,
+      channel_id: channelId
+    };
+
+    // Add optimistic post IMMEDIATELY
+    if (!parentId) {
+      setPosts(current => [optimisticPost, ...current]);
+    } else {
+      setPosts(current => current.map(post => {
+        if (post.id === parentId) {
+          return {
+            ...post,
+            replies: [...(post.replies || []), optimisticPost],
+            reply_count: post.reply_count + 1,
+            isExpanded: true
+          };
+        }
+        return post;
+      }));
+    }
 
     try {
       const { data, error } = await supabase
@@ -217,85 +337,75 @@ export const useCommunityFeed = (options: UseCommunityFeedOptions = {}) => {
           content: content.trim(),
           user_id: profile.id,
           parent_id: parentId || null,
-          post_type: 'user_post'
+          post_type: 'user_post',
+          channel_id: channelId
         }])
         .select('*')
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error creating post:', error);
+        // REVERT optimistic update on error
+        if (!parentId) {
+          setPosts(current => current.filter(p => p.id !== optimisticId));
+        } else {
+          setPosts(current => current.map(post => {
+            if (post.id === parentId) {
+              return {
+                ...post,
+                replies: (post.replies || []).filter(r => r.id !== optimisticId),
+                reply_count: Math.max(0, post.reply_count - 1)
+              };
+            }
+            return post;
+          }));
+        }
+        toast.error('Failed to send message');
+        throw error;
+      }
 
       // INSTANT FEEDBACK: Add your post immediately to UI
       if (data) {
+        // Replace optimistic post with real data
+        const realPost: CommunityPost = {
+          id: data.id,
+          user_id: data.user_id,
+          parent_id: data.parent_id,
+          content: data.content,
+          post_type: data.post_type,
+          submission_id: data.submission_id || null,
+          created_at: data.created_at,
+          full_name: profile.full_name || 'You',
+          organization: profile.organization || '',
+          region: profile.region || '',
+          user_badges: (profile.badges || []).map(badge => ({
+            name: badge.name,
+            image_url: badge.imageUrl,
+            min_pull_ups: badge.criteria?.value || 0
+          })),
+          like_count: 0,
+          reply_count: 0,
+          engagement_score: 0,
+          user_has_liked: false,
+          submission_data: null,
+          load_time_ms: 0,
+          channel_id: channelId
+        };
+
         if (parentId) {
-          // It's a reply - add to thread immediately for Discord feel
+          // Replace optimistic reply with real reply
           setPosts(current => current.map(post => {
             if (post.id === parentId) {
-              const replyData: CommunityPost = {
-                id: data.id,
-                user_id: data.user_id,
-                parent_id: data.parent_id,
-                content: data.content,
-                post_type: data.post_type,
-                submission_id: data.submission_id || null,
-                created_at: data.created_at,
-                full_name: profile.full_name || 'You',
-                organization: profile.organization || '',
-                region: profile.region || '',
-                user_badges: (profile.badges || []).map(badge => ({
-                  name: badge.name,
-                  image_url: badge.imageUrl,
-                  min_pull_ups: badge.criteria?.value || 0
-                })),
-                like_count: 0,
-                reply_count: 0,
-                engagement_score: 0,
-                user_has_liked: false,
-                submission_data: null,
-                load_time_ms: 0
-              };
-
               return {
                 ...post,
-                reply_count: post.reply_count + 1,
-                replies: post.replies ? [...post.replies, replyData] : [replyData],
-                isExpanded: true // Auto-expand to show your reply
+                replies: (post.replies || []).map(r => r.id === optimisticId ? realPost : r)
               };
             }
             return post;
           }));
         } else {
-          // It's a main post - add to top of feed immediately
-          const newPostData: CommunityPost = {
-            id: data.id,
-            user_id: data.user_id,
-            parent_id: data.parent_id,
-            content: data.content,
-            post_type: data.post_type,
-            submission_id: data.submission_id || null,
-            created_at: data.created_at,
-            full_name: profile.full_name || 'You',
-            organization: profile.organization || '',
-            region: profile.region || '',
-            user_badges: (profile.badges || []).map(badge => ({
-              name: badge.name,
-              image_url: badge.imageUrl,
-              min_pull_ups: badge.criteria?.value || 0
-            })),
-            like_count: 0,
-            reply_count: 0,
-            engagement_score: 0,
-            user_has_liked: false,
-            submission_data: null,
-            load_time_ms: 0
-          };
-
-          setPosts(current => {
-            // Check if post already exists (avoid duplicates)
-            if (current.some(p => p.id === newPostData.id)) {
-              return current;
-            }
-            return [newPostData, ...current];
-          });
+          // Replace optimistic post with real post
+          setPosts(current => current.map(p => p.id === optimisticId ? realPost : p));
         }
       }
 
@@ -303,7 +413,7 @@ export const useCommunityFeed = (options: UseCommunityFeedOptions = {}) => {
       console.error('Error creating post:', error);
       throw error;
     }
-  }, [profile]);
+  }, [profile, channelId]);
 
   // Discord-level real-time: Light notifications + optimistic updates
   useEffect(() => {
@@ -329,13 +439,20 @@ export const useCommunityFeed = (options: UseCommunityFeedOptions = {}) => {
         { event: 'INSERT', schema: 'public', table: 'community_post_likes' },
         (payload) => {
           const like = payload.new as any;
-          // Instant like feedback for Discord feel
+          
+          // IMPORTANT: Skip if this is our own like (already handled optimistically)
+          if (like.user_id === profile?.id) {
+            console.log('[REALTIME] Skipping own like event (already optimistic)');
+            return;
+          }
+          
+          // Update for OTHER users' likes
+          console.log('[REALTIME] Another user liked:', like.user_id);
           setPosts(current => current.map(post => {
             if (post.id === like.post_id) {
               return {
                 ...post,
-                like_count: post.like_count + 1,
-                user_has_liked: like.user_id === profile.id ? true : post.user_has_liked
+                like_count: post.like_count + 1
               };
             }
             // Also update in replies
@@ -346,8 +463,7 @@ export const useCommunityFeed = (options: UseCommunityFeedOptions = {}) => {
                   reply.id === like.post_id
                     ? {
                         ...reply,
-                        like_count: reply.like_count + 1,
-                        user_has_liked: like.user_id === profile.id ? true : reply.user_has_liked
+                        like_count: reply.like_count + 1
                       }
                     : reply
                 )
@@ -361,13 +477,20 @@ export const useCommunityFeed = (options: UseCommunityFeedOptions = {}) => {
         { event: 'DELETE', schema: 'public', table: 'community_post_likes' },
         (payload) => {
           const like = payload.old as any;
-          // Instant unlike feedback for Discord feel
+          
+          // IMPORTANT: Skip if this is our own unlike (already handled optimistically)
+          if (like.user_id === profile?.id) {
+            console.log('[REALTIME] Skipping own unlike event (already optimistic)');
+            return;
+          }
+          
+          // Update for OTHER users' unlikes
+          console.log('[REALTIME] Another user unliked:', like.user_id);
           setPosts(current => current.map(post => {
             if (post.id === like.post_id) {
               return {
                 ...post,
-                like_count: Math.max(0, post.like_count - 1),
-                user_has_liked: like.user_id === profile.id ? false : post.user_has_liked
+                like_count: Math.max(0, post.like_count - 1)
               };
             }
             // Also update in replies
@@ -378,8 +501,7 @@ export const useCommunityFeed = (options: UseCommunityFeedOptions = {}) => {
                   reply.id === like.post_id
                     ? {
                         ...reply,
-                        like_count: Math.max(0, reply.like_count - 1),
-                        user_has_liked: like.user_id === profile.id ? false : reply.user_has_liked
+                        like_count: Math.max(0, reply.like_count - 1)
                       }
                     : reply
                 )

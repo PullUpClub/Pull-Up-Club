@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.tsx';
-import { User, Menu, X, Trophy, Home, UserPlus, LogIn, LogOut, Shield, BookOpen, MessageCircle } from 'lucide-react';
+import { User, Menu, X, Trophy, Home, UserPlus, LogIn, LogOut, Shield, BookOpen, Mail } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { LanguageSelector } from '../LanguageSelector';
 
@@ -15,7 +15,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-black text-white shadow-md">
+    <header className="sticky top-0 z-50 bg-black/95 backdrop-blur-md text-white border-b border-[#9b9b6f]/20 shadow-lg shadow-black/50">
       <div className="container mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center space-x-2 text-[#9b9b6f] hover:text-[#7a7a58] transition-colors">
@@ -45,7 +45,7 @@ const Header: React.FC = () => {
               {t('navigation.firstPullUpCourse')}
             </Link>
             <Link to="/community" className="font-medium hover:text-[#9b9b6f] transition-colors flex items-center">
-              <MessageCircle className="h-4 w-4 mr-1" />
+              <Mail className="h-4 w-4 mr-1" />
               {t('navigation.community') || 'Community'}
             </Link>
             {user ? (
@@ -146,7 +146,7 @@ const Header: React.FC = () => {
                 className="font-medium hover:text-[#9b9b6f] transition-colors flex items-center"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <MessageCircle className="h-4 w-4 mr-1" />
+                <Mail className="h-4 w-4 mr-1" />
                 {t('navigation.community') || 'Community'}
               </Link>
               {!user && (

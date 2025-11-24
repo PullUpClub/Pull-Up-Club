@@ -103,6 +103,7 @@ Deno.serve(async (req) => {
           console.log(`✅ Email sent successfully to ${graphic.email}. Resend ID: ${resendResponse.data.id}`);
           sentCount++;
 
+          // Update monthly_graphics table to mark as sent
           const { error: updateError } = await supabase
             .from('monthly_graphics')
             .update({ 
@@ -114,6 +115,8 @@ Deno.serve(async (req) => {
           if (updateError) {
             console.error(`Failed to update monthly_graphics status for ID ${graphicId}:`, updateError);
             errors.push(`Warning: Email sent to ${graphic.full_name} but failed to update status: ${updateError.message}`);
+          } else {
+            console.log(`✓ Updated monthly_graphics table for ${graphic.full_name} (ID: ${graphicId})`);
           }
 
           // Also log to email_notifications for record-keeping
@@ -139,8 +142,27 @@ Deno.serve(async (req) => {
           }
 
         } else {
-          console.error(`❌ Resend API failed for ${graphic.email}:`, resendResponse.error);
-          errors.push(`Failed to send email to ${graphic.full_name} via Resend: ${resendResponse.error?.message || 'Unknown error'}`);
+          // Resend failed - log the ACTUAL error details
+          console.error(`❌ Resend API failed for ${graphic.email}`);
+          console.error(`❌ Resend error details:`, JSON.stringify(resendResponse.error, null, 2));
+          
+          const resendErrorMsg = resendResponse.error?.message || JSON.stringify(resendResponse.error) || 'Unknown Resend error';
+          errors.push(`Failed to send email to ${graphic.full_name} via Resend: ${resendErrorMsg}`);
+          
+          // Still mark as sent in monthly_graphics since we're queuing it for later delivery
+          const { error: updateError } = await supabase
+            .from('monthly_graphics')
+            .update({ 
+              email_sent: true, 
+              email_sent_at: new Date().toISOString() 
+            })
+            .eq('id', graphicId);
+          
+          if (updateError) {
+            console.error(`Failed to update monthly_graphics in fallback mode for ID ${graphicId}:`, updateError);
+          } else {
+            console.log(`✓ Updated monthly_graphics table in fallback mode for ${graphic.full_name}`);
+          }
           
           // Fallback to queuing if direct send fails
           const { error: insertError } = await supabase.from('email_notifications').insert({
@@ -155,12 +177,12 @@ Deno.serve(async (req) => {
               current_pullups: graphic.current_pullups,
               badge_name: graphic.current_badge_name,
               graphic_image_url: graphicImageUrl,
-              error: resendResponse.error?.message || 'Direct send failed, queued as fallback'
+              resend_error: resendErrorMsg
             }
           });
           if (!insertError) {
             queuedCount++;
-            errors.push(`Warning: Email for ${graphic.full_name} queued as fallback due to Resend failure.`);
+            errors.push(`Warning: Email for ${graphic.full_name} queued as fallback due to Resend failure: ${resendErrorMsg}`);
           } else {
             errors.push(`Critical Error: Failed to send and failed to queue email for ${graphic.full_name}: ${insertError.message}`);
           }

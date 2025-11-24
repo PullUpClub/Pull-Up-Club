@@ -1,0 +1,544 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-11-24T00:00:00Z",
+  "type": "ARCHITECTURE",
+  "metadata": {
+    "project": "Pull-Up Club Community System",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true,
+    "status": "planning"
+  },
+  "architecture": {
+    "overview": {
+      "description": "Slack/Discord-style community messaging system with channel-based architecture using Supabase Realtime Broadcast instead of Postgres Changes for optimal scalability",
+      "target_scale": "100,000 concurrent users",
+      "wireframe_requirements": {
+        "layout": "Mailbox/Slack-style with persistent sidebar",
+        "channels": "Multiple themed channels (The Arena, Form Check, Wins, Nutrition, Off Topic)",
+        "realtime": "Real-time message delivery, typing indicators, presence",
+        "mobile": "Responsive with collapsible sidebar"
+      },
+      "recommended_approach": "Broadcast + Database Triggers (realtime.broadcast_changes)",
+      "rationale": [
+        "Broadcast scales better than Postgres Changes (800k+ msgs/sec vs performance bottlenecks)",
+        "Broadcast has lower latency (6ms median vs database query time)",
+        "Postgres Changes has single-threaded processing limitation",
+        "Broadcast supports 250k+ concurrent users per cluster",
+        "Private channels with RLS provide security"
+      ]
+    },
+    "database_schema": {
+      "channels": {
+        "table": "channels",
+        "purpose": "Store channel metadata",
+        "columns": {
+          "id": "UUID PRIMARY KEY",
+          "slug": "TEXT UNIQUE (e.g., 'the-arena')",
+          "name": "TEXT (display name)",
+          "description": "TEXT",
+          "icon": "TEXT (lucide icon name)",
+          "position": "INTEGER (sort order)",
+          "is_private": "BOOLEAN DEFAULT false",
+          "created_at": "TIMESTAMPTZ",
+          "updated_at": "TIMESTAMPTZ"
+        },
+        "indexes": [
+          "idx_channels_slug ON channels(slug)",
+          "idx_channels_position ON channels(position)"
+        ],
+        "rls_policies": {
+          "select": "Public channels viewable by all, private by authenticated",
+          "insert_update_delete": "Admin only"
+        }
+      },
+      "community_posts": {
+        "table": "community_posts",
+        "purpose": "Store all messages/posts",
+        "columns": {
+          "id": "UUID PRIMARY KEY",
+          "channel_id": "UUID REFERENCES channels(id) NOT NULL",
+          "user_id": "UUID REFERENCES profiles(id) NOT NULL",
+          "parent_id": "UUID REFERENCES community_posts(id) (for threads)",
+          "content": "TEXT NOT NULL",
+          "post_type": "TEXT (user_post, announcement, etc.)",
+          "is_deleted": "BOOLEAN DEFAULT false",
+          "created_at": "TIMESTAMPTZ",
+          "updated_at": "TIMESTAMPTZ",
+          "engagement_score": "NUMERIC (for sorting)"
+        },
+        "indexes": [
+          "idx_community_posts_channel_id ON community_posts(channel_id)",
+          "idx_community_posts_parent_id ON community_posts(parent_id)",
+          "idx_community_posts_created_at ON community_posts(created_at DESC)",
+          "idx_community_posts_user_id ON community_posts(user_id)"
+        ],
+        "partitioning": {
+          "strategy": "Consider partitioning by channel_id at scale",
+          "threshold": "10M+ messages"
+        },
+        "rls_policies": {
+          "select": "Users can read messages from channels they have access to",
+          "insert": "Authenticated users can post to channels",
+          "update": "Users can edit own posts within time window",
+          "delete": "Users can soft-delete own posts, admins hard delete"
+        }
+      },
+      "community_post_likes": {
+        "table": "community_post_likes",
+        "purpose": "Track message reactions",
+        "columns": {
+          "id": "UUID PRIMARY KEY",
+          "post_id": "UUID REFERENCES community_posts(id)",
+          "user_id": "UUID REFERENCES profiles(id)",
+          "created_at": "TIMESTAMPTZ"
+        },
+        "constraints": {
+          "unique": "UNIQUE(post_id, user_id)"
+        },
+        "indexes": [
+          "idx_post_likes_post_id ON community_post_likes(post_id)",
+          "idx_post_likes_user_id ON community_post_likes(user_id)"
+        ]
+      },
+      "realtime_messages": {
+        "table": "realtime.messages",
+        "purpose": "Built-in Supabase table for Broadcast authorization",
+        "rls_policies": {
+          "select": "Allow authenticated users to receive broadcasts",
+          "insert": "Allow authenticated users to send broadcasts"
+        }
+      }
+    },
+    "realtime_configuration": {
+      "approach": "Hybrid Broadcast + Database Triggers",
+      "components": {
+        "broadcast": {
+          "purpose": "Primary real-time delivery mechanism",
+          "channel_naming": "private-channel:channel_slug (e.g., 'private-channel:the-arena')",
+          "message_types": [
+            "new_message",
+            "message_updated",
+            "message_deleted",
+            "typing_indicator",
+            "presence_change"
+          ],
+          "configuration": {
+            "private": true,
+            "broadcast": {
+              "ack": false,
+              "self": false
+            }
+          },
+          "scalability": {
+            "max_concurrent_users": "250,000+",
+            "max_throughput": "800,000+ msgs/sec",
+            "median_latency": "6ms",
+            "p95_latency": "28ms"
+          }
+        },
+        "database_triggers": {
+          "purpose": "Automatically broadcast database changes",
+          "triggers": [
+            {
+              "name": "broadcast_new_message",
+              "table": "community_posts",
+              "events": ["INSERT"],
+              "function": "realtime.broadcast_changes",
+              "topic_pattern": "private-channel:{channel_slug}"
+            },
+            {
+              "name": "broadcast_message_update",
+              "table": "community_posts",
+              "events": ["UPDATE"],
+              "function": "realtime.broadcast_changes",
+              "topic_pattern": "private-channel:{channel_slug}"
+            },
+            {
+              "name": "broadcast_message_delete",
+              "table": "community_posts",
+              "events": ["DELETE"],
+              "function": "realtime.broadcast_changes",
+              "topic_pattern": "private-channel:{channel_slug}"
+            }
+          ],
+          "implementation": "Use realtime.broadcast_changes() for automatic message propagation"
+        },
+        "presence": {
+          "purpose": "Track online users per channel",
+          "usage": "Minimal - only for online status, NOT for typing indicators",
+          "channel_prefix": "presence:channel_slug",
+          "throttle": "Update every 30 seconds to reduce overhead",
+          "warning": "Presence is computationally heavy due to CRDT - use sparingly"
+        },
+        "postgres_changes": {
+          "usage": "NOT RECOMMENDED for this use case",
+          "rationale": [
+            "Single-threaded processing bottleneck",
+            "RLS check on every change (100 users = 100 reads per insert)",
+            "Does not scale beyond moderate traffic",
+            "Broadcast is superior in every metric"
+          ],
+          "exception": "Only use for admin monitoring/logging, not user-facing features"
+        }
+      }
+    },
+    "rls_authorization": {
+      "purpose": "Secure private channels using Row Level Security",
+      "policies": {
+        "broadcast_receive": {
+          "table": "realtime.messages",
+          "operation": "SELECT",
+          "policy": "CREATE POLICY \"authenticated_can_receive\" ON realtime.messages FOR SELECT TO authenticated USING (true)"
+        },
+        "broadcast_send": {
+          "table": "realtime.messages",
+          "operation": "INSERT",
+          "policy": "CREATE POLICY \"authenticated_can_send\" ON realtime.messages FOR INSERT TO authenticated WITH CHECK (true)"
+        },
+        "channel_access": {
+          "table": "channels",
+          "operation": "SELECT",
+          "policy": "Users can only view channels they have permission to access"
+        },
+        "message_read": {
+          "table": "community_posts",
+          "operation": "SELECT",
+          "policy": "Users can read messages from channels they have access to"
+        },
+        "message_write": {
+          "table": "community_posts",
+          "operation": "INSERT",
+          "policy": "Authenticated users can post to channels"
+        }
+      },
+      "performance_note": "Complex RLS policies increase connection latency - keep policies simple"
+    },
+    "client_architecture": {
+      "channel_management": {
+        "description": "Each channel is a separate Realtime subscription",
+        "pattern": "One WebSocket connection, multiple channels multiplexed",
+        "subscription_lifecycle": {
+          "mount": "Subscribe to channel on component mount",
+          "unmount": "Unsubscribe on component unmount",
+          "cleanup": "Always call supabase.removeChannel(channel) to prevent memory leaks"
+        }
+      },
+      "message_flow": {
+        "send": [
+          "1. Optimistic UI update (instant feedback)",
+          "2. Insert into community_posts table",
+          "3. Database trigger broadcasts to Realtime",
+          "4. All subscribed clients receive via Broadcast",
+          "5. Clients update UI from Broadcast payload"
+        ],
+        "receive": [
+          "1. Listen to Broadcast events on channel",
+          "2. Receive new_message event with full payload",
+          "3. Update local state optimistically",
+          "4. No database query needed - all data in Broadcast"
+        ]
+      },
+      "optimistic_updates": {
+        "purpose": "Discord-level instant feedback",
+        "implementation": [
+          "Update UI immediately on user action",
+          "Send request to database in background",
+          "Revert UI on error",
+          "Trust Broadcast events for other users' actions"
+        ],
+        "examples": {
+          "send_message": "Show message immediately, add to DB, Broadcast confirms",
+          "like_message": "Update like count instantly, sync to DB",
+          "delete_message": "Remove from UI instantly, soft-delete in DB"
+        }
+      },
+      "state_management": {
+        "local_state": "React useState for active channel messages",
+        "cache": "Keep last N messages per channel in memory",
+        "pagination": "Load older messages on demand via RPC function",
+        "real_time_updates": "Prepend new messages from Broadcast"
+      }
+    },
+    "performance_optimizations": {
+      "database": {
+        "indexes": [
+          "Composite index on (channel_id, created_at DESC) for message retrieval",
+          "Index on parent_id for thread queries",
+          "Partial index on is_deleted = false for active messages"
+        ],
+        "materialized_views": {
+          "channel_stats": "Precompute message counts, active users per channel",
+          "refresh": "REFRESH CONCURRENTLY every 5 minutes"
+        },
+        "connection_pooling": {
+          "transaction_mode": "Use Supavisor transaction mode for short-lived queries",
+          "session_mode": "Use for long-lived connections (Realtime)"
+        }
+      },
+      "realtime": {
+        "rate_limiting": {
+          "max_channels_per_client": 100,
+          "max_joins_per_second": 100,
+          "max_events_per_second": 100,
+          "max_concurrent_users": 200
+        },
+        "payload_optimization": {
+          "max_message_size": "Keep under 50KB for best performance",
+          "include_only_necessary_data": "Don't send entire user profile with each message",
+          "reference_user_data": "Send user_id, cache profile data on client"
+        },
+        "connection_management": {
+          "heartbeat": "Client sends heartbeat every 30 seconds",
+          "reconnection": "Exponential backoff on disconnect",
+          "stale_detection": "Detect stale connections and reconnect"
+        }
+      },
+      "client": {
+        "virtual_scrolling": "Render only visible messages for performance",
+        "lazy_loading": "Load threads/replies on demand",
+        "debouncing": "Debounce typing indicators (1 second)",
+        "throttling": "Throttle scroll events, presence updates"
+      }
+    },
+    "monitoring": {
+      "metrics": {
+        "message_latency": "Track time from send to all clients receiving",
+        "connection_count": "Active WebSocket connections per channel",
+        "error_rate": "Failed message deliveries, connection errors",
+        "throughput": "Messages per second per channel"
+      },
+      "telemetry": {
+        "supabase_dashboard": "Monitor Realtime connections, message throughput",
+        "custom_logging": "Log performance metrics via log_performance RPC",
+        "alerting": "Alert on connection failures, high latency, error spikes"
+      }
+    },
+    "security": {
+      "authentication": {
+        "requirement": "All Realtime connections require valid JWT",
+        "token_refresh": "Refresh token before expiration to prevent disconnection",
+        "token_validation": "Supabase validates JWT on every channel join"
+      },
+      "authorization": {
+        "channel_access": "RLS policies enforce channel access",
+        "message_visibility": "Users only see messages from authorized channels",
+        "admin_privileges": "Special policies for admin actions"
+      },
+      "content_security": {
+        "xss_prevention": "Sanitize message content before display",
+        "rate_limiting": "Prevent spam with rate limits",
+        "moderation": "Admin tools for message deletion, user banning"
+      }
+    },
+    "scalability": {
+      "current_setup": {
+        "users": "< 1,000 concurrent",
+        "messages": "< 100/second",
+        "channels": "5 channels",
+        "approach": "Direct Broadcast with database triggers"
+      },
+      "growth_strategy": {
+        "10k_users": {
+          "approach": "Same as current, monitor metrics",
+          "database": "Upgrade to Pro tier if needed",
+          "indexes": "Ensure all recommended indexes exist"
+        },
+        "100k_users": {
+          "approach": "Dedicated Realtime cluster (contact Supabase)",
+          "database": "Consider read replicas for message history",
+          "caching": "Implement Redis/CDN caching for hot data",
+          "sharding": "Shard channels across multiple Realtime instances if needed"
+        }
+      }
+    },
+    "testing": {
+      "load_testing": {
+        "tool": "k6",
+        "scenarios": [
+          "10,000 concurrent users joining channels",
+          "1,000 messages per second distributed across channels",
+          "Spike test: 50k users joining simultaneously"
+        ]
+      },
+      "functional_testing": {
+        "message_delivery": "Verify all clients receive messages",
+        "ordering": "Ensure message order is preserved",
+        "reconnection": "Test reconnection after disconnect",
+        "authorization": "Verify RLS policies enforce access control"
+      }
+    }
+  },
+  "implementation_phases": {
+    "phase_1_database_setup": {
+      "status": "completed",
+      "tasks": {
+        "channels_table": "✅ Already created with slug, name, icon, position",
+        "community_posts_channel_id": "✅ channel_id column added",
+        "indexes": "✅ Basic indexes created",
+        "rls_policies": "✅ Basic policies in place"
+      }
+    },
+    "phase_2_realtime_authorization": {
+      "status": "pending",
+      "tasks": {
+        "create_broadcast_policies": {
+          "priority": "critical",
+          "sql": "Create RLS policies on realtime.messages for authenticated users",
+          "file": "supabase/migrations/YYYYMMDD_realtime_broadcast_auth.sql"
+        },
+        "test_private_channels": {
+          "priority": "critical",
+          "description": "Verify private channel config works with RLS"
+        }
+      }
+    },
+    "phase_3_database_triggers": {
+      "status": "pending",
+      "tasks": {
+        "create_broadcast_trigger_function": {
+          "priority": "critical",
+          "description": "Create function that calls realtime.broadcast_changes()",
+          "file": "supabase/migrations/YYYYMMDD_broadcast_triggers.sql"
+        },
+        "attach_triggers": {
+          "priority": "critical",
+          "description": "Attach triggers to community_posts for INSERT, UPDATE, DELETE"
+        },
+        "test_broadcast": {
+          "priority": "critical",
+          "description": "Verify messages are broadcast on database changes"
+        }
+      }
+    },
+    "phase_4_client_implementation": {
+      "status": "partial",
+      "tasks": {
+        "refactor_useRealtimeFeed": {
+          "priority": "high",
+          "description": "Replace Postgres Changes with Broadcast subscriptions",
+          "file": "src/hooks/useCommunityFeed.ts"
+        },
+        "implement_private_channels": {
+          "priority": "high",
+          "description": "Use { config: { private: true } } for channel subscriptions"
+        },
+        "optimistic_updates": {
+          "priority": "high",
+          "description": "Already implemented ✅"
+        },
+        "cleanup_subscriptions": {
+          "priority": "high",
+          "description": "Ensure removeChannel() called on unmount"
+        }
+      }
+    },
+    "phase_5_ui_polish": {
+      "status": "partial",
+      "tasks": {
+        "sidebar_persistence": {
+          "priority": "medium",
+          "description": "Persist sidebar across navigation ✅ Partially done"
+        },
+        "mobile_responsive": {
+          "priority": "medium",
+          "description": "Collapsible sidebar for mobile ✅ Done"
+        },
+        "typing_indicators": {
+          "priority": "low",
+          "description": "Show when users are typing (use Broadcast, not Presence)"
+        },
+        "online_status": {
+          "priority": "low",
+          "description": "Show online users (use Presence sparingly)"
+        }
+      }
+    },
+    "phase_6_performance_monitoring": {
+      "status": "pending",
+      "tasks": {
+        "add_telemetry": {
+          "priority": "medium",
+          "description": "Track message latency, connection health"
+        },
+        "setup_alerts": {
+          "priority": "medium",
+          "description": "Alert on high error rates, connection drops"
+        },
+        "load_testing": {
+          "priority": "medium",
+          "description": "Run k6 load tests to validate 100k user scalability"
+        }
+      }
+    }
+  },
+  "critical_decisions": {
+    "broadcast_vs_postgres_changes": {
+      "decision": "Use Broadcast with database triggers",
+      "rationale": "Broadcast scales to 250k+ users and 800k+ msgs/sec. Postgres Changes bottlenecks at single-threaded processing and RLS overhead.",
+      "benchmarks": {
+        "broadcast": {
+          "concurrent_users": "250,000",
+          "throughput": "800,000 msgs/sec",
+          "median_latency": "6ms",
+          "p95_latency": "28ms"
+        },
+        "postgres_changes": {
+          "note": "Single-threaded, scales poorly, not recommended for high-traffic chat"
+        }
+      }
+    },
+    "private_vs_public_channels": {
+      "decision": "Use private channels with RLS",
+      "rationale": "Private channels enforce authorization via RLS policies, preventing unauthorized access. Critical for security at scale.",
+      "tradeoff": "Slightly higher connection latency due to RLS checks, but necessary for security"
+    },
+    "presence_usage": {
+      "decision": "Minimal Presence usage",
+      "rationale": "Presence uses CRDT which is computationally expensive. Use only for online status, NOT for typing indicators or frequent updates.",
+      "alternative": "Use Broadcast for typing indicators instead"
+    }
+  },
+  "migration_from_current": {
+    "current_state": {
+      "approach": "Postgres Changes with realtime subscriptions",
+      "issues": [
+        "Will not scale to 100k users",
+        "Single-threaded processing bottleneck",
+        "RLS overhead on every change",
+        "Higher latency than Broadcast"
+      ]
+    },
+    "migration_steps": [
+      "1. Create RLS policies on realtime.messages for Broadcast authorization",
+      "2. Create database trigger functions using realtime.broadcast_changes()",
+      "3. Attach triggers to community_posts table",
+      "4. Update client to use Broadcast subscriptions with private: true",
+      "5. Test Broadcast delivery end-to-end",
+      "6. Remove old Postgres Changes subscriptions",
+      "7. Monitor performance metrics",
+      "8. Gradually roll out to production"
+    ],
+    "rollback_plan": "Keep Postgres Changes code in place until Broadcast is fully validated"
+  },
+  "best_practices": {
+    "dos": [
+      "✅ Use Broadcast for real-time messaging",
+      "✅ Use private channels with RLS",
+      "✅ Implement optimistic updates for instant feedback",
+      "✅ Clean up subscriptions on unmount",
+      "✅ Keep Broadcast payloads under 50KB",
+      "✅ Use indexes for fast database queries",
+      "✅ Monitor connection health and message latency",
+      "✅ Use realtime.broadcast_changes() for automatic propagation"
+    ],
+    "donts": [
+      "❌ Don't use Postgres Changes for high-traffic chat",
+      "❌ Don't overuse Presence (computationally expensive)",
+      "❌ Don't forget to set private: true for secure channels",
+      "❌ Don't send large payloads (> 50KB) via Broadcast",
+      "❌ Don't forget to refresh JWT tokens",
+      "❌ Don't create memory leaks by not cleaning up subscriptions"
+    ]
+  }
+}
+

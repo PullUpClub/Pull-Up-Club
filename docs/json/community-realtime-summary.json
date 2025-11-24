@@ -1,0 +1,455 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-11-24T00:00:00Z",
+  "type": "CHECKLIST",
+  "metadata": {
+    "project": "Pull-Up Club Community System - Realtime Setup",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true
+  },
+  "executive_summary": {
+    "title": "Pull-Up Club Community Realtime Architecture - Complete Plan",
+    "overview": "World-class Slack/Discord-style community messaging system using Supabase Realtime Broadcast for optimal scalability and performance",
+    "current_status": "Architecture designed and planned. Ready for implementation.",
+    "key_decisions": {
+      "realtime_approach": "Broadcast with database triggers (realtime.broadcast_changes)",
+      "why_not_postgres_changes": "Postgres Changes is single-threaded and bottlenecks at scale. Broadcast scales to 250k+ users and 800k+ msgs/sec",
+      "security": "Private channels with RLS policies on realtime.messages",
+      "scalability_target": "100,000 concurrent users"
+    },
+    "benefits": [
+      "🚀 800k+ messages per second throughput (vs Postgres Changes bottleneck)",
+      "⚡ 6ms median latency, 28ms p95 (real-time Discord-level performance)",
+      "🔒 Secure private channels with Row Level Security",
+      "📈 Scales to 250k+ concurrent users per cluster",
+      "🎯 Automatic message propagation via database triggers",
+      "💪 Battle-tested by Supabase (used in production at scale)"
+    ]
+  },
+  "documentation_created": {
+    "architecture_document": {
+      "file": "docs/json/community-realtime-architecture.json",
+      "description": "Comprehensive architecture document covering database schema, Realtime configuration, client architecture, performance optimizations, monitoring, security, and scalability",
+      "sections": [
+        "Overview and rationale for Broadcast over Postgres Changes",
+        "Complete database schema (channels, community_posts, likes)",
+        "Realtime configuration (Broadcast, Presence, authorization)",
+        "RLS authorization policies",
+        "Client architecture and state management",
+        "Performance optimizations (database, Realtime, client)",
+        "Monitoring and telemetry",
+        "Security best practices",
+        "Scalability roadmap (1k → 10k → 100k users)",
+        "Testing strategy",
+        "Critical decisions and rationale"
+      ]
+    },
+    "implementation_document": {
+      "file": "docs/json/community-realtime-implementation.json",
+      "description": "Step-by-step implementation guide with SQL migrations, client code, testing, and rollout plan",
+      "sections": [
+        "Step 1: Realtime authorization (RLS policies on realtime.messages)",
+        "Step 2: Database trigger functions (broadcast_community_post_changes, broadcast_post_like_changes)",
+        "Step 3: Attach triggers to tables",
+        "Step 4: Client refactor (replace Postgres Changes with Broadcast)",
+        "Step 5: Comprehensive testing (8 test cases)",
+        "Step 6: Gradual rollout plan (dev → staging → canary → production)",
+        "Step 7: Monitoring and alerting setup"
+      ]
+    },
+    "summary_document": {
+      "file": "docs/json/community-realtime-summary.json",
+      "description": "This document - executive summary and implementation checklist"
+    }
+  },
+  "architecture_highlights": {
+    "database_schema": {
+      "channels": {
+        "purpose": "Store channel metadata (The Arena, Wins, etc.)",
+        "key_fields": "slug, name, description, icon, position, is_private",
+        "status": "✅ Already created"
+      },
+      "community_posts": {
+        "purpose": "Store all messages",
+        "key_fields": "id, channel_id, user_id, parent_id, content, post_type",
+        "indexes": "channel_id, parent_id, created_at, user_id",
+        "status": "✅ Already created with channel_id"
+      },
+      "community_post_likes": {
+        "purpose": "Track reactions/likes",
+        "key_fields": "post_id, user_id",
+        "status": "✅ Already exists"
+      },
+      "realtime_messages": {
+        "purpose": "Supabase built-in table for Broadcast authorization",
+        "rls_needed": "✅ Documented in implementation plan",
+        "status": "⏳ Needs RLS policies (critical first step)"
+      }
+    },
+    "realtime_architecture": {
+      "broadcast": {
+        "purpose": "Primary real-time message delivery",
+        "channel_naming": "private-channel:the-arena, private-channel:wins, etc.",
+        "events": "INSERT, UPDATE, DELETE, LIKE, UNLIKE",
+        "security": "Private channels with RLS",
+        "scalability": "250k users, 800k msgs/sec, 6ms latency"
+      },
+      "database_triggers": {
+        "purpose": "Automatically broadcast database changes",
+        "function": "realtime.broadcast_changes()",
+        "triggers": "community_posts (INSERT/UPDATE/DELETE), community_post_likes (INSERT/DELETE)",
+        "status": "⏳ Needs to be implemented"
+      },
+      "presence": {
+        "purpose": "Online status (use sparingly)",
+        "warning": "Computationally expensive - use minimally",
+        "usage": "Only for online users count, NOT typing indicators"
+      }
+    },
+    "client_architecture": {
+      "subscription_pattern": "One WebSocket, multiple channels multiplexed",
+      "optimistic_updates": "✅ Already implemented",
+      "cleanup": "Always call supabase.removeChannel() on unmount",
+      "private_channels": "⚠️ Must set { config: { private: true } }",
+      "error_handling": "Revert optimistic updates on error"
+    }
+  },
+  "implementation_checklist": {
+    "phase_1_database_foundation": {
+      "status": "completed",
+      "tasks": {
+        "channels_table": {
+          "description": "Create channels table with slug, name, icon, position",
+          "status": "✅ complete",
+          "file": "supabase/migrations/20250224000000_add_community_channels.sql"
+        },
+        "community_posts_channel_id": {
+          "description": "Add channel_id to community_posts",
+          "status": "✅ complete",
+          "file": "supabase/migrations/20250224000000_add_community_channels.sql"
+        },
+        "indexes": {
+          "description": "Create indexes for performance",
+          "status": "✅ complete",
+          "indexes": ["idx_community_posts_channel_id"]
+        },
+        "rls_policies": {
+          "description": "Basic RLS policies on channels and posts",
+          "status": "✅ complete"
+        }
+      }
+    },
+    "phase_2_realtime_authorization": {
+      "status": "pending",
+      "priority": "🔴 CRITICAL - Do this first",
+      "tasks": {
+        "create_rls_policies": {
+          "description": "Create RLS policies on realtime.messages",
+          "status": "⏳ pending",
+          "file": "supabase/migrations/20251124000000_realtime_broadcast_authorization.sql",
+          "sql_provided": "✅ Yes - see implementation document",
+          "action": "Run the migration to enable Broadcast authorization"
+        },
+        "verify_policies": {
+          "description": "Verify RLS policies are active",
+          "status": "⏳ pending",
+          "sql_provided": "✅ Yes - SELECT from pg_policies",
+          "action": "Run verification query after migration"
+        }
+      }
+    },
+    "phase_3_database_triggers": {
+      "status": "pending",
+      "priority": "🔴 CRITICAL - Do this second",
+      "tasks": {
+        "create_trigger_functions": {
+          "description": "Create broadcast_community_post_changes() and broadcast_post_like_changes()",
+          "status": "⏳ pending",
+          "file": "supabase/migrations/20251124000001_broadcast_trigger_functions.sql",
+          "sql_provided": "✅ Yes - complete functions provided",
+          "action": "Run the migration to create trigger functions"
+        },
+        "attach_triggers": {
+          "description": "Attach triggers to community_posts and community_post_likes",
+          "status": "⏳ pending",
+          "file": "supabase/migrations/20251124000002_attach_broadcast_triggers.sql",
+          "sql_provided": "✅ Yes - complete trigger definitions",
+          "action": "Run the migration to attach triggers"
+        },
+        "verify_triggers": {
+          "description": "Verify triggers are attached and enabled",
+          "status": "⏳ pending",
+          "sql_provided": "✅ Yes - SELECT from pg_trigger",
+          "action": "Run verification query after migration"
+        }
+      }
+    },
+    "phase_4_client_implementation": {
+      "status": "pending",
+      "priority": "🟡 HIGH - Do this third",
+      "tasks": {
+        "refactor_useCommunityFeed": {
+          "description": "Replace Postgres Changes with Broadcast subscriptions",
+          "status": "⏳ pending",
+          "file": "src/hooks/useCommunityFeed.ts",
+          "code_provided": "✅ Yes - complete implementation in documentation",
+          "changes": [
+            "Replace postgres_changes with broadcast subscriptions",
+            "Set private: true for all channels",
+            "Listen to INSERT, UPDATE, DELETE, LIKE, UNLIKE events",
+            "Parse broadcast payload from realtime.broadcast_changes format",
+            "Ensure cleanup with removeChannel()"
+          ],
+          "action": "Update the hook with the provided code"
+        },
+        "verify_subscription_cleanup": {
+          "description": "Ensure channels are cleaned up on unmount",
+          "status": "⏳ pending",
+          "file": "src/pages/Community/CommunityPage.tsx",
+          "action": "Verify removeChannel() is called when switching channels"
+        },
+        "test_optimistic_updates": {
+          "description": "Verify optimistic updates still work",
+          "status": "⏳ pending",
+          "action": "Test sending messages, likes - should appear instantly"
+        }
+      }
+    },
+    "phase_5_testing": {
+      "status": "pending",
+      "priority": "🟡 HIGH - Do this fourth",
+      "tasks": {
+        "unit_tests": {
+          "description": "Test individual components",
+          "status": "⏳ pending",
+          "test_cases": 8,
+          "details": "See implementation document for complete test cases"
+        },
+        "integration_tests": {
+          "description": "Test end-to-end message flow",
+          "status": "⏳ pending",
+          "scenarios": [
+            "Single user sends message",
+            "Multiple users receive message",
+            "User likes message",
+            "User deletes message",
+            "Channel switching",
+            "Connection resilience",
+            "Authorization enforcement"
+          ]
+        },
+        "load_tests": {
+          "description": "Test scalability with k6",
+          "status": "⏳ pending",
+          "target": "1000 concurrent users, 100 msgs/sec",
+          "success_criteria": "Latency < 50ms median, < 200ms p95, 0% message loss"
+        }
+      }
+    },
+    "phase_6_ui_polish": {
+      "status": "partial",
+      "priority": "🟢 MEDIUM - Nice to have",
+      "tasks": {
+        "sidebar_persistence": {
+          "description": "Persist sidebar across navigation",
+          "status": "✅ mostly complete"
+        },
+        "mobile_responsive": {
+          "description": "Collapsible sidebar for mobile",
+          "status": "✅ complete"
+        },
+        "typing_indicators": {
+          "description": "Show when users are typing",
+          "status": "⏳ pending",
+          "note": "Use Broadcast, NOT Presence (lighter weight)"
+        },
+        "online_status": {
+          "description": "Show online users per channel",
+          "status": "⏳ pending",
+          "note": "Use Presence sparingly - computationally expensive"
+        }
+      }
+    },
+    "phase_7_deployment": {
+      "status": "pending",
+      "priority": "🟡 HIGH - Do after testing",
+      "tasks": {
+        "staging_deployment": {
+          "description": "Deploy to staging environment",
+          "status": "⏳ pending",
+          "duration": "1 week",
+          "users": "10-20 beta testers"
+        },
+        "canary_deployment": {
+          "description": "Deploy to 10% of production users",
+          "status": "⏳ pending",
+          "duration": "3 days",
+          "monitoring": "Error rate < 0.1%, latency p95 < 200ms"
+        },
+        "full_rollout": {
+          "description": "Deploy to 100% of users",
+          "status": "⏳ pending",
+          "duration": "1 day"
+        }
+      }
+    },
+    "phase_8_monitoring": {
+      "status": "pending",
+      "priority": "🟡 HIGH - Set up before production",
+      "tasks": {
+        "setup_alerts": {
+          "description": "Configure alerts for critical metrics",
+          "status": "⏳ pending",
+          "alerts": [
+            "High message latency (p95 > 500ms)",
+            "Connection spike (50% increase in 5 min)",
+            "Broadcast failures (error rate > 1%)",
+            "Database CPU high (> 80% for 10 min)"
+          ]
+        },
+        "dashboard": {
+          "description": "Create monitoring dashboard",
+          "status": "⏳ pending",
+          "metrics": [
+            "Active connections per channel",
+            "Message throughput (msgs/sec)",
+            "Message latency (p50, p95, p99)",
+            "Error rate",
+            "Database trigger execution time"
+          ]
+        }
+      }
+    }
+  },
+  "immediate_next_steps": {
+    "step_1": {
+      "title": "Create and run Realtime authorization migration",
+      "priority": "🔴 CRITICAL",
+      "file": "supabase/migrations/20251124000000_realtime_broadcast_authorization.sql",
+      "action": "Copy SQL from implementation document and run migration",
+      "verification": "Query pg_policies to verify RLS policies exist",
+      "estimated_time": "5 minutes"
+    },
+    "step_2": {
+      "title": "Create and run broadcast trigger functions migration",
+      "priority": "🔴 CRITICAL",
+      "file": "supabase/migrations/20251124000001_broadcast_trigger_functions.sql",
+      "action": "Copy SQL from implementation document and run migration",
+      "verification": "Query pg_proc to verify functions exist",
+      "estimated_time": "5 minutes"
+    },
+    "step_3": {
+      "title": "Create and run attach triggers migration",
+      "priority": "🔴 CRITICAL",
+      "file": "supabase/migrations/20251124000002_attach_broadcast_triggers.sql",
+      "action": "Copy SQL from implementation document and run migration",
+      "verification": "Query pg_trigger to verify triggers attached",
+      "estimated_time": "5 minutes"
+    },
+    "step_4": {
+      "title": "Refactor useCommunityFeed hook",
+      "priority": "🟡 HIGH",
+      "file": "src/hooks/useCommunityFeed.ts",
+      "action": "Replace postgres_changes subscriptions with broadcast subscriptions using code from implementation document",
+      "verification": "Test sending a message and verify it broadcasts to other users",
+      "estimated_time": "30 minutes"
+    },
+    "step_5": {
+      "title": "Test end-to-end message flow",
+      "priority": "🟡 HIGH",
+      "action": "Open two browser windows, log in as different users, send messages, verify real-time delivery",
+      "verification": "Messages appear within 100ms on both clients",
+      "estimated_time": "20 minutes"
+    },
+    "step_6": {
+      "title": "Test like functionality",
+      "priority": "🟡 HIGH",
+      "action": "Like a message from one user, verify other user sees like count update in real-time",
+      "verification": "Like count updates within 100ms",
+      "estimated_time": "10 minutes"
+    },
+    "step_7": {
+      "title": "Test channel switching",
+      "priority": "🟡 HIGH",
+      "action": "Switch between channels, verify old channel is unsubscribed and new channel is subscribed",
+      "verification": "No duplicate subscriptions, no memory leaks",
+      "estimated_time": "15 minutes"
+    },
+    "step_8": {
+      "title": "Set up monitoring",
+      "priority": "🟢 MEDIUM",
+      "action": "Configure Supabase dashboard alerts for critical metrics",
+      "verification": "Alerts fire when thresholds are breached",
+      "estimated_time": "30 minutes"
+    }
+  },
+  "key_resources": {
+    "supabase_realtime_docs": "https://supabase.com/docs/guides/realtime",
+    "broadcast_guide": "https://supabase.com/docs/guides/realtime/broadcast",
+    "broadcast_benchmarks": "https://supabase.com/docs/guides/realtime/benchmarks",
+    "realtime_authorization": "https://supabase.com/docs/guides/realtime/authorization",
+    "architecture_doc": "docs/json/community-realtime-architecture.json",
+    "implementation_doc": "docs/json/community-realtime-implementation.json",
+    "supabase_project": "PullupClub_Final Launch (yqnikgupiaghgjtsaypr)"
+  },
+  "critical_warnings": {
+    "dont_use_postgres_changes": {
+      "warning": "❌ DO NOT use Postgres Changes for this use case",
+      "reason": "Single-threaded processing, RLS overhead, does not scale",
+      "use_instead": "✅ Use Broadcast with database triggers (realtime.broadcast_changes)"
+    },
+    "always_use_private_channels": {
+      "warning": "🔒 ALWAYS set { config: { private: true } }",
+      "reason": "Without private: true, RLS authorization is not enforced",
+      "security_risk": "Users could access channels they shouldn't see"
+    },
+    "cleanup_subscriptions": {
+      "warning": "🧹 ALWAYS call supabase.removeChannel() on unmount",
+      "reason": "Prevents memory leaks and stale subscriptions",
+      "consequence": "Memory leaks, duplicate messages, poor performance"
+    },
+    "dont_overuse_presence": {
+      "warning": "⚠️ Use Presence SPARINGLY",
+      "reason": "Presence uses CRDT which is computationally expensive",
+      "use_instead": "Use Broadcast for typing indicators and frequent updates"
+    }
+  },
+  "success_criteria": {
+    "functionality": {
+      "real_time_delivery": "Messages delivered to all clients within 100ms",
+      "optimistic_updates": "User sees own actions instantly (< 10ms)",
+      "thread_support": "Replies work correctly with real-time updates",
+      "likes": "Like counts update in real-time for all users",
+      "channel_switching": "Switching channels is instant with proper cleanup"
+    },
+    "performance": {
+      "message_latency": "Median < 50ms, p95 < 200ms, p99 < 500ms",
+      "throughput": "Support 100+ messages per second per channel",
+      "concurrent_users": "Support 1000+ concurrent users (initial), 100k+ (future)",
+      "database_load": "Trigger execution < 5ms",
+      "client_load": "UI remains responsive with 100+ messages visible"
+    },
+    "reliability": {
+      "message_loss": "0% message loss under normal conditions",
+      "connection_recovery": "Automatic reconnection within 5 seconds",
+      "error_rate": "< 0.1% broadcast failures",
+      "uptime": "99.9% availability"
+    },
+    "security": {
+      "authorization": "RLS policies enforce channel access correctly",
+      "authentication": "All connections require valid JWT",
+      "xss_prevention": "No XSS vulnerabilities from user content",
+      "rate_limiting": "Spam prevention via rate limits"
+    }
+  },
+  "estimated_completion_time": {
+    "database_migrations": "15 minutes (3 migrations × 5 min each)",
+    "client_refactoring": "30 minutes",
+    "testing": "1-2 hours (unit + integration + manual)",
+    "monitoring_setup": "30 minutes",
+    "documentation": "✅ Complete",
+    "total": "2.5 - 3.5 hours for core implementation",
+    "note": "Additional time for deployment, load testing, and polish features"
+  }
+}
+

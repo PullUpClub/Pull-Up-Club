@@ -3,6 +3,7 @@ import { CreditCard, Package, Shield, ShoppingBag, DollarSign, ExternalLink } fr
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
 import toast from 'react-hot-toast';
+import PatchRoadmap from '../../components/Profile/PatchRoadmap';
 
 interface WeeklyEarning {
   id: string;
@@ -317,6 +318,9 @@ const SubscriptionRewards: React.FC = () => {
 
   return (
     <div className="space-y-8">
+      {/* Patch Roadmap - First Thing Users See */}
+      <PatchRoadmap />
+
       {/* US Shipping Notice */}
       <div className="bg-[#9b9b6f]/10 border border-[#9b9b6f] rounded-lg p-4 text-center">
         <p className="text-[#9b9b6f] text-sm">

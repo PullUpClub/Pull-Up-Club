@@ -5,15 +5,16 @@ import AnalyticsWrapper from './AnalyticsWrapper';
 
 interface LayoutProps {
   children: React.ReactNode;
+  showFooter?: boolean;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({ children, showFooter = true }) => {
   return (
     <AnalyticsWrapper>
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-screen bg-black">
         <Header />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+        <main className="flex-grow flex flex-col">{children}</main>
+        {showFooter && <Footer />}
       </div>
     </AnalyticsWrapper>
   );
