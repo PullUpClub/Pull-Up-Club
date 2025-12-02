@@ -45,12 +45,34 @@ const FirstPullUpCourse = lazy(() => import("./pages/FirstPullUpCourse/FirstPull
 // Community feature - lazy loaded for optimal performance  
 const CommunityPage = lazy(() => import("./pages/Community/CommunityPage.tsx"));
 
-// Loading component
+// Optimized loading component with minimal render
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-screen bg-black">
     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#9b9b6f]"></div>
   </div>
 );
+
+// Preload critical routes on mount
+const preloadCriticalRoutes = () => {
+  // Preload commonly visited routes
+  const criticalRoutes = [
+    () => import("./pages/Leaderboard/LeaderboardPage.tsx"),
+    () => import("./pages/Rules/RulesPage.tsx"),
+    () => import("./pages/Subscription/SubscriptionPage.tsx"),
+  ];
+  
+  // Use requestIdleCallback to preload during idle time
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(() => {
+      criticalRoutes.forEach(route => route().catch(() => {}));
+    });
+  } else {
+    // Fallback for browsers without requestIdleCallback
+    setTimeout(() => {
+      criticalRoutes.forEach(route => route().catch(() => {}));
+    }, 2000);
+  }
+};
 
 // Create QueryClient with optimized settings
 const queryClient = new QueryClient({
@@ -79,6 +101,9 @@ function App() {
   useEffect(() => {
     // Initialize Google Analytics
     initializeGA();
+    
+    // Preload critical routes during idle time
+    preloadCriticalRoutes();
   }, []);
 
   useEffect(() => {
