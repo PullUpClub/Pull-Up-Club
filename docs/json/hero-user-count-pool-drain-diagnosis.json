@@ -1,0 +1,158 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-12-02T00:00:00Z",
+  "type": "DIAGNOSIS",
+  "metadata": {
+    "project": "Pull-Up-Club",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true,
+    "priority": "CRITICAL"
+  },
+  "issues": [
+    {
+      "issue_id": "USER_COUNT_001",
+      "title": "User Count Not Displaying on Hero Section",
+      "severity": "HIGH",
+      "status": "DIAGNOSED",
+      "location": "src/pages/Home/Hero1.tsx:87-90",
+      "description": "The total user count query is blocked by RLS policies, preventing anonymous users from seeing the total member count on the homepage.",
+      "root_cause": {
+        "primary": "RLS policy on profiles table only allows authenticated users to view profiles",
+        "policy_location": "supabase/migrations/20250523100000_fix_rls_performance_issues.sql:81-90",
+        "policy_code": "CREATE POLICY \"Combined profiles select policy\" ON public.profiles FOR SELECT TO public USING (((SELECT auth.uid()) = id) OR (EXISTS (SELECT 1 FROM admin_roles WHERE user_id = (SELECT auth.uid()))))",
+        "explanation": "The SELECT policy requires auth.uid() = id (user viewing own profile) OR user is admin. Anonymous users (no auth.uid()) cannot count rows."
+      },
+      "impact": {
+        "user_facing": "Homepage shows '0+ Warriors Joined' instead of real count",
+        "business": "Reduces social proof and credibility for new visitors",
+        "affected_users": "All unauthenticated visitors to homepage"
+      },
+      "fix_strategy": {
+        "approach": "Add a separate RLS policy for COUNT queries or create a public view",
+        "options": [
+          {
+            "option": "A",
+            "method": "Add SELECT policy allowing COUNT(*) for anonymous users",
+            "pros": "Simple, direct fix",
+            "cons": "May expose row existence to anonymous users",
+            "code": "CREATE POLICY \"Allow public count\" ON public.profiles FOR SELECT TO anon USING (true)"
+          },
+          {
+            "option": "B",
+            "method": "Create a public function that returns count with SECURITY DEFINER",
+            "pros": "More secure, only exposes count",
+            "cons": "Requires function call instead of direct query",
+            "recommended": true
+          },
+          {
+            "option": "C",
+            "method": "Create materialized view with public access to stats",
+            "pros": "Most secure, can cache count",
+            "cons": "More complex, requires refresh logic"
+          }
+        ]
+      },
+      "verification_query": "SELECT COUNT(*) FROM profiles; -- Run as anonymous user"
+    },
+    {
+      "issue_id": "POOL_DRAIN_001",
+      "title": "Weekly Pool Not Draining on Approved Submissions",
+      "severity": "CRITICAL",
+      "status": "DIAGNOSED",
+      "location": "supabase/migrations/20250609000000_create_puc_bank_system.sql",
+      "description": "When submissions are approved, the weekly_pools.remaining_dollars stays at 250 and never decreases, allowing unlimited earnings.",
+      "root_cause": {
+        "primary": "Missing pool drain logic in approval flow",
+        "conflicting_systems": true,
+        "old_system": {
+          "location": "process_submission_earnings RPC function",
+          "status": "EXISTS but may have schema conflicts",
+          "drains_pool": true,
+          "called_from": "src/pages/Admin/AdminDashboardPage.tsx:520"
+        },
+        "new_system": {
+          "location": "process_earnings_on_approval trigger",
+          "status": "MAY EXIST but has critical bugs",
+          "drains_pool": false,
+          "bugs": [
+            "References non-existent weekly_earnings table",
+            "Uses wrong column names (week_start_date vs week_start)",
+            "Never updates weekly_pools table"
+          ]
+        }
+      },
+      "impact": {
+        "financial": "Unlimited earnings from same $250 pool - CRITICAL MONEY LEAK",
+        "data_integrity": "Pool tracking completely broken",
+        "user_impact": "Users may earn more than allocated budget",
+        "business_risk": "Unsustainable financial model, potential bankruptcy"
+      },
+      "current_state": {
+        "weekly_pools_schema": {
+          "correct_columns": ["week_start", "week_end", "remaining_dollars", "spent_dollars"],
+          "rpc_updates_pool": true,
+          "trigger_updates_pool": false
+        },
+        "approval_flow": {
+          "frontend_calls": "process_submission_earnings(p_submission_id, p_user_id, p_pull_up_count)",
+          "rpc_logic": "Inserts into user_earnings AND updates weekly_pools",
+          "trigger_logic": "Tries to insert into weekly_earnings (missing table)"
+        }
+      },
+      "fix_strategy": {
+        "immediate_action": "DISABLE broken trigger, rely on RPC function",
+        "recommended_approach": "Fix RPC function to ensure pool draining works correctly",
+        "steps": [
+          "1. Verify process_submission_earnings RPC exists and works",
+          "2. Check if user_earnings table has correct schema for RPC",
+          "3. Ensure RPC properly updates weekly_pools.remaining_dollars",
+          "4. Drop broken process_earnings_on_approval trigger if it exists",
+          "5. Verify approval flow drains pool correctly",
+          "6. Backfill any missed pool updates for recent approved submissions"
+        ],
+        "verification": {
+          "test_query": "SELECT id, remaining_dollars, spent_dollars FROM weekly_pools WHERE is_current = true",
+          "expected_result": "remaining_dollars should decrease after each approval",
+          "test_submission": "Approve a test submission and verify pool decreases by verified_count dollars"
+        }
+      }
+    }
+  ],
+  "dependencies": {
+    "tables": ["profiles", "weekly_pools", "user_earnings", "submissions"],
+    "functions": ["process_submission_earnings"],
+    "policies": ["Combined profiles select policy"],
+    "frontend_files": ["src/pages/Home/Hero1.tsx", "src/pages/Admin/AdminDashboardPage.tsx"]
+  },
+  "next_steps": [
+    {
+      "step": 1,
+      "action": "Create migration to fix user count RLS",
+      "file": "supabase/migrations/YYYYMMDD_fix_hero_user_count.sql",
+      "priority": "HIGH"
+    },
+    {
+      "step": 2,
+      "action": "Verify process_submission_earnings RPC functionality",
+      "method": "Run diagnostic queries against database",
+      "priority": "CRITICAL"
+    },
+    {
+      "step": 3,
+      "action": "Create migration to fix/disable broken trigger",
+      "file": "supabase/migrations/YYYYMMDD_fix_pool_draining.sql",
+      "priority": "CRITICAL"
+    },
+    {
+      "step": 4,
+      "action": "Test both fixes in staging environment",
+      "priority": "HIGH"
+    },
+    {
+      "step": 5,
+      "action": "Deploy fixes to production",
+      "priority": "CRITICAL"
+    }
+  ]
+}
+

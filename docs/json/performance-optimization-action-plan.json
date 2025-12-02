@@ -1,0 +1,736 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-12-02T16:10:00Z",
+  "type": "ACTION_PLAN",
+  "metadata": {
+    "project": "Pull-Up-Club",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true,
+    "created_date": "2025-12-02",
+    "objective": "Improve Lighthouse scores and Core Web Vitals for all pages",
+    "current_performance_score": 87,
+    "target_performance_score": 95,
+    "estimated_total_hours": 28
+  },
+  "executive_summary": {
+    "current_state": {
+      "performance": 87,
+      "accessibility": 92,
+      "best_practices": 78,
+      "seo": 100,
+      "critical_issues": 6,
+      "high_priority_issues": 3,
+      "medium_priority_issues": 3
+    },
+    "target_state": {
+      "performance": 95,
+      "accessibility": 95,
+      "best_practices": 90,
+      "seo": 100,
+      "lcp_target": "< 1.8s",
+      "cls_target": "< 0.1",
+      "fcp_target": "< 1.0s"
+    },
+    "primary_focus": "Optimize Largest Contentful Paint (LCP) from 2.5s to < 1.8s by optimizing hero image loading and reducing render-blocking resources"
+  },
+  "phases": [
+    {
+      "phase": 1,
+      "name": "Critical Performance Fixes",
+      "priority": "critical",
+      "estimated_hours": 12,
+      "target_completion": "Week 1",
+      "tasks": [
+        {
+          "task_id": "TASK-001",
+          "title": "Optimize Hero Image (LCP Fix)",
+          "status": "pending",
+          "priority": "critical",
+          "category": "performance",
+          "estimated_hours": 4,
+          "dependencies": [],
+          "description": "Optimize the hero image loading to improve LCP from 2.5s to < 1.8s",
+          "subtasks": [
+            {
+              "id": "TASK-001-A",
+              "description": "Remove duplicate preload tags from index.html (lines 10-11 or 55-57)",
+              "file": "index.html",
+              "verification": "Confirm only one set of hero image preload tags exist"
+            },
+            {
+              "id": "TASK-001-B",
+              "description": "Compress hero images further (pullup_header_desktop.webp, pullup_header-mobile.webp, pullup_header-tablet.webp)",
+              "tools": ["squoosh.app", "sharp", "imagemin"],
+              "target": "Reduce file size by 30-40% without visible quality loss"
+            },
+            {
+              "id": "TASK-001-C",
+              "description": "Add blur-up placeholder using base64 encoded tiny image",
+              "file": "src/pages/Home/Hero1.tsx",
+              "implementation": "Add placeholder prop to img with blurred base64 image"
+            },
+            {
+              "id": "TASK-001-D",
+              "description": "Implement AVIF format as primary with WebP fallback",
+              "file": "src/pages/Home/Hero1.tsx",
+              "example": "<source type='image/avif' srcSet='...' />"
+            },
+            {
+              "id": "TASK-001-E",
+              "description": "Move hero image preload to <head> with fetchpriority='high'",
+              "file": "index.html",
+              "verification": "Confirm preload executes before other resources"
+            },
+            {
+              "id": "TASK-001-F",
+              "description": "Defer non-critical animations in Hero1.tsx until after LCP",
+              "file": "src/pages/Home/Hero1.tsx",
+              "lines": [103, 127],
+              "implementation": "Delay animation triggers by 100ms after image load"
+            }
+          ],
+          "expected_outcome": "LCP reduced from 2.5s to 1.5-1.8s",
+          "verification": "Run Lighthouse test and confirm LCP score > 75"
+        },
+        {
+          "task_id": "TASK-002",
+          "title": "Convert PNG/JPG Images to WebP",
+          "status": "pending",
+          "priority": "high",
+          "category": "performance",
+          "estimated_hours": 3,
+          "dependencies": [],
+          "description": "Convert 1.86 MB of PNG/JPG images to WebP format for 712 KB savings (38.3%)",
+          "subtasks": [
+            {
+              "id": "TASK-002-A",
+              "description": "Convert Male badge images to WebP",
+              "files": [
+                "public/Male-Badges/Elite.png",
+                "public/Male-Badges/Proven.png",
+                "public/Male-Badges/Operator.png",
+                "public/Male-Badges/Recruit.png",
+                "public/Male-Badges/Hardened.png"
+              ],
+              "output_dir": "public/Male-Badges/",
+              "estimated_savings_kb": 514.86
+            },
+            {
+              "id": "TASK-002-B",
+              "description": "Convert Female badge image to WebP",
+              "files": ["public/Female-Badges/Hardened_1_-_Female.png"],
+              "output_dir": "public/Female-Badges/",
+              "estimated_savings_kb": 75.94
+            },
+            {
+              "id": "TASK-002-C",
+              "description": "Update code references to use WebP versions",
+              "files_to_search": [
+                "src/components/**/*.tsx",
+                "src/pages/**/*.tsx"
+              ],
+              "find": "\\.png",
+              "replace": ".webp",
+              "verification": "Grep for .png references and verify all are intentional (favicons, PWA icons)"
+            },
+            {
+              "id": "TASK-002-D",
+              "description": "Delete or archive original PNG/JPG files",
+              "action": "Move to /archive/ folder or delete after verification"
+            }
+          ],
+          "expected_outcome": "712 KB reduction in image payload",
+          "verification": "Run bundle analyzer and confirm image size reduction"
+        },
+        {
+          "task_id": "TASK-003",
+          "title": "Cache User Count Data",
+          "status": "pending",
+          "priority": "medium",
+          "category": "performance",
+          "estimated_hours": 1,
+          "dependencies": [],
+          "description": "Prevent database call on every page load by caching user count",
+          "subtasks": [
+            {
+              "id": "TASK-003-A",
+              "description": "Create user count caching service",
+              "file": "src/utils/cacheUserCount.ts",
+              "implementation": "Use localStorage with 5-minute TTL"
+            },
+            {
+              "id": "TASK-003-B",
+              "description": "Update Hero1.tsx to use cached value",
+              "file": "src/pages/Home/Hero1.tsx",
+              "lines": [84, 100],
+              "implementation": "Replace direct Supabase call with cache service"
+            },
+            {
+              "id": "TASK-003-C",
+              "description": "Create background job to refresh cache",
+              "file": "src/hooks/useUserCountCache.ts",
+              "implementation": "Custom hook that refreshes cache periodically"
+            }
+          ],
+          "expected_outcome": "Faster TTI, reduced database load by 100% on home page",
+          "verification": "Check network tab - no user count query on initial load"
+        },
+        {
+          "task_id": "TASK-004",
+          "title": "Implement Advanced Code Splitting",
+          "status": "pending",
+          "priority": "high",
+          "category": "performance",
+          "estimated_hours": 4,
+          "dependencies": [],
+          "description": "Reduce initial bundle size through granular code splitting",
+          "subtasks": [
+            {
+              "id": "TASK-004-A",
+              "description": "Update vite.config.ts with advanced manual chunks",
+              "file": "vite.config.ts",
+              "implementation": {
+                "vendor": ["react", "react-dom"],
+                "router": ["react-router-dom"],
+                "ui": ["@headlessui/react", "lucide-react"],
+                "forms": ["@stripe/react-stripe-js", "@stripe/stripe-js"],
+                "query": ["@tanstack/react-query"],
+                "i18n": ["i18next", "react-i18next", "i18next-browser-languagedetector"],
+                "animations": ["framer-motion", "lenis"],
+                "supabase": ["@supabase/supabase-js", "@supabase/auth-ui-react"],
+                "analytics": ["@vercel/analytics", "@vercel/speed-insights", "react-ga4"]
+              }
+            },
+            {
+              "id": "TASK-004-B",
+              "description": "Lazy load admin pages",
+              "files": [
+                "src/pages/Admin/AdminDashboardPage.tsx",
+                "src/pages/Admin/AdminPayoutsPage.tsx",
+                "src/pages/Admin/AdminMonthlyGraphicsPage.tsx"
+              ],
+              "verification": "Admin bundle not loaded for regular users"
+            },
+            {
+              "id": "TASK-004-C",
+              "description": "Lazy load i18n locale files",
+              "file": "src/i18n/index.ts",
+              "implementation": "Load only active locale initially, others on-demand"
+            },
+            {
+              "id": "TASK-004-D",
+              "description": "Dynamic import for heavy components",
+              "components": ["CommunityPage", "FirstPullUpCourse"],
+              "implementation": "Use React.lazy() for route-level splitting"
+            }
+          ],
+          "expected_outcome": "30-40% reduction in initial bundle size",
+          "verification": "Run 'npm run build' and analyze chunk sizes"
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "Medium Priority Optimizations",
+      "priority": "high",
+      "estimated_hours": 10,
+      "target_completion": "Week 2",
+      "tasks": [
+        {
+          "task_id": "TASK-005",
+          "title": "Optimize Third-Party Scripts",
+          "status": "pending",
+          "priority": "medium",
+          "category": "performance",
+          "estimated_hours": 2,
+          "dependencies": [],
+          "description": "Defer non-critical third-party scripts to improve FCP and TTI",
+          "subtasks": [
+            {
+              "id": "TASK-005-A",
+              "description": "Defer Meta Pixel initialization",
+              "file": "index.html",
+              "lines": [100, 137],
+              "implementation": "Move initialization to after window.onload"
+            },
+            {
+              "id": "TASK-005-B",
+              "description": "Lazy load Google Analytics",
+              "file": "src/utils/analytics.ts",
+              "implementation": "Initialize only after user interaction or 3s delay"
+            },
+            {
+              "id": "TASK-005-C",
+              "description": "Defer Stripe JS loading",
+              "file": "src/lib/StripeProvider.tsx",
+              "implementation": "Load Stripe only on subscription/payment pages"
+            }
+          ],
+          "expected_outcome": "Improved FCP and TTI by 200-300ms",
+          "verification": "Check network waterfall - third-party scripts load after critical resources"
+        },
+        {
+          "task_id": "TASK-006",
+          "title": "Implement Service Worker Caching",
+          "status": "pending",
+          "priority": "medium",
+          "category": "performance",
+          "estimated_hours": 3,
+          "dependencies": [],
+          "description": "Use vite-plugin-pwa for offline support and faster repeat visits",
+          "subtasks": [
+            {
+              "id": "TASK-006-A",
+              "description": "Configure vite-plugin-pwa in vite.config.ts",
+              "file": "vite.config.ts",
+              "implementation": "Add PWA plugin with workbox configuration"
+            },
+            {
+              "id": "TASK-006-B",
+              "description": "Define cache strategies",
+              "strategies": {
+                "images": "CacheFirst",
+                "api": "NetworkFirst",
+                "static": "StaleWhileRevalidate"
+              }
+            },
+            {
+              "id": "TASK-006-C",
+              "description": "Update sw.js with cache invalidation logic",
+              "file": "public/sw.js",
+              "implementation": "Clear old caches on version update"
+            }
+          ],
+          "expected_outcome": "50% faster repeat page loads, offline support",
+          "verification": "Test repeat visits show cached resources in DevTools"
+        },
+        {
+          "task_id": "TASK-007",
+          "title": "Reduce Hero Animation Complexity",
+          "status": "pending",
+          "priority": "medium",
+          "category": "performance",
+          "estimated_hours": 2,
+          "dependencies": ["TASK-001"],
+          "description": "Simplify animations to improve LCP and reduce jank",
+          "subtasks": [
+            {
+              "id": "TASK-007-A",
+              "description": "Replace JS animations with CSS transforms",
+              "file": "src/pages/Home/Hero1.tsx",
+              "lines": [234, 243, 279, 288],
+              "implementation": "Use CSS classes instead of inline styles for animations"
+            },
+            {
+              "id": "TASK-007-B",
+              "description": "Use requestAnimationFrame for counter animation",
+              "file": "src/pages/Home/Hero1.tsx",
+              "lines": [147, 170],
+              "implementation": "Replace setInterval with rAF for smoother animation"
+            },
+            {
+              "id": "TASK-007-C",
+              "description": "Defer IntersectionObserver initialization",
+              "file": "src/pages/Home/Hero1.tsx",
+              "lines": [103, 120],
+              "implementation": "Initialize only after critical content loaded"
+            }
+          ],
+          "expected_outcome": "Smoother animations, faster LCP",
+          "verification": "Check Chrome DevTools Performance tab for reduced jank"
+        },
+        {
+          "task_id": "TASK-008",
+          "title": "Improve Best Practices Score",
+          "status": "pending",
+          "priority": "medium",
+          "category": "best_practices",
+          "estimated_hours": 3,
+          "dependencies": [],
+          "description": "Identify and fix issues causing Best Practices score of 78",
+          "subtasks": [
+            {
+              "id": "TASK-008-A",
+              "description": "Run detailed Lighthouse audit to identify issues",
+              "tools": ["Chrome DevTools", "PageSpeed Insights"],
+              "action": "Document all Best Practices failures"
+            },
+            {
+              "id": "TASK-008-B",
+              "description": "Fix HTTPS/security issues if present",
+              "verification": "All resources served over HTTPS"
+            },
+            {
+              "id": "TASK-008-C",
+              "description": "Update browser compatibility issues",
+              "verification": "No console errors in Chrome, Firefox, Safari"
+            },
+            {
+              "id": "TASK-008-D",
+              "description": "Resolve any CSP violations",
+              "file": "index.html",
+              "line": 67,
+              "action": "Enable and configure Content-Security-Policy header"
+            }
+          ],
+          "expected_outcome": "Best Practices score increased to 90+",
+          "verification": "Run Lighthouse and confirm score >= 90"
+        }
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "Testing & Monitoring",
+      "priority": "medium",
+      "estimated_hours": 6,
+      "target_completion": "Week 3",
+      "tasks": [
+        {
+          "task_id": "TASK-009",
+          "title": "Run Comprehensive Mobile Tests",
+          "status": "pending",
+          "priority": "high",
+          "category": "testing",
+          "estimated_hours": 2,
+          "dependencies": ["TASK-001", "TASK-002", "TASK-004"],
+          "description": "Test all pages on mobile devices to identify mobile-specific issues",
+          "subtasks": [
+            {
+              "id": "TASK-009-A",
+              "description": "Run mobile Lighthouse tests on Linux/Mac or online tool",
+              "pages": [
+                "/",
+                "/leaderboard",
+                "/subscription",
+                "/rules",
+                "/faq",
+                "/login",
+                "/profile"
+              ],
+              "device": "mobile"
+            },
+            {
+              "id": "TASK-009-B",
+              "description": "Test on real mobile devices",
+              "devices": ["iPhone 14", "Samsung Galaxy S23", "Pixel 7"],
+              "metrics": ["LCP", "FID", "CLS", "TTI"]
+            },
+            {
+              "id": "TASK-009-C",
+              "description": "Fix mobile-specific performance issues",
+              "action": "Document and prioritize mobile-only issues"
+            }
+          ],
+          "expected_outcome": "Mobile performance score >= 90",
+          "verification": "All mobile tests pass with acceptable scores"
+        },
+        {
+          "task_id": "TASK-010",
+          "title": "Test All Pages (Desktop & Mobile)",
+          "status": "pending",
+          "priority": "high",
+          "category": "testing",
+          "estimated_hours": 2,
+          "dependencies": ["TASK-001", "TASK-002", "TASK-004", "TASK-009"],
+          "description": "Run Lighthouse on all application pages",
+          "pages_to_test": [
+            {
+              "url": "/",
+              "name": "Home",
+              "priority": "critical",
+              "target_performance": 95
+            },
+            {
+              "url": "/leaderboard",
+              "name": "Leaderboard",
+              "priority": "high",
+              "target_performance": 90
+            },
+            {
+              "url": "/subscription",
+              "name": "Subscription",
+              "priority": "high",
+              "target_performance": 92
+            },
+            {
+              "url": "/rules",
+              "name": "Rules",
+              "priority": "medium",
+              "target_performance": 95
+            },
+            {
+              "url": "/faq",
+              "name": "FAQ",
+              "priority": "medium",
+              "target_performance": 95
+            },
+            {
+              "url": "/ethos",
+              "name": "Ethos",
+              "priority": "medium",
+              "target_performance": 95
+            },
+            {
+              "url": "/login",
+              "name": "Login",
+              "priority": "high",
+              "target_performance": 92
+            },
+            {
+              "url": "/profile",
+              "name": "Profile",
+              "priority": "high",
+              "target_performance": 88,
+              "note": "Requires authentication"
+            },
+            {
+              "url": "/community",
+              "name": "Community",
+              "priority": "medium",
+              "target_performance": 85,
+              "note": "Real-time features may impact performance"
+            }
+          ],
+          "expected_outcome": "All pages meet target performance scores",
+          "verification": "Create performance report JSON with all results"
+        },
+        {
+          "task_id": "TASK-011",
+          "title": "Set Up Performance Monitoring",
+          "status": "pending",
+          "priority": "high",
+          "category": "monitoring",
+          "estimated_hours": 2,
+          "dependencies": [],
+          "description": "Implement Real User Monitoring (RUM) for production",
+          "subtasks": [
+            {
+              "id": "TASK-011-A",
+              "description": "Configure Vercel Speed Insights alerts",
+              "implementation": "Set up alerts for LCP > 2.5s, CLS > 0.1, FID > 100ms"
+            },
+            {
+              "id": "TASK-011-B",
+              "description": "Create performance dashboard",
+              "tool": "Vercel Analytics or custom solution",
+              "metrics": ["LCP", "FCP", "CLS", "TTI", "TBT", "FID"]
+            },
+            {
+              "id": "TASK-011-C",
+              "description": "Set up automated Lighthouse CI",
+              "tool": "Lighthouse CI or Vercel integration",
+              "trigger": "On every deployment",
+              "action": "Fail build if performance score < 85"
+            },
+            {
+              "id": "TASK-011-D",
+              "description": "Create weekly performance report",
+              "output": "docs/json/weekly-performance-report.json",
+              "frequency": "Weekly",
+              "distribution": "Email to team"
+            }
+          ],
+          "expected_outcome": "Continuous monitoring of Core Web Vitals",
+          "verification": "Dashboard shows real-time performance metrics"
+        }
+      ]
+    }
+  ],
+  "quick_wins": [
+    {
+      "id": "QW-001",
+      "title": "Remove duplicate preload tags",
+      "effort": "5 minutes",
+      "impact": "Small performance improvement",
+      "file": "index.html",
+      "action": "Delete lines 10-11 or 55-57"
+    },
+    {
+      "id": "QW-002",
+      "title": "Add fetchpriority='high' to hero image",
+      "effort": "2 minutes",
+      "impact": "Small LCP improvement",
+      "file": "src/pages/Home/Hero1.tsx",
+      "action": "Add fetchpriority='high' to <img> tag"
+    },
+    {
+      "id": "QW-003",
+      "title": "Defer Meta Pixel loading",
+      "effort": "10 minutes",
+      "impact": "Medium FCP improvement",
+      "file": "index.html",
+      "action": "Wrap Meta Pixel in setTimeout(() => {...}, 1000)"
+    },
+    {
+      "id": "QW-004",
+      "title": "Enable Brotli compression on Netlify",
+      "effort": "5 minutes",
+      "impact": "10-20% bundle size reduction",
+      "file": "netlify.toml",
+      "action": "Add [[headers]] for /*.js with Content-Encoding: br"
+    }
+  ],
+  "success_metrics": {
+    "performance_scores": {
+      "home_desktop": {
+        "current": 87,
+        "target": 95,
+        "status": "in_progress"
+      },
+      "home_mobile": {
+        "current": "unknown",
+        "target": 90,
+        "status": "pending"
+      },
+      "leaderboard_desktop": {
+        "current": "unknown",
+        "target": 90,
+        "status": "pending"
+      },
+      "leaderboard_mobile": {
+        "current": "unknown",
+        "target": 85,
+        "status": "pending"
+      }
+    },
+    "core_web_vitals": {
+      "lcp": {
+        "current": "2.5s",
+        "target": "< 1.8s",
+        "measurement": "75th percentile"
+      },
+      "fid": {
+        "current": "unknown",
+        "target": "< 100ms",
+        "measurement": "75th percentile"
+      },
+      "cls": {
+        "current": "0.001",
+        "target": "< 0.1",
+        "status": "excellent"
+      }
+    },
+    "bundle_size": {
+      "initial_load": {
+        "current": "unknown",
+        "target": "< 200 KB",
+        "measurement": "gzipped"
+      },
+      "images": {
+        "current": "1858 KB (PNG/JPG)",
+        "target": "< 1150 KB (WebP)",
+        "savings": "712 KB (38.3%)"
+      }
+    }
+  },
+  "tools_required": [
+    {
+      "name": "Sharp",
+      "purpose": "Image optimization and conversion to WebP/AVIF",
+      "installation": "npm install --save-dev sharp"
+    },
+    {
+      "name": "Squoosh CLI",
+      "purpose": "Batch image optimization",
+      "installation": "npm install -g @squoosh/cli"
+    },
+    {
+      "name": "Lighthouse CI",
+      "purpose": "Automated performance testing",
+      "installation": "npm install --save-dev @lhci/cli"
+    },
+    {
+      "name": "Bundle Analyzer",
+      "purpose": "Visualize bundle composition",
+      "installation": "npm install --save-dev rollup-plugin-visualizer"
+    },
+    {
+      "name": "Chrome DevTools",
+      "purpose": "Manual performance testing",
+      "installation": "Built-in to Chrome browser"
+    }
+  ],
+  "risks": [
+    {
+      "risk_id": "RISK-001",
+      "description": "Image conversion may cause visual quality loss",
+      "probability": "low",
+      "impact": "medium",
+      "mitigation": "Test converted images on multiple devices before deployment"
+    },
+    {
+      "risk_id": "RISK-002",
+      "description": "Code splitting may introduce runtime errors",
+      "probability": "medium",
+      "impact": "high",
+      "mitigation": "Comprehensive testing on all routes after implementation"
+    },
+    {
+      "risk_id": "RISK-003",
+      "description": "Deferred third-party scripts may break analytics",
+      "probability": "medium",
+      "impact": "medium",
+      "mitigation": "Monitor analytics data for 1 week post-deployment"
+    },
+    {
+      "risk_id": "RISK-004",
+      "description": "Service worker caching may serve stale content",
+      "probability": "medium",
+      "impact": "medium",
+      "mitigation": "Implement cache versioning and invalidation strategy"
+    }
+  ],
+  "next_steps": [
+    {
+      "step": 1,
+      "action": "Review and approve action plan",
+      "owner": "Parker Gawne",
+      "deadline": "2025-12-03"
+    },
+    {
+      "step": 2,
+      "action": "Implement Quick Wins (QW-001 to QW-004)",
+      "owner": "Development Team",
+      "deadline": "2025-12-03",
+      "estimated_hours": 0.5
+    },
+    {
+      "step": 3,
+      "action": "Start Phase 1 - Critical Performance Fixes",
+      "owner": "Development Team",
+      "deadline": "2025-12-09",
+      "estimated_hours": 12
+    },
+    {
+      "step": 4,
+      "action": "Deploy Phase 1 changes to staging",
+      "owner": "DevOps",
+      "deadline": "2025-12-10"
+    },
+    {
+      "step": 5,
+      "action": "Run comprehensive tests on staging",
+      "owner": "QA Team",
+      "deadline": "2025-12-11"
+    },
+    {
+      "step": 6,
+      "action": "Deploy Phase 1 to production",
+      "owner": "DevOps",
+      "deadline": "2025-12-12"
+    },
+    {
+      "step": 7,
+      "action": "Monitor performance metrics for 3 days",
+      "owner": "Development Team",
+      "deadline": "2025-12-15"
+    },
+    {
+      "step": 8,
+      "action": "Start Phase 2 if Phase 1 successful",
+      "owner": "Development Team",
+      "deadline": "2025-12-16"
+    }
+  ]
+}
+

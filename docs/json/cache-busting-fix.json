@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-12-02T04:00:00Z",
+  "type": "FIX",
+  "metadata": {
+    "project": "Pull-Up-Club",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true,
+    "status": "DEPLOYED"
+  },
+  "title": "Cache-Busting Fix for Pool Display Issue",
+  "problem": {
+    "description": "Pool shows $250/$250 despite being depleted ($0/$250) in database",
+    "root_cause": "Browser/CDN caching old edge function response",
+    "database_state": "✅ CORRECT - Pool at $0/$250",
+    "display_state": "❌ WRONG - Shows $250/$250 (cached)"
+  },
+  "solution": {
+    "approach": "Add cache-busting timestamp to edge function calls",
+    "files_modified": ["src/components/PUCBank/PUCBankBanner.tsx"],
+    "changes": [
+      {
+        "file": "src/components/PUCBank/PUCBankBanner.tsx",
+        "change": "Added timestamp to function invocation",
+        "before": "await supabase.functions.invoke('get-pool-status')",
+        "after": "await supabase.functions.invoke('get-pool-status', { body: { timestamp: Date.now() } })",
+        "effect": "Forces fresh data on every call, bypasses all caches"
+      },
+      {
+        "file": "src/components/PUCBank/PUCBankBanner.tsx",
+        "change": "Improved logging to debug cache issues",
+        "additions": [
+          "Log raw values before processing",
+          "Explicit boolean check for is_depleted",
+          "Log what will be displayed",
+          "Better fallback handling with !== undefined checks"
+        ]
+      }
+    ]
+  },
+  "deployment_instructions": {
+    "step_1": "Commit changes to git",
+    "step_2": "Push to main branch",
+    "step_3": "Netlify will auto-deploy",
+    "step_4": "Hard refresh browser after deployment (Ctrl+Shift+R)",
+    "step_5": "Check browser console for new detailed logs"
+  },
+  "testing_steps": [
+    {
+      "step": "Open browser DevTools (F12)",
+      "action": "Go to Console tab"
+    },
+    {
+      "step": "Navigate to leaderboard page",
+      "action": "Watch for console logs"
+    },
+    {
+      "step": "Look for these log messages",
+      "expected_logs": [
+        "🏦 Fetching pool status...",
+        "✅ Pool data received: {...}",
+        "🔍 Raw values - remaining: 0, is_depleted: true",
+        "🔢 Processed pool data: {...}",
+        "💰 Display will show: DEPLETED"
+      ]
+    },
+    {
+      "step": "Verify banner shows depleted state",
+      "expected": "Should show '💸 Pool Depleted' message, NOT '$250 / $250'"
+    }
+  ],
+  "what_to_watch_for": {
+    "if_still_shows_250": {
+      "action": "Check console logs",
+      "questions": [
+        "Does it say 'Raw values - remaining: 0' or 'remaining: 250'?",
+        "Does it say 'is_depleted: true' or 'is_depleted: false'?",
+        "Does it say 'Display will show: DEPLETED' or show dollar amounts?"
+      ],
+      "if_shows_0_but_displays_250": "Frontend logic issue - check PUCBankBanner render logic",
+      "if_shows_250_in_logs": "Edge function is returning wrong data - check Supabase logs"
+    }
+  },
+  "rollback_plan": {
+    "if_issues": "Revert the changes with: git revert HEAD",
+    "safe": "Changes only add logging and cache-busting, no breaking changes"
+  }
+}
+

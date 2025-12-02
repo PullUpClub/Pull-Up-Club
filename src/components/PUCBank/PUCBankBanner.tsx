@@ -19,7 +19,10 @@ const PUCBankBanner: React.FC = () => {
   const fetchPoolStatus = async () => {
     try {
       console.log('🏦 Fetching pool status...');
-      const { data, error } = await supabase.functions.invoke('get-pool-status');
+      // Add cache-busting timestamp to force fresh data
+      const { data, error } = await supabase.functions.invoke('get-pool-status', {
+        body: { timestamp: Date.now() }
+      });
       
       console.log('📊 Pool status response:', { data, error });
       
@@ -30,17 +33,19 @@ const PUCBankBanner: React.FC = () => {
       
       if (data?.success) {
         console.log('✅ Pool data received:', data.pool);
+        console.log('🔍 Raw values - remaining:', data.pool.remaining_dollars, 'is_depleted:', data.pool.is_depleted);
         
         // Handle dollar-based API with fallbacks
         const poolData = {
-          remaining_dollars: data.pool.remaining_dollars || '250',
+          remaining_dollars: data.pool.remaining_dollars !== undefined ? data.pool.remaining_dollars : '250',
           total_dollars: data.pool.total_dollars || '250', 
-          spent_dollars: data.pool.spent_dollars || '0',
+          spent_dollars: data.pool.spent_dollars !== undefined ? data.pool.spent_dollars : '0',
           progress_percentage: isNaN(data.pool.progress_percentage) ? 0 : data.pool.progress_percentage,
-          is_depleted: data.pool.is_depleted || false
+          is_depleted: data.pool.is_depleted === true // Explicit boolean check
         };
         
         console.log('🔢 Processed pool data:', poolData);
+        console.log('💰 Display will show:', poolData.is_depleted ? 'DEPLETED' : `$${poolData.remaining_dollars} / $${poolData.total_dollars}`);
         setPoolData(poolData);
         setError(null);
       } else {

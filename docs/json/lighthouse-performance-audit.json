@@ -1,0 +1,379 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-12-02T16:05:00Z",
+  "type": "PERFORMANCE_AUDIT",
+  "metadata": {
+    "project": "Pull-Up-Club",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true,
+    "audit_date": "2025-12-02",
+    "tool": "Lighthouse MCP",
+    "lighthouse_version": "12.8.2"
+  },
+  "test_results": {
+    "tested_pages": [
+      {
+        "url": "https://pullupclub.com",
+        "page_name": "Home",
+        "device": "desktop",
+        "status": "completed",
+        "scores": {
+          "performance": 87,
+          "accessibility": 92,
+          "best_practices": 78,
+          "seo": 100
+        },
+        "metrics": {
+          "first_contentful_paint": {
+            "value": "0.4s",
+            "score": 100,
+            "status": "excellent"
+          },
+          "largest_contentful_paint": {
+            "value": "2.5s",
+            "score": 46,
+            "status": "critical",
+            "threshold": "< 2.5s",
+            "current_performance": "poor"
+          },
+          "total_blocking_time": {
+            "value": "0ms",
+            "score": 100,
+            "status": "excellent"
+          },
+          "cumulative_layout_shift": {
+            "value": "0.001",
+            "score": 100,
+            "status": "excellent",
+            "threshold": "< 0.1"
+          },
+          "speed_index": {
+            "value": "0.5s",
+            "score": 100,
+            "status": "excellent"
+          },
+          "time_to_interactive": {
+            "value": "2.5s",
+            "score": 88,
+            "status": "good"
+          }
+        }
+      }
+    ],
+    "mobile_tests": {
+      "status": "failed",
+      "error": "Permission denied errors on Windows temp file creation",
+      "recommendation": "Run tests on Linux/Mac system or use online Lighthouse tool"
+    },
+    "additional_pages_to_test": [
+      "/leaderboard",
+      "/subscription",
+      "/rules",
+      "/faq",
+      "/profile",
+      "/login",
+      "/community",
+      "/ethos"
+    ]
+  },
+  "critical_issues": [
+    {
+      "issue_id": "PERF-001",
+      "severity": "critical",
+      "category": "performance",
+      "title": "Largest Contentful Paint (LCP) exceeds target",
+      "description": "LCP is 2.5s with a score of 46/100. This is at the threshold of acceptable performance and negatively impacts user experience.",
+      "current_value": "2.5s",
+      "target_value": "< 2.5s (ideally < 1.8s)",
+      "impact": "Users experience delayed visual feedback, increasing bounce rate",
+      "affected_pages": ["Home"],
+      "root_causes": [
+        "Hero image (pullup_header_desktop.webp) is the LCP element",
+        "Image loaded via <picture> element without optimal optimization",
+        "Duplicate preload tags in index.html (lines 10-11 and 55-57)",
+        "Multiple animations and state changes delay rendering",
+        "Database call to fetch user count on page load (Hero1.tsx lines 84-100)"
+      ]
+    },
+    {
+      "issue_id": "PERF-002",
+      "severity": "high",
+      "category": "performance",
+      "title": "Large unoptimized PNG/JPG images",
+      "description": "1.86 MB of PNG/JPG images should be converted to WebP format for 30-50% size reduction",
+      "total_size_kb": 1858.07,
+      "files": [
+        {
+          "name": "Elite.png",
+          "size_kb": 225.24,
+          "location": "public/Male-Badges/",
+          "webp_exists": false,
+          "estimated_savings_kb": 112.62,
+          "priority": "high"
+        },
+        {
+          "name": "Proven.png",
+          "size_kb": 220.23,
+          "location": "public/Male-Badges/",
+          "webp_exists": false,
+          "estimated_savings_kb": 110.12,
+          "priority": "high"
+        },
+        {
+          "name": "Operator.png",
+          "size_kb": 211.87,
+          "location": "public/Male-Badges/",
+          "webp_exists": false,
+          "estimated_savings_kb": 105.94,
+          "priority": "high"
+        },
+        {
+          "name": "android-chrome-512x512.png",
+          "size_kb": 181.55,
+          "location": "public/",
+          "webp_exists": false,
+          "estimated_savings_kb": 0,
+          "priority": "low",
+          "note": "PWA manifest requires PNG format"
+        },
+        {
+          "name": "Recruit.png",
+          "size_kb": 181.39,
+          "location": "public/Male-Badges/",
+          "webp_exists": false,
+          "estimated_savings_kb": 90.70,
+          "priority": "high"
+        },
+        {
+          "name": "Hardened.png",
+          "size_kb": 179.07,
+          "location": "public/Male-Badges/",
+          "webp_exists": false,
+          "estimated_savings_kb": 89.54,
+          "priority": "high"
+        },
+        {
+          "name": "Hardened_1_-_Female.png",
+          "size_kb": 151.88,
+          "location": "public/Female-Badges/",
+          "webp_exists": false,
+          "estimated_savings_kb": 75.94,
+          "priority": "high"
+        },
+        {
+          "name": "PUClogo (1).png",
+          "size_kb": 143.62,
+          "location": "public/",
+          "webp_exists": true,
+          "webp_name": "PUClogo-optimized.webp",
+          "estimated_savings_kb": 71.81,
+          "priority": "medium",
+          "action": "Replace references to use WebP version"
+        },
+        {
+          "name": "AustinAlexander.png",
+          "size_kb": 90.13,
+          "location": "public/",
+          "webp_exists": true,
+          "webp_name": "NewWebp-Pics/AustinAlexander.webp",
+          "estimated_savings_kb": 45.07,
+          "priority": "medium",
+          "action": "Replace references to use WebP version"
+        },
+        {
+          "name": "battlebunkerlogo.jpg",
+          "size_kb": 21.29,
+          "location": "public/",
+          "webp_exists": true,
+          "webp_name": "battlebunker-logo-optimized.webp",
+          "estimated_savings_kb": 10.65,
+          "priority": "low",
+          "action": "Replace references to use WebP version"
+        }
+      ],
+      "total_estimated_savings_kb": 712.39,
+      "percentage_savings": "38.3%"
+    },
+    {
+      "issue_id": "PERF-003",
+      "severity": "medium",
+      "category": "performance",
+      "title": "Limited code splitting in Vite configuration",
+      "description": "Only basic vendor chunking configured, missing opportunities for route-based and component-based code splitting",
+      "current_config": {
+        "vendor": ["react", "react-dom", "react-router-dom"],
+        "ui": ["@headlessui/react"]
+      },
+      "impact": "Larger initial bundle size, slower first page load",
+      "file": "vite.config.ts"
+    },
+    {
+      "issue_id": "PERF-004",
+      "severity": "medium",
+      "category": "performance",
+      "title": "Duplicate resource preload tags",
+      "description": "index.html contains duplicate preload tags for hero images (lines 10-11 and 55-57)",
+      "file": "index.html",
+      "lines": [10, 11, 55, 56, 57],
+      "impact": "Browser may waste resources on duplicate requests"
+    },
+    {
+      "issue_id": "PERF-005",
+      "severity": "medium",
+      "category": "performance",
+      "title": "Database call on initial page load",
+      "description": "Hero1.tsx fetches total user count from Supabase on every page load, blocking render",
+      "file": "src/pages/Home/Hero1.tsx",
+      "lines": [84, 100],
+      "impact": "Delays time to interactive, adds unnecessary database load",
+      "recommendation": "Cache user count, update periodically via background job"
+    },
+    {
+      "issue_id": "BEST-001",
+      "severity": "medium",
+      "category": "best_practices",
+      "title": "Best Practices score of 78",
+      "description": "Score indicates potential security, HTTPS, or browser compatibility issues",
+      "score": 78,
+      "target": 90,
+      "recommendation": "Run detailed Lighthouse audit to identify specific best practice violations"
+    }
+  ],
+  "opportunities": [
+    {
+      "id": "OPP-001",
+      "title": "Implement advanced image optimization",
+      "description": "Convert all PNG/JPG to WebP, implement responsive images with srcset, use modern formats (AVIF as fallback)",
+      "estimated_savings": "712 KB",
+      "difficulty": "medium",
+      "priority": "high",
+      "estimated_hours": 3
+    },
+    {
+      "id": "OPP-002",
+      "title": "Optimize LCP hero image loading",
+      "description": "Reduce hero image file size, implement blur placeholder, remove duplicate preloads, defer non-critical animations",
+      "estimated_improvement": "LCP: 2.5s → 1.5s",
+      "difficulty": "medium",
+      "priority": "critical",
+      "estimated_hours": 4
+    },
+    {
+      "id": "OPP-003",
+      "title": "Implement comprehensive code splitting",
+      "description": "Split routes, lazy load heavy components (i18n, charts, admin), create optimized chunks",
+      "estimated_savings": "30-40% reduction in initial bundle",
+      "difficulty": "medium",
+      "priority": "high",
+      "estimated_hours": 4
+    },
+    {
+      "id": "OPP-004",
+      "title": "Cache user count with periodic updates",
+      "description": "Store user count in localStorage or state management, refresh every 5 minutes instead of every page load",
+      "estimated_improvement": "Faster TTI, reduced DB load",
+      "difficulty": "low",
+      "priority": "medium",
+      "estimated_hours": 1
+    },
+    {
+      "id": "OPP-005",
+      "title": "Implement lazy loading for i18n locales",
+      "description": "Load only active locale on initial render, lazy load other locales on language switch",
+      "estimated_savings": "100-200 KB initial bundle",
+      "difficulty": "medium",
+      "priority": "medium",
+      "estimated_hours": 2
+    },
+    {
+      "id": "OPP-006",
+      "title": "Add performance monitoring",
+      "description": "Implement real-user monitoring (RUM) to track Core Web Vitals in production",
+      "tools": ["Vercel Analytics (already included)", "Sentry", "New Relic"],
+      "difficulty": "low",
+      "priority": "high",
+      "estimated_hours": 2
+    },
+    {
+      "id": "OPP-007",
+      "title": "Optimize third-party scripts",
+      "description": "Defer Meta Pixel, Google Analytics, Stripe JS until after initial page load",
+      "estimated_improvement": "Faster FCP and TTI",
+      "difficulty": "low",
+      "priority": "medium",
+      "estimated_hours": 2
+    },
+    {
+      "id": "OPP-008",
+      "title": "Implement service worker caching strategy",
+      "description": "Use vite-plugin-pwa (already installed) to cache static assets and API responses",
+      "difficulty": "medium",
+      "priority": "medium",
+      "estimated_hours": 3
+    },
+    {
+      "id": "OPP-009",
+      "title": "Reduce animation complexity on Hero",
+      "description": "Simplify or defer animations in Hero1.tsx, use CSS transforms instead of JS state",
+      "estimated_improvement": "Faster LCP, smoother rendering",
+      "difficulty": "low",
+      "priority": "medium",
+      "estimated_hours": 2
+    },
+    {
+      "id": "OPP-010",
+      "title": "Run mobile Lighthouse tests",
+      "description": "Test on Linux/Mac or use online Lighthouse tool to get mobile performance scores",
+      "difficulty": "low",
+      "priority": "high",
+      "estimated_hours": 1
+    }
+  ],
+  "strengths": [
+    {
+      "metric": "Cumulative Layout Shift",
+      "value": "0.001",
+      "score": 100,
+      "comment": "Excellent - no layout shift issues"
+    },
+    {
+      "metric": "First Contentful Paint",
+      "value": "0.4s",
+      "score": 100,
+      "comment": "Excellent - fast initial paint"
+    },
+    {
+      "metric": "Total Blocking Time",
+      "value": "0ms",
+      "score": 100,
+      "comment": "Excellent - no main thread blocking"
+    },
+    {
+      "metric": "SEO",
+      "score": 100,
+      "comment": "Perfect SEO score with structured data, meta tags, and sitemap"
+    },
+    {
+      "metric": "Accessibility",
+      "score": 92,
+      "comment": "Very good - minor improvements possible"
+    },
+    {
+      "feature": "Lazy loading",
+      "comment": "App already uses React.lazy for route-level code splitting"
+    },
+    {
+      "feature": "WebP images",
+      "comment": "Many images already converted to WebP (hero, badges, logos)"
+    },
+    {
+      "feature": "Preloading",
+      "comment": "Critical resources preloaded (fonts, hero images, locale files)"
+    },
+    {
+      "feature": "Analytics",
+      "comment": "Vercel Analytics and Speed Insights already integrated"
+    }
+  ]
+}
+

@@ -1,0 +1,205 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-12-02T04:00:00Z",
+  "type": "CONFIRMATION",
+  "metadata": {
+    "project": "Pull-Up-Club",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true,
+    "verified": true
+  },
+  "title": "CONFIRMED: Pool Draining System is Working Correctly",
+  "executive_summary": {
+    "pool_status": "✅ WORKING CORRECTLY",
+    "current_balance": "$0 / $250 (DEPLETED)",
+    "approvals_processed": "12 submissions on December 1st, 2025",
+    "total_spent": "$250",
+    "issue": "Display caching - database is correct, frontend showing stale data"
+  },
+  "december_1st_approvals": {
+    "total_submissions": 12,
+    "total_pullups": 261,
+    "total_dollars_earned": 250,
+    "approval_timeframe": "7:20 PM - 10:49 PM EST (Dec 1st, 2025)",
+    "approval_timeframe_utc": "12:20 AM - 3:49 AM UTC (Dec 2nd, 2025)",
+    "submissions": [
+      {
+        "approved_at_est": "2025-12-01 22:49:40",
+        "verified_count": 21,
+        "note": "Last approval that depleted the pool"
+      },
+      {
+        "approved_at_est": "2025-12-01 22:48:46",
+        "verified_count": 26
+      },
+      {
+        "approved_at_est": "2025-12-01 22:39:40",
+        "verified_count": 56,
+        "note": "Largest submission this week"
+      },
+      {
+        "approved_at_est": "2025-12-01 22:38:17",
+        "verified_count": 23
+      },
+      {
+        "approved_at_est": "2025-12-01 22:36:20",
+        "verified_count": 15
+      },
+      {
+        "approved_at_est": "2025-12-01 22:34:30",
+        "verified_count": 25
+      },
+      {
+        "approved_at_est": "2025-12-01 22:30:39",
+        "verified_count": 10
+      },
+      {
+        "approved_at_est": "2025-12-01 22:29:44",
+        "verified_count": 13
+      },
+      {
+        "approved_at_est": "2025-12-01 22:25:31",
+        "verified_count": 28
+      },
+      {
+        "approved_at_est": "2025-12-01 22:24:55",
+        "verified_count": 10
+      },
+      {
+        "approved_at_est": "2025-12-01 22:22:39",
+        "verified_count": 23
+      },
+      {
+        "approved_at_est": "2025-12-01 22:20:08",
+        "verified_count": 11,
+        "note": "First approval of the week"
+      }
+    ]
+  },
+  "database_verification": {
+    "current_pool": {
+      "pool_id": "ec8e4bcf-3559-41a9-b648-0200930860e5",
+      "week": "2025-12-01 to 2025-12-07",
+      "total_amount_dollars": 250,
+      "remaining_amount_dollars": 0,
+      "spent_dollars": 250,
+      "progress_percentage": 100,
+      "is_depleted": true,
+      "is_current": true,
+      "created_at": "2025-12-01 00:00:00 UTC",
+      "updated_at": "2025-12-02 03:49:40 UTC (last approval)"
+    },
+    "earnings_records": {
+      "total_records": 12,
+      "total_dollars_earned": 250,
+      "total_pullups_claimed": 261
+    },
+    "pool_math_verification": {
+      "total": 250,
+      "spent": 250,
+      "remaining": 0,
+      "calculation": "250 - 250 = 0",
+      "status": "✅ POOL MATH CORRECT"
+    }
+  },
+  "edge_function_expected_output": {
+    "function_name": "get-pool-status",
+    "should_return": {
+      "success": true,
+      "pool": {
+        "remaining_dollars": "0",
+        "total_dollars": "250",
+        "spent_dollars": "250",
+        "progress_percentage": 100,
+        "is_depleted": true,
+        "week_start": "2025-12-01",
+        "week_end": "2025-12-07",
+        "pool_id": "ec8e4bcf-3559-41a9-b648-0200930860e5"
+      }
+    }
+  },
+  "display_issue_analysis": {
+    "what_user_sees": "$250 / $250",
+    "what_should_display": "💸 Pool Depleted",
+    "why_wrong_display": [
+      "Browser cache holding old response from before approvals",
+      "Aggressive caching on edge function response",
+      "Netlify/CDN cache not expired yet",
+      "Edge function failing and showing fallback data"
+    ]
+  },
+  "immediate_troubleshooting_steps": [
+    {
+      "step": 1,
+      "action": "Hard refresh browser",
+      "command": "Ctrl+Shift+R (Windows) or Cmd+Shift+R (Mac)",
+      "expected": "Should trigger new edge function call"
+    },
+    {
+      "step": 2,
+      "action": "Open DevTools and check Network tab",
+      "details": "F12 > Network > refresh page > find 'get-pool-status' request",
+      "check": "Look at the Response body - does it show remaining_dollars: 0?"
+    },
+    {
+      "step": 3,
+      "action": "Check browser Console for errors",
+      "details": "F12 > Console tab",
+      "look_for": "Any red errors related to 'get-pool-status' or 'supabase.functions'"
+    },
+    {
+      "step": 4,
+      "action": "Test edge function directly in Supabase",
+      "location": "Supabase Dashboard > Edge Functions > get-pool-status > Invoke",
+      "expected": "Should return is_depleted: true and remaining_dollars: 0"
+    },
+    {
+      "step": 5,
+      "action": "Clear all site data",
+      "details": "Chrome: DevTools (F12) > Application > Clear storage > Clear site data",
+      "nuclear_option": true
+    }
+  ],
+  "cache_headers_to_check": {
+    "edge_function": {
+      "current_headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        "Pragma": "no-cache",
+        "Expires": "0"
+      },
+      "note": "Function already has anti-cache headers - caching shouldn't happen"
+    },
+    "component": {
+      "refresh_interval": "30 seconds",
+      "note": "PUCBankBanner.tsx refreshes every 30s - should self-correct"
+    }
+  },
+  "possible_fixes_if_caching_persists": [
+    {
+      "fix": "Add cache-busting query parameter",
+      "location": "PUCBankBanner.tsx line 22",
+      "change": "supabase.functions.invoke('get-pool-status', { body: { timestamp: Date.now() } })",
+      "reason": "Forces new request every time"
+    },
+    {
+      "fix": "Add version header",
+      "location": "Edge function invocation",
+      "change": "Add custom header with app version or timestamp",
+      "reason": "Bypasses any proxy caches"
+    },
+    {
+      "fix": "Disable edge function caching completely",
+      "location": "Supabase Edge Function configuration",
+      "method": "Ensure verify_jwt is properly set",
+      "note": "Currently verify_jwt: true, which should prevent caching"
+    }
+  ],
+  "next_steps": [
+    "1. User should open browser DevTools and check Network tab",
+    "2. Hard refresh and look at get-pool-status response",
+    "3. If response shows remaining_dollars: 0, it's purely browser cache",
+    "4. If response shows remaining_dollars: 250, edge function might be failing",
+    "5. Report back what the Network tab shows"
+  ]
+}
+

@@ -1,0 +1,283 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-12-02T00:00:00Z",
+  "type": "IMPLEMENTATION",
+  "metadata": {
+    "project": "Pull-Up-Club",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true,
+    "status": "READY_FOR_DEPLOYMENT"
+  },
+  "title": "Hero User Count & Pool Draining Fix Implementation",
+  "summary": "Implementation of fixes for user count display on hero section and weekly pool draining issues",
+  "changes": [
+    {
+      "change_id": "FIX_001",
+      "component": "Database Function",
+      "file": "supabase/migrations/20251202000001_fix_hero_user_count.sql",
+      "type": "NEW",
+      "description": "Created SECURITY DEFINER function to allow anonymous users to get total user count",
+      "details": {
+        "function_name": "get_total_user_count()",
+        "return_type": "INTEGER",
+        "security": "SECURITY DEFINER",
+        "permissions": ["anon", "authenticated"],
+        "purpose": "Bypasses RLS to provide total user count for homepage display"
+      },
+      "sql": "CREATE OR REPLACE FUNCTION public.get_total_user_count() RETURNS INTEGER LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$ DECLARE user_count INTEGER; BEGIN SELECT COUNT(*)::INTEGER INTO user_count FROM public.profiles; RETURN user_count; END; $$;"
+    },
+    {
+      "change_id": "FIX_002",
+      "component": "Frontend Component",
+      "file": "src/pages/Home/Hero1.tsx",
+      "type": "MODIFIED",
+      "description": "Updated fetchUserCount to use new RPC function instead of direct count query",
+      "before": "const { count } = await supabase.from('profiles').select('*', { count: 'exact', head: true });",
+      "after": "const { data, error } = await supabase.rpc('get_total_user_count');",
+      "impact": "Anonymous users can now see the real user count on homepage"
+    },
+    {
+      "change_id": "FIX_003",
+      "component": "Database Trigger",
+      "file": "supabase/migrations/20251202000002_verify_pool_draining.sql",
+      "type": "REMOVED",
+      "description": "Dropped broken process_earnings_on_approval trigger that was blocking earnings",
+      "reason": "Trigger referenced non-existent weekly_earnings table and used wrong column names"
+    },
+    {
+      "change_id": "FIX_004",
+      "component": "Diagnostic Function",
+      "file": "supabase/migrations/20251202000002_verify_pool_draining.sql",
+      "type": "NEW",
+      "description": "Created check_pool_health() function for monitoring pool draining",
+      "details": {
+        "function_name": "check_pool_health()",
+        "return_type": "TABLE",
+        "security": "SECURITY DEFINER",
+        "permissions": ["authenticated"],
+        "purpose": "Allows admins to monitor weekly pool health and verify draining logic",
+        "columns": [
+          "pool_id UUID",
+          "week_start TIMESTAMPTZ",
+          "week_end TIMESTAMPTZ",
+          "total_dollars DECIMAL(10,2)",
+          "remaining_dollars DECIMAL(10,2)",
+          "spent_dollars DECIMAL(10,2)",
+          "is_current BOOLEAN",
+          "is_depleted BOOLEAN",
+          "health_status TEXT"
+        ]
+      }
+    },
+    {
+      "change_id": "FIX_005",
+      "component": "Database Constraint",
+      "file": "supabase/migrations/20251202000002_verify_pool_draining.sql",
+      "type": "NEW",
+      "description": "Added constraint to ensure pool math is always correct",
+      "constraint": "weekly_pools_math_check",
+      "logic": "CHECK (total_dollars = remaining_dollars + spent_dollars)",
+      "purpose": "Prevents data corruption where pool values don't add up"
+    },
+    {
+      "change_id": "FIX_006",
+      "component": "Database Indexes",
+      "file": "supabase/migrations/20251202000002_verify_pool_draining.sql",
+      "type": "NEW",
+      "description": "Added performance indexes for earnings queries",
+      "indexes": [
+        "idx_user_earnings_created_at ON user_earnings(created_at DESC)",
+        "idx_submissions_status_approved_at ON submissions(status, approved_at DESC) WHERE status = 'approved'"
+      ],
+      "purpose": "Optimize queries used in admin dashboard and earnings processing"
+    }
+  ],
+  "deployment_steps": [
+    {
+      "step": 1,
+      "action": "Push migrations to remote database",
+      "command": "npx supabase db push",
+      "expected_result": "Both migrations applied successfully",
+      "rollback": "Use Supabase dashboard to revert migrations if issues occur"
+    },
+    {
+      "step": 2,
+      "action": "Verify get_total_user_count function works",
+      "command": "SELECT get_total_user_count();",
+      "expected_result": "Returns total number of users (e.g., 500)",
+      "test_as": "anonymous user"
+    },
+    {
+      "step": 3,
+      "action": "Verify hero section displays user count",
+      "method": "Open homepage in incognito window",
+      "expected_result": "Should show '500+ Warriors Joined' (or actual count)",
+      "location": "Homepage hero section, top of page"
+    },
+    {
+      "step": 4,
+      "action": "Check pool health",
+      "command": "SELECT * FROM check_pool_health();",
+      "expected_result": "Shows current pool status with health_status",
+      "test_as": "authenticated user (admin)"
+    },
+    {
+      "step": 5,
+      "action": "Test submission approval flow",
+      "method": "Approve a test submission via admin dashboard",
+      "steps": [
+        "Note current pool remaining_dollars",
+        "Approve submission with verified_count = 10",
+        "Query pool again: SELECT * FROM check_pool_health();",
+        "Verify remaining_dollars decreased by 10",
+        "Verify spent_dollars increased by 10"
+      ],
+      "expected_result": "Pool drains correctly, health_status = '✅ Pool is draining correctly'"
+    },
+    {
+      "step": 6,
+      "action": "Monitor for errors in Supabase logs",
+      "location": "Supabase Dashboard > Logs > Database",
+      "watch_for": [
+        "RPC errors on get_total_user_count",
+        "Constraint violations on weekly_pools",
+        "process_submission_earnings failures"
+      ],
+      "duration": "24 hours after deployment"
+    }
+  ],
+  "testing_checklist": [
+    {
+      "test_id": "TEST_001",
+      "component": "Hero User Count",
+      "test": "Load homepage as anonymous user",
+      "expected": "Displays real user count (e.g., '500+ Warriors Joined')",
+      "actual": "TO BE TESTED",
+      "status": "PENDING"
+    },
+    {
+      "test_id": "TEST_002",
+      "component": "Hero User Count",
+      "test": "Load homepage as authenticated user",
+      "expected": "Displays real user count",
+      "actual": "TO BE TESTED",
+      "status": "PENDING"
+    },
+    {
+      "test_id": "TEST_003",
+      "component": "Pool Draining",
+      "test": "Approve submission with 10 pull-ups",
+      "expected": "remaining_dollars decreases by 10, spent_dollars increases by 10",
+      "actual": "TO BE TESTED",
+      "status": "PENDING"
+    },
+    {
+      "test_id": "TEST_004",
+      "component": "Pool Draining",
+      "test": "Approve submission with 25 pull-ups",
+      "expected": "remaining_dollars decreases by 25, spent_dollars increases by 25",
+      "actual": "TO BE TESTED",
+      "status": "PENDING"
+    },
+    {
+      "test_id": "TEST_005",
+      "component": "Pool Health",
+      "test": "Run SELECT * FROM check_pool_health();",
+      "expected": "Returns current pool with health_status",
+      "actual": "TO BE TESTED",
+      "status": "PENDING"
+    },
+    {
+      "test_id": "TEST_006",
+      "component": "Math Constraint",
+      "test": "Try to manually update pool with invalid math",
+      "expected": "Constraint violation prevents invalid update",
+      "actual": "TO BE TESTED",
+      "status": "PENDING"
+    }
+  ],
+  "verification_queries": {
+    "check_user_count_function": {
+      "query": "SELECT get_total_user_count();",
+      "description": "Get total user count (works for anonymous users)",
+      "expected": "Single integer value"
+    },
+    "check_pool_health": {
+      "query": "SELECT * FROM check_pool_health();",
+      "description": "Check if pools are draining correctly",
+      "expected": "List of pools with health_status indicating if draining properly"
+    },
+    "check_current_pool": {
+      "query": "SELECT id, total_dollars, remaining_dollars, spent_dollars, (remaining_dollars + spent_dollars) as sum_check FROM weekly_pools WHERE is_current = true;",
+      "description": "Verify current pool math is correct",
+      "expected": "sum_check should equal total_dollars"
+    },
+    "check_recent_earnings": {
+      "query": "SELECT COUNT(*) as earnings_count, SUM(dollars_earned) as total_earned FROM user_earnings WHERE created_at > NOW() - INTERVAL '7 days';",
+      "description": "Count earnings created in last 7 days",
+      "expected": "Should match recent approved submissions"
+    },
+    "check_approved_vs_earnings": {
+      "query": "SELECT (SELECT COUNT(*) FROM submissions WHERE status = 'approved' AND approved_at > NOW() - INTERVAL '7 days') as approved_count, (SELECT COUNT(*) FROM user_earnings WHERE created_at > NOW() - INTERVAL '7 days') as earnings_count;",
+      "description": "Compare approved submissions to earnings records",
+      "expected": "approved_count should equal earnings_count"
+    }
+  },
+  "rollback_plan": {
+    "if_user_count_breaks": {
+      "action": "Revert migration 20251202000001",
+      "method": "Drop function: DROP FUNCTION IF EXISTS get_total_user_count();",
+      "restore_frontend": "Restore Hero1.tsx to use direct count query with auth check"
+    },
+    "if_pool_draining_breaks": {
+      "action": "Revert migration 20251202000002",
+      "method": "Restore process_earnings_on_approval trigger if it was working",
+      "note": "The trigger was already broken, so reverting won't make things worse"
+    }
+  },
+  "monitoring": {
+    "metrics_to_watch": [
+      "Total user count API calls per minute",
+      "Weekly pool remaining_dollars over time",
+      "User earnings creation rate",
+      "Submission approval rate",
+      "RPC function error rate"
+    ],
+    "alerts": [
+      {
+        "condition": "get_total_user_count() returns 0 when users exist",
+        "severity": "HIGH",
+        "action": "Check function permissions and RLS policies"
+      },
+      {
+        "condition": "weekly_pools.remaining_dollars not decreasing after approvals",
+        "severity": "CRITICAL",
+        "action": "Check process_submission_earnings RPC logs for errors"
+      },
+      {
+        "condition": "weekly_pools_math_check constraint violations",
+        "severity": "CRITICAL",
+        "action": "Data corruption detected, investigate immediately"
+      }
+    ]
+  },
+  "post_deployment_actions": [
+    {
+      "action": "Backfill any missed pool updates",
+      "description": "If pool was stuck at 250, calculate what it should be based on approved submissions",
+      "query": "SELECT SUM(verified_count) FROM submissions WHERE status = 'approved' AND approved_at > (SELECT week_start FROM weekly_pools WHERE is_current = true);",
+      "manual_fix": "Update weekly_pools SET spent_dollars = [calculated_sum], remaining_dollars = 250 - [calculated_sum] WHERE is_current = true;"
+    },
+    {
+      "action": "Monitor homepage performance",
+      "description": "Ensure new RPC call doesn't slow down homepage",
+      "tools": ["Lighthouse", "WebPageTest", "Chrome DevTools"]
+    },
+    {
+      "action": "Update admin documentation",
+      "description": "Document new check_pool_health() function for admins",
+      "location": "Admin dashboard help section"
+    }
+  ]
+}
+

@@ -80,16 +80,21 @@ const Hero1: React.FC = () => {
   const [headlineVisible, setHeadlineVisible] = useState(false);
   const [subtitleVisible, setSubtitleVisible] = useState(false);
 
-  // Fetch total user count from profiles table
+
+  // Fetch total user count from profiles table using public function
   useEffect(() => {
     const fetchUserCount = async () => {
       try {
-        const { count } = await supabase
-          .from('profiles')
-          .select('*', { count: 'exact', head: true });
+        // Use the new SECURITY DEFINER function that bypasses RLS
+        const { data, error } = await supabase.rpc('get_total_user_count');
         
-        if (count !== null) {
-          setTotalUsers(count);
+        if (error) {
+          console.error('Error fetching user count:', error);
+          return;
+        }
+        
+        if (data !== null) {
+          setTotalUsers(data);
         }
       } catch (error) {
         console.error('Error fetching user count:', error);
@@ -207,6 +212,7 @@ const Hero1: React.FC = () => {
             className={`w-full h-full object-cover transition-opacity duration-1000 ${imageLoaded ? 'max-md:opacity-20 md:opacity-50' : 'opacity-0'}`}
             style={{ objectPosition: 'center center' }}
             loading="eager"
+            fetchPriority="high"
             onLoad={() => setImageLoaded(true)}
           />
         </picture>

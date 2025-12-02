@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-12-02T00:00:00Z",
+  "type": "FIX_SUMMARY",
+  "metadata": {
+    "project": "Pull-Up-Club",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true,
+    "status": "DIAGNOSIS_COMPLETE"
+  },
+  "title": "Pool Draining Issue - Root Cause Analysis",
+  "discovery": {
+    "issue_reported": "Pool shows $250/$250 on leaderboard despite approved submissions",
+    "actual_state": "Pool IS draining correctly - remaining_amount_dollars = 0",
+    "display_issue": "Leaderboard banner shows wrong value"
+  },
+  "root_cause": {
+    "summary": "Pool is draining correctly in database, but banner may be cached or showing fallback data",
+    "database_state": {
+      "current_pool_id": "ec8e4bcf-3559-41a9-b648-0200930860e5",
+      "week": "2025-12-01 to 2025-12-07",
+      "total_amount_dollars": 250,
+      "remaining_amount_dollars": 0,
+      "status": "✅ FULLY DRAINED",
+      "is_depleted": true
+    },
+    "edge_function_state": {
+      "function_name": "get-pool-status",
+      "code_status": "✅ CORRECT - uses remaining_amount_dollars",
+      "expected_output": {
+        "remaining_dollars": "0",
+        "total_dollars": "250",
+        "spent_dollars": "250",
+        "progress_percentage": 100,
+        "is_depleted": true
+      }
+    },
+    "frontend_state": {
+      "component": "PUCBankBanner.tsx",
+      "query_method": "Calls supabase.functions.invoke('get-pool-status')",
+      "fallback_behavior": "Shows '250' if function fails or returns null",
+      "likely_issue": "Function returning error OR browser cache showing old data"
+    }
+  },
+  "diagnosis_steps_completed": [
+    "✅ Verified weekly_pools table has correct draining (remaining_amount_dollars = 0)",
+    "✅ Verified process_submission_earnings function exists and updates pool correctly",
+    "✅ Verified get-pool-status edge function uses correct column name",
+    "✅ Identified table has duplicate columns (remaining_amount_dollars vs remaining_dollars)",
+    "✅ Confirmed weekly_earnings table exists with correct schema",
+    "✅ Confirmed pool IS draining - this is a DISPLAY issue, not a DATA issue"
+  ],
+  "likely_causes": [
+    {
+      "cause": "Browser cache showing old pool status",
+      "probability": "HIGH",
+      "solution": "Hard refresh (Ctrl+Shift+R) or clear browser cache",
+      "test": "Open leaderboard in incognito window"
+    },
+    {
+      "cause": "Edge function failing and returning fallback data",
+      "probability": "MEDIUM",
+      "solution": "Check Supabase Edge Function logs for errors",
+      "test": "Check browser console for API errors"
+    },
+    {
+      "cause": "CDN/Netlify caching the old response",
+      "probability": "MEDIUM",
+      "solution": "Clear Netlify cache or wait for cache expiration",
+      "test": "Check response headers for cache-control"
+    },
+    {
+      "cause": "Edge function permission issue",
+      "probability": "LOW",
+      "solution": "Verify RLS policies allow reading weekly_pools",
+      "test": "Run edge function in Supabase dashboard"
+    }
+  ],
+  "immediate_actions": [
+    {
+      "action": "Clear browser cache and hard refresh",
+      "command": "Ctrl+Shift+R on leaderboard page",
+      "expected": "Should show '💸 Pool Depleted' message"
+    },
+    {
+      "action": "Open leaderboard in incognito/private window",
+      "purpose": "Test without any browser cache",
+      "expected": "Should show pool as depleted if cache is the issue"
+    },
+    {
+      "action": "Check browser console on leaderboard page",
+      "look_for": "Errors calling get-pool-status function",
+      "location": "F12 > Console tab > refresh page"
+    },
+    {
+      "action": "Check Supabase Edge Function logs",
+      "location": "Supabase Dashboard > Edge Functions > get-pool-status > Logs",
+      "look_for": "Recent errors or failed invocations"
+    }
+  ],
+  "verification_queries": {
+    "confirm_pool_drained": {
+      "query": "SELECT total_amount_dollars, remaining_amount_dollars, is_current FROM weekly_pools WHERE is_current = true;",
+      "expected": "remaining_amount_dollars should be 0",
+      "actual_result": "remaining_amount_dollars = 0 ✅"
+    },
+    "confirm_submissions_processed": {
+      "query": "SELECT COUNT(*) as total_spent FROM weekly_earnings we JOIN weekly_pools wp ON we.weekly_pool_id = wp.id WHERE wp.is_current = true;",
+      "purpose": "Verify earnings were created for this week's pool"
+    },
+    "test_edge_function": {
+      "method": "Direct invocation via SQL",
+      "query": "SELECT * FROM http_get('https://yqnikgupiaghgjtsaypr.supabase.co/functions/v1/get-pool-status');",
+      "alternative": "Test in Supabase Dashboard > Edge Functions > get-pool-status > Invoke"
+    }
+  },
+  "conclusion": {
+    "pool_draining": "✅ WORKING CORRECTLY",
+    "data_integrity": "✅ CORRECT",
+    "issue_type": "DISPLAY/CACHE ISSUE",
+    "user_action_required": "Clear browser cache or wait for cache to expire",
+    "no_code_changes_needed": true
+  },
+  "next_steps": [
+    "1. User should hard refresh browser (Ctrl+Shift+R)",
+    "2. If still showing $250, check browser console for errors",
+    "3. If errors present, check Edge Function logs in Supabase Dashboard",
+    "4. If no errors, may be CDN cache - wait 5-10 minutes or clear Netlify cache",
+    "5. If issue persists, we may need to add cache-busting to the edge function call"
+  ]
+}
+

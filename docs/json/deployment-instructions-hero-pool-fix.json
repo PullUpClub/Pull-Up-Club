@@ -1,0 +1,257 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-12-02T00:00:00Z",
+  "type": "DEPLOYMENT",
+  "metadata": {
+    "project": "Pull-Up-Club",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true,
+    "priority": "CRITICAL"
+  },
+  "title": "Manual Deployment Instructions - Hero User Count & Pool Draining Fixes",
+  "summary": "Since we cannot directly push to remote database without project ref, these are manual deployment instructions for the fixes",
+  "files_created": [
+    {
+      "file": "supabase/migrations/20251202000001_fix_hero_user_count.sql",
+      "purpose": "Fix user count display on hero section",
+      "deploy_method": "Supabase Dashboard SQL Editor or CLI push"
+    },
+    {
+      "file": "supabase/migrations/20251202000002_verify_pool_draining.sql",
+      "purpose": "Fix pool draining issues and add diagnostics",
+      "deploy_method": "Supabase Dashboard SQL Editor or CLI push"
+    },
+    {
+      "file": "src/pages/Home/Hero1.tsx",
+      "purpose": "Updated to use new get_total_user_count() RPC",
+      "deploy_method": "Git commit and Netlify deploy"
+    },
+    {
+      "file": "docs/json/hero-user-count-pool-drain-diagnosis.json",
+      "purpose": "Complete diagnosis documentation",
+      "deploy_method": "Git commit (documentation only)"
+    },
+    {
+      "file": "docs/json/hero-pool-fix-implementation.json",
+      "purpose": "Implementation guide",
+      "deploy_method": "Git commit (documentation only)"
+    }
+  ],
+  "deployment_options": {
+    "option_1_supabase_cli": {
+      "name": "Deploy via Supabase CLI (Recommended)",
+      "steps": [
+        {
+          "step": 1,
+          "command": "npx supabase link --project-ref YOUR_PROJECT_REF",
+          "description": "Link to your Supabase project",
+          "note": "Get YOUR_PROJECT_REF from Supabase Dashboard > Settings > General > Reference ID"
+        },
+        {
+          "step": 2,
+          "command": "npx supabase db push",
+          "description": "Push both new migrations to remote database",
+          "expected": "Successfully applied 2 migrations"
+        },
+        {
+          "step": 3,
+          "command": "git add . && git commit -m \"Fix hero user count and pool draining issues\"",
+          "description": "Commit all changes"
+        },
+        {
+          "step": 4,
+          "command": "git push origin main",
+          "description": "Deploy to production via Netlify",
+          "expected": "Netlify will rebuild and deploy with new Hero1.tsx"
+        }
+      ]
+    },
+    "option_2_supabase_dashboard": {
+      "name": "Deploy via Supabase Dashboard (Alternative)",
+      "steps": [
+        {
+          "step": 1,
+          "action": "Open Supabase Dashboard",
+          "url": "https://supabase.com/dashboard",
+          "navigate_to": "Your Project > SQL Editor"
+        },
+        {
+          "step": 2,
+          "action": "Copy and paste contents of supabase/migrations/20251202000001_fix_hero_user_count.sql",
+          "click": "RUN button",
+          "verify": "Function created successfully"
+        },
+        {
+          "step": 3,
+          "action": "Copy and paste contents of supabase/migrations/20251202000002_verify_pool_draining.sql",
+          "click": "RUN button",
+          "verify": "Notices appear showing trigger dropped, indexes created, etc."
+        },
+        {
+          "step": 4,
+          "action": "Test the get_total_user_count function",
+          "query": "SELECT get_total_user_count();",
+          "expected_result": "Returns a number (e.g., 500)"
+        },
+        {
+          "step": 5,
+          "action": "Test pool health function",
+          "query": "SELECT * FROM check_pool_health();",
+          "expected_result": "Shows current pools with health_status"
+        },
+        {
+          "step": 6,
+          "action": "Commit frontend changes and deploy",
+          "commands": [
+            "git add .",
+            "git commit -m \"Fix hero user count and pool draining issues\"",
+            "git push origin main"
+          ],
+          "expected": "Netlify auto-deploys"
+        }
+      ]
+    }
+  },
+  "verification_tests": {
+    "test_1_user_count_function": {
+      "name": "Test get_total_user_count() works",
+      "location": "Supabase Dashboard > SQL Editor",
+      "query": "SELECT get_total_user_count();",
+      "expected_result": "Returns integer count of users (e.g., 500)",
+      "test_as": "Anonymous user (log out of Supabase dashboard first)"
+    },
+    "test_2_pool_health": {
+      "name": "Check current pool status",
+      "location": "Supabase Dashboard > SQL Editor",
+      "query": "SELECT * FROM check_pool_health();",
+      "expected_fields": [
+        "pool_id",
+        "week_start",
+        "week_end",
+        "total_dollars (should be 250)",
+        "remaining_dollars",
+        "spent_dollars",
+        "health_status"
+      ],
+      "expected_health_status": "Either '✅ Pool is draining correctly' or '❌ POOL NEVER DRAINED'"
+    },
+    "test_3_rpc_exists": {
+      "name": "Verify process_submission_earnings RPC exists",
+      "location": "Supabase Dashboard > SQL Editor",
+      "query": "SELECT routine_name, routine_type FROM information_schema.routines WHERE routine_name = 'process_submission_earnings';",
+      "expected_result": "Should return 1 row with routine_name = 'process_submission_earnings'"
+    },
+    "test_4_trigger_removed": {
+      "name": "Verify broken trigger was dropped",
+      "location": "Supabase Dashboard > SQL Editor",
+      "query": "SELECT trigger_name FROM information_schema.triggers WHERE trigger_name = 'process_earnings_on_approval' AND event_object_table = 'submissions';",
+      "expected_result": "Should return 0 rows (trigger removed)"
+    },
+    "test_5_homepage_count": {
+      "name": "Test hero section displays user count",
+      "location": "Homepage (https://pullupclub.com or your domain)",
+      "method": "Open in incognito/private browsing window",
+      "expected_result": "Should show 'XXX+ Warriors Joined' with real count, not 0"
+    },
+    "test_6_approval_drains_pool": {
+      "name": "Test that approving a submission drains the pool",
+      "location": "Admin Dashboard > Submissions",
+      "steps": [
+        "Before: Run SELECT * FROM check_pool_health(); and note remaining_dollars",
+        "Approve a pending submission with verified_count = 10",
+        "After: Run SELECT * FROM check_pool_health(); again",
+        "Verify: remaining_dollars decreased by 10, spent_dollars increased by 10"
+      ],
+      "expected_result": "Pool should drain by exact verified_count amount"
+    }
+  },
+  "rollback_plan": {
+    "if_user_count_breaks": {
+      "sql": "DROP FUNCTION IF EXISTS public.get_total_user_count();",
+      "frontend_rollback": "git revert HEAD (to restore old Hero1.tsx)"
+    },
+    "if_pool_breaks": {
+      "note": "The pool was already broken, so reverting won't make it worse",
+      "sql": "-- No rollback needed, broken trigger was already removed"
+    }
+  },
+  "post_deployment_monitoring": [
+    {
+      "metric": "Homepage load time",
+      "tool": "Lighthouse or Chrome DevTools",
+      "watch_for": "Ensure new RPC call doesn't slow down page",
+      "threshold": "Should load in < 2 seconds"
+    },
+    {
+      "metric": "User count accuracy",
+      "method": "Compare SELECT get_total_user_count(); vs SELECT COUNT(*) FROM profiles;",
+      "frequency": "Daily for first week",
+      "expected": "Should always match"
+    },
+    {
+      "metric": "Pool draining",
+      "method": "Run SELECT * FROM check_pool_health(); after each approval",
+      "frequency": "After each approval for first week",
+      "expected": "remaining_dollars should decrease, spent_dollars should increase"
+    },
+    {
+      "metric": "Error logs",
+      "location": "Supabase Dashboard > Logs > Database",
+      "watch_for": [
+        "RPC errors on get_total_user_count",
+        "Constraint violations on weekly_pools",
+        "process_submission_earnings failures"
+      ],
+      "duration": "24-48 hours after deployment"
+    }
+  ],
+  "known_issues_and_fixes": {
+    "issue_1": {
+      "problem": "If pool has never drained, it will show 250/250",
+      "solution": "Backfill spent_dollars based on approved submissions this week",
+      "query": "UPDATE weekly_pools SET spent_dollars = (SELECT COALESCE(SUM(verified_count), 0) FROM submissions WHERE status = 'approved' AND approved_at >= (SELECT week_start FROM weekly_pools WHERE is_current = true)), remaining_dollars = 250 - (SELECT COALESCE(SUM(verified_count), 0) FROM submissions WHERE status = 'approved' AND approved_at >= (SELECT week_start FROM weekly_pools WHERE is_current = true)) WHERE is_current = true;"
+    },
+    "issue_2": {
+      "problem": "If user_earnings table has wrong schema",
+      "check": "SELECT column_name FROM information_schema.columns WHERE table_name = 'user_earnings' ORDER BY ordinal_position;",
+      "expected_columns": [
+        "id",
+        "user_id",
+        "submission_id",
+        "pool_id",
+        "pull_up_count",
+        "dollars_earned",
+        "is_first_submission",
+        "created_at"
+      ],
+      "solution": "If columns don't match, you may need to recreate the table"
+    }
+  },
+  "support_queries": {
+    "get_project_ref": {
+      "location": "Supabase Dashboard > Settings > General",
+      "field": "Reference ID",
+      "needed_for": "npx supabase link --project-ref YOUR_PROJECT_REF"
+    },
+    "check_current_pool": {
+      "query": "SELECT * FROM weekly_pools WHERE is_current = true;",
+      "shows": "Current week's pool status"
+    },
+    "check_recent_approvals": {
+      "query": "SELECT s.id, s.full_name, s.verified_count, s.approved_at, ue.dollars_earned FROM submissions s LEFT JOIN user_earnings ue ON s.id = ue.submission_id WHERE s.status = 'approved' AND s.approved_at > NOW() - INTERVAL '7 days' ORDER BY s.approved_at DESC LIMIT 10;",
+      "shows": "Recent approvals and if earnings were created"
+    },
+    "check_missing_earnings": {
+      "query": "SELECT s.id, s.full_name, s.verified_count, s.approved_at FROM submissions s LEFT JOIN user_earnings ue ON s.id = ue.submission_id WHERE s.status = 'approved' AND ue.id IS NULL ORDER BY s.approved_at DESC;",
+      "shows": "Approved submissions that never got earnings (indicates broken flow)"
+    }
+  },
+  "next_steps": [
+    "1. Deploy migrations using one of the options above",
+    "2. Run all verification tests",
+    "3. Monitor for 24-48 hours",
+    "4. If issues found, use rollback plan",
+    "5. If successful, mark todos complete and close issue"
+  ]
+}
+

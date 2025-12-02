@@ -7,8 +7,6 @@
     <link rel="preload" href="/locales/en/common.json" as="fetch" crossorigin>
     <link rel="preload" href="/locales/en/home.json" as="fetch" crossorigin>
     <link rel="preload" href="/battlebunker-logo-optimized.webp" as="image">
-    <link rel="preload" href="/pullup_header-mobile.webp" as="image" media="(max-width: 768px)">
-    <link rel="preload" href="/pullup_header_desktop.webp" as="image" media="(min-width: 769px)">
     <link rel="dns-prefetch" href="//supabase.co">
     <link rel="dns-prefetch" href="//js.stripe.com">
     
@@ -51,10 +49,10 @@
     <!-- Google Search Console verification (placeholder) -->
     <meta name="google-site-verification" content="PLACEHOLDER_REPLACE_WITH_ACTUAL_VERIFICATION_CODE">
     
-    <!-- Critical resource preloading for performance -->
-    <link rel="preload" as="image" href="/pullup_header_desktop.webp" fetchpriority="high" media="(min-width: 1025px)">
-    <link rel="preload" as="image" href="/pullup_header-tablet.webp" fetchpriority="high" media="(min-width: 769px) and (max-width: 1024px)">
-    <link rel="preload" as="image" href="/pullup_header-mobile.webp" fetchpriority="high" media="(max-width: 768px)">
+    <!-- Critical resource preloading for performance - Hero images with high priority -->
+    <link rel="preload" as="image" href="/pullup_header_desktop.webp" fetchpriority="high" media="(min-width: 1025px)" type="image/webp">
+    <link rel="preload" as="image" href="/pullup_header-tablet.webp" fetchpriority="high" media="(min-width: 769px) and (max-width: 1024px)" type="image/webp">
+    <link rel="preload" as="image" href="/pullup_header-mobile.webp" fetchpriority="high" media="(max-width: 768px)" type="image/webp">
     
     <!-- DNS prefetching for external services -->
     <link rel="preconnect" href="https://yqnikgupiaghgjtsaypr.supabase.co">
@@ -97,38 +95,47 @@
     <!-- Google Analytics will be handled by the application code -->
   </head>
   <body>
-    <!-- Meta Pixel Code -->
+    <!-- Meta Pixel Code - Deferred for performance -->
     <script>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
+      // Defer Meta Pixel initialization until after page load for better FCP/LCP
+      function initMetaPixel() {
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        
+        // Initialize pixel
+        fbq('init', '1512318086417813');
+        
+        // Enable Advanced Matching for better Event Match Quality
+        fbq('set', 'autoConfig', false, '1512318086417813');
+        
+        // Track PageView
+        fbq('track', 'PageView');
+        
+        // Make fbq available globally
+        window.fbq = fbq;
+        
+        // Helper function to get Facebook parameters
+        window.getFacebookParams = function() {
+          const fbp = document.cookie.match(/_fbp=([^;]+)/)?.[1];
+          const fbc = document.cookie.match(/_fbc=([^;]+)/)?.[1];
+          return { fbp, fbc };
+        };
+      }
       
-      // Debug mode (only in development - automatically detected by Meta Pixel)
-      // fbq('set', 'debug', true); // Removed: causes console warnings
-      
-      // Initialize pixel
-      fbq('init', '1512318086417813');
-      
-      // Enable Advanced Matching for better Event Match Quality
-      fbq('set', 'autoConfig', false, '1512318086417813');
-      
-      // Track PageView immediately
-      fbq('track', 'PageView');
-      
-      // Make fbq available globally
-      window.fbq = fbq;
-      
-      // Helper function to get Facebook parameters
-      window.getFacebookParams = function() {
-        const fbp = document.cookie.match(/_fbp=([^;]+)/)?.[1];
-        const fbc = document.cookie.match(/_fbc=([^;]+)/)?.[1];
-        return { fbp, fbc };
-      };
+      // Initialize after page load or after 1 second (whichever comes first)
+      if (document.readyState === 'complete') {
+        setTimeout(initMetaPixel, 100);
+      } else {
+        window.addEventListener('load', function() {
+          setTimeout(initMetaPixel, 100);
+        });
+      }
     </script>
     <noscript>
       <img height="1" width="1" style="display:none"
