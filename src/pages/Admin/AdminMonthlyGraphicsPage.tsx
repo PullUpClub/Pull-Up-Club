@@ -178,28 +178,45 @@ const AdminMonthlyGraphicsPage: React.FC = () => {
       if (error) throw error;
       
       // Show detailed success message based on response
-      if (data?.sent > 0) {
+      if (data?.sent > 0 && data?.queued > 0) {
+        // Mixed results: some sent, some queued
+        toast.success(`${data.sent} sent immediately, ${data.queued} queued for delivery`, {
+          duration: 5000,
+          style: {
+            background: '#1f2937',
+            color: '#ffffff',
+            border: '1px solid #9b9b6f',
+          },
+        });
+      } else if (data?.sent > 0) {
+        // All sent successfully
         toast.success(graphic.email_sent 
-          ? `Email resent immediately to ${graphic.full_name}` 
-          : `Email sent immediately to ${graphic.full_name}`
+          ? `✅ Email resent immediately to ${graphic.full_name}` 
+          : `✅ Email sent immediately to ${graphic.full_name}`
         );
       } else if (data?.queued > 0) {
-        toast.success(`Email queued for ${graphic.full_name} (fallback mode)`, {
-          duration: 4000
+        // Queued for fallback delivery
+        toast.success(`📧 Email queued for ${graphic.full_name}`, {
+          duration: 4000,
+          icon: '📧',
+          style: {
+            background: '#1f2937',
+            color: '#ffffff',
+            border: '1px solid #f59e0b',
+          },
         });
       } else {
+        // Generic success
         toast.success(graphic.email_sent 
           ? `Email resent to ${graphic.full_name}` 
           : `Email sent to ${graphic.full_name}`
         );
       }
       
-      // Show any warnings
+      // Show any real errors (not warnings about fallback)
       if (data?.errors && data.errors.length > 0) {
         data.errors.forEach((err: string) => {
-          if (err.includes('Warning:')) {
-            toast.error(err, { duration: 6000 });
-          }
+          toast.error(err, { duration: 6000 });
         });
       }
       
@@ -539,17 +556,23 @@ const AdminMonthlyGraphicsPage: React.FC = () => {
                       return (
                         <tr 
                           key={graphic.id} 
-                          className={`border-b border-[#23231f] ${graphic.email_sent ? 'opacity-60' : ''}`}
+                          className={`border-b border-[#23231f] transition-all ${
+                            graphic.email_sent 
+                              ? 'bg-[#0d1f0d] opacity-75' 
+                              : 'hover:bg-[#23231f]'
+                          }`}
                         >
                           <td className="p-3">
                             <div className="flex items-center">
-                              {!graphic.email_sent && (
+                              {!graphic.email_sent ? (
                                 <input
                                   type="checkbox"
                                   checked={selectedEmails.has(graphic.id)}
                                   onChange={() => toggleEmailSelection(graphic.id)}
                                   className="mr-3"
                                 />
+                              ) : (
+                                <div className="w-5 mr-3"></div>
                               )}
                               <div>
                                 <div className="text-[#ededed] font-medium">{graphic.full_name}</div>
@@ -600,11 +623,25 @@ const AdminMonthlyGraphicsPage: React.FC = () => {
                           
                           <td className="p-3">
                             {graphic.email_sent ? (
-                              <div className="text-green-400 text-xs">
-                                Sent {new Date(graphic.email_sent_at!).toLocaleDateString()}
+                              <div className="flex items-center gap-2">
+                                <CheckCircle2 className="h-4 w-4 text-green-400" />
+                                <div>
+                                  <div className="text-green-400 text-sm font-semibold">Sent</div>
+                                  <div className="text-[#9a9871] text-xs">
+                                    {new Date(graphic.email_sent_at!).toLocaleDateString('en-US', {
+                                      month: 'short',
+                                      day: 'numeric',
+                                      hour: '2-digit',
+                                      minute: '2-digit'
+                                    })}
+                                  </div>
+                                </div>
                               </div>
                             ) : (
-                              <span className="text-yellow-400 text-xs">Pending</span>
+                              <div className="flex items-center gap-2">
+                                <AlertCircle className="h-4 w-4 text-yellow-400" />
+                                <span className="text-yellow-400 font-semibold">Pending</span>
+                              </div>
                             )}
                           </td>
                           

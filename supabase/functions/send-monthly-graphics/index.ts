@@ -142,27 +142,11 @@ Deno.serve(async (req) => {
           }
 
         } else {
-          // Resend failed - log the ACTUAL error details
+          // Resend failed - attempt fallback queue
           console.error(`❌ Resend API failed for ${graphic.email}`);
           console.error(`❌ Resend error details:`, JSON.stringify(resendResponse.error, null, 2));
           
           const resendErrorMsg = resendResponse.error?.message || JSON.stringify(resendResponse.error) || 'Unknown Resend error';
-          errors.push(`Failed to send email to ${graphic.full_name} via Resend: ${resendErrorMsg}`);
-          
-          // Still mark as sent in monthly_graphics since we're queuing it for later delivery
-          const { error: updateError } = await supabase
-            .from('monthly_graphics')
-            .update({ 
-              email_sent: true, 
-              email_sent_at: new Date().toISOString() 
-            })
-            .eq('id', graphicId);
-          
-          if (updateError) {
-            console.error(`Failed to update monthly_graphics in fallback mode for ID ${graphicId}:`, updateError);
-          } else {
-            console.log(`✓ Updated monthly_graphics table in fallback mode for ${graphic.full_name}`);
-          }
           
           // Fallback to queuing if direct send fails
           const { error: insertError } = await supabase.from('email_notifications').insert({
@@ -180,11 +164,29 @@ Deno.serve(async (req) => {
               resend_error: resendErrorMsg
             }
           });
+          
           if (!insertError) {
+            // Successfully queued as fallback - mark as sent since it will be processed
             queuedCount++;
-            errors.push(`Warning: Email for ${graphic.full_name} queued as fallback due to Resend failure: ${resendErrorMsg}`);
+            console.log(`📧 Email queued for fallback delivery to ${graphic.full_name}`);
+            
+            const { error: updateError } = await supabase
+              .from('monthly_graphics')
+              .update({ 
+                email_sent: true, 
+                email_sent_at: new Date().toISOString() 
+              })
+              .eq('id', graphicId);
+            
+            if (updateError) {
+              console.error(`Failed to update monthly_graphics in fallback mode for ID ${graphicId}:`, updateError);
+              // Don't add to errors - the email is queued successfully
+            } else {
+              console.log(`✓ Updated monthly_graphics table in fallback mode for ${graphic.full_name}`);
+            }
           } else {
-            errors.push(`Critical Error: Failed to send and failed to queue email for ${graphic.full_name}: ${insertError.message}`);
+            // Both Resend AND queue failed - this is a real error
+            errors.push(`Failed to send email to ${graphic.full_name}: Direct send failed (${resendErrorMsg}) and queue failed (${insertError.message})`);
           }
         }
         

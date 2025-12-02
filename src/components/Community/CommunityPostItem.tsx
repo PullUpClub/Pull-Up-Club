@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Heart, MessageCircle, Trophy, MoreHorizontal } from 'lucide-react';
+ import { Heart, MessageCircle, Trophy, MoreHorizontal } from 'lucide-react';
 import CommunityPostForm from './CommunityPostForm';
 import type { CommunityPost } from '../../hooks/useCommunityFeed';
 import BadgeAvatar from './BadgeAvatar';

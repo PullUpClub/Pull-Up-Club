@@ -12,6 +12,7 @@ interface PatchConfig {
   tier: string;
   icon: string;
   position: 'top' | 'bottom';
+  shopifyUrl: string;
 }
 
 interface PatchStatus {
@@ -53,7 +54,8 @@ const PATCH_ROADMAP: PatchConfig[] = [
     requiredBillingDays: 90,
     tier: '3-Month',
     icon: 'Shield',
-    position: 'bottom'
+    position: 'bottom',
+    shopifyUrl: 'https://shop.thebattlebunker.com/discount/PULLUPCLUB100?redirect=/products/3-months-in-pullupclub-com'
   },
   {
     id: 'champion',
@@ -62,7 +64,8 @@ const PATCH_ROADMAP: PatchConfig[] = [
     requiredBillingDays: 180,
     tier: '6-Month',
     icon: 'Trophy',
-    position: 'top'
+    position: 'top',
+    shopifyUrl: 'https://shop.thebattlebunker.com/discount/PULLUPCLUB100?redirect=/products/6-months-in-patch-pullupclub-com'
   },
   {
     id: 'guardian',
@@ -71,7 +74,8 @@ const PATCH_ROADMAP: PatchConfig[] = [
     requiredBillingDays: 270,
     tier: '9-Month',
     icon: 'Target',
-    position: 'bottom'
+    position: 'bottom',
+    shopifyUrl: 'https://shop.thebattlebunker.com/discount/PULLUPCLUB100?redirect=/products/9-months-in-patch-pullupclub-com'
   },
   {
     id: 'immortal',
@@ -80,7 +84,8 @@ const PATCH_ROADMAP: PatchConfig[] = [
     requiredBillingDays: 365,
     tier: '12-Month',
     icon: 'Star',
-    position: 'top'
+    position: 'top',
+    shopifyUrl: 'https://shop.thebattlebunker.com/discount/PULLUPCLUB100?redirect=/products/12-months-in-patch-pullupclub-com'
   }
 ];
 
@@ -270,25 +275,36 @@ const PatchRoadmap: React.FC = () => {
   const handleClaimPatch = async (patchId: string) => {
     if (!user?.id || claimingPatch) return;
 
+    const patch = PATCH_ROADMAP.find(p => p.id === patchId);
+    if (!patch) return;
+
     setClaimingPatch(patchId);
 
     try {
-      const { error } = await supabase.functions.invoke('claim-patch', {
-        body: { patch_type: patchId }
+      // Log the claim attempt to track interest
+      const { error } = await supabase.functions.invoke('log-patch-claim-attempt', {
+        body: { 
+          patch_type: patchId,
+          user_id: user.id
+        }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error logging claim attempt:', error);
+        // Don't block the user from opening the shop if logging fails
+      }
 
-      const patch = PATCH_ROADMAP.find(p => p.id === patchId);
-      toast.success(`${patch?.name} patch claimed successfully!`);
+      // Open Shopify store in new tab - webhook will handle marking as claimed
+      window.open(patch.shopifyUrl, '_blank');
       
-      // Refresh eligibility to show updated state
-      await fetchEligibility();
+      toast.success(`Opening ${patch.name} claim page...`, {
+        icon: '🎖️',
+        duration: 3000
+      });
       
     } catch (err: any) {
       console.error('Error claiming patch:', err);
-      const errorMessage = err.message || 'Failed to claim patch. Please try again.';
-      toast.error(errorMessage);
+      toast.error('Failed to open claim page. Please try again.');
     } finally {
       setClaimingPatch(null);
     }
