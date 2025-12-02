@@ -94,37 +94,30 @@ const PUCBankBanner: React.FC = () => {
 
   return (
     <div className="flex justify-center mb-6">
-      {poolData?.is_depleted ? (
-        // DEPLETED State - Larger pill
-        <div className="bg-gray-900/50 border border-red-500/30 rounded-full px-6 py-2 shadow-lg shadow-red-500/10">
-          <div className="flex items-center space-x-3 text-base">
-            <span className="text-red-400 text-xl">💸</span>
-            <span className="text-red-400 font-bold text-xl">{t('pucBank.poolDepleted')}</span>
+      <div className={`bg-gray-900/50 border-2 rounded-full px-6 py-2 shadow-lg ${
+        poolData?.is_depleted 
+          ? 'border-red-500/30 shadow-red-500/10' 
+          : 'border-[#9b9b6f]/30 shadow-[#9b9b6f]/10'
+      }`}>
+        <div className="flex items-center space-x-4 text-base">
+          <div className="flex items-center space-x-2">
+            <span className="text-xl">{poolData?.is_depleted ? '💸' : '🏦'}</span>
+            <span className="text-[#9b9b6f] font-bold text-2xl">{t('pucBank.title')}</span>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <span className={`font-bold text-xl ${
+              poolData?.is_depleted ? 'text-red-400' : 'text-white'
+            }`}>
+              ${poolData?.remaining_dollars}
+            </span>
+            <span className="text-gray-400">/</span>
+            <span className="text-[#9b9b6f] text-xl">
+              ${poolData?.total_dollars}
+            </span>
           </div>
         </div>
-      ) : (
-        // ACTIVE State - Larger pill
-        <div className="bg-gray-900/50 border-2 border-[#9b9b6f]/30 rounded-full px-6 py-2 shadow-lg shadow-[#9b9b6f]/10">
-          <div className="flex items-center space-x-4 text-base">
-            <div className="flex items-center space-x-2">
-              <span className="text-xl">🏦</span>
-              <span className="text-[#9b9b6f] font-bold text-2xl">{t('pucBank.title')}</span>
-            </div>
-            
-            <div className="flex items-center space-x-2">
-              <span className="text-white font-bold text-xl">
-                ${poolData?.remaining_dollars}
-              </span>
-              <span className="text-gray-400">/</span>
-              <span className="text-[#9b9b6f] text-xl">
-                ${poolData?.total_dollars}
-              </span>
-            </div>
-
-
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 };
