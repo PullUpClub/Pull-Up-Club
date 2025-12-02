@@ -70,114 +70,33 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks(id) {
-          // Core React libraries
-          if (id.includes('node_modules/react') || 
-              id.includes('node_modules/react-dom') || 
-              id.includes('node_modules/react-router-dom')) {
-            return 'react-vendor';
-          }
-          
+        manualChunks: {
+          // Core framework - must load first, no dependencies on app code
+          'vendor-react': [
+            'react', 
+            'react-dom', 
+            'react-router-dom',
+            'scheduler'
+          ],
+          // Supabase - independent library
+          'vendor-supabase': [
+            '@supabase/supabase-js',
+            '@supabase/auth-ui-react',
+            '@supabase/auth-ui-shared'
+          ],
           // UI libraries
-          if (id.includes('@headlessui/react') || 
-              id.includes('node_modules/framer-motion')) {
-            return 'ui-vendor';
-          }
-          
-          // Analytics and tracking
-          if (id.includes('@vercel/analytics') || 
-              id.includes('@vercel/speed-insights') ||
-              id.includes('node_modules/react-ga4')) {
-            return 'analytics';
-          }
-          
-          // Query and state management
-          if (id.includes('@tanstack/react-query') || 
-              id.includes('node_modules/zustand')) {
-            return 'query-vendor';
-          }
-          
-          // Supabase libraries
-          if (id.includes('@supabase')) {
-            return 'supabase-vendor';
-          }
-          
-          // i18n libraries
-          if (id.includes('i18next') || 
-              id.includes('react-i18next')) {
-            return 'i18n-vendor';
-          }
-          
-          // Stripe
-          if (id.includes('@stripe')) {
-            return 'stripe-vendor';
-          }
-          
-          // Icons and utilities
-          if (id.includes('lucide-react')) {
-            return 'icons';
-          }
-          
-          // Date/time utilities
-          if (id.includes('date-fns') || 
-              id.includes('dayjs')) {
-            return 'date-vendor';
-          }
-          
-          // Toast notifications
-          if (id.includes('react-hot-toast')) {
-            return 'toast-vendor';
-          }
-          
-          // Lenis smooth scroll
-          if (id.includes('lenis')) {
-            return 'lenis-vendor';
-          }
-          
-          // Community page (large page, separate chunk)
-          if (id.includes('/pages/Community/')) {
-            return 'page-community';
-          }
-          
-          // FAQ page (large page, separate chunk)
-          if (id.includes('/pages/FAQ/')) {
-            return 'page-faq';
-          }
-          
-          // Admin pages (not needed by regular users)
-          if (id.includes('/pages/Admin/')) {
-            return 'page-admin';
-          }
-          
-          // Other large pages
-          if (id.includes('/pages/Profile/')) {
-            return 'page-profile';
-          }
-          
-          if (id.includes('/pages/Subscription/')) {
-            return 'page-subscription';
-          }
-          
-          if (id.includes('/pages/VideoSubmission/')) {
-            return 'page-video-submission';
-          }
-          
-          // All other node_modules
-          if (id.includes('node_modules')) {
-            return 'vendor-misc';
-          }
+          'vendor-ui': [
+            '@headlessui/react',
+            'framer-motion',
+            'motion',
+            'clsx',
+            'tailwind-merge',
+            'class-variance-authority'
+          ],
         }
       }
     },
-    // Increase chunk size warning limit since we're intentionally chunking
-    chunkSizeWarningLimit: 1000,
-    // Optimize for production
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true, // Remove console.logs in production
-        drop_debugger: true,
-      },
-    },
+    // Warn for very large chunks
+    chunkSizeWarningLimit: 600,
   }
 });
