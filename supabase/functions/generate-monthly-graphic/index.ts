@@ -26,6 +26,8 @@ Deno.serve(async (req) => {
   try {
     const { graphicData } = await req.json() as { graphicData: GraphicData };
     
+    console.log(`🎨 Starting graphic generation for ${graphicData.full_name} (${graphicData.month_year})`);
+    
     // Generate HTML template
     const html = generateProfessionalGraphic(graphicData);
     
@@ -33,88 +35,154 @@ Deno.serve(async (req) => {
     const API_KEY = Deno.env.get('HTMLCSSTOIMAGE_API_KEY');
     const API_ID = Deno.env.get('HTMLCSSTOIMAGE_API_ID');
     
-    console.log('HTMLCSSTOIMAGE_API_KEY found:', !!API_KEY);
-    console.log('HTMLCSSTOIMAGE_API_ID found:', !!API_ID);
+    console.log('🔑 Credentials check:', {
+      hasApiKey: !!API_KEY,
+      hasApiId: !!API_ID,
+      apiIdLength: API_ID?.length || 0,
+      apiKeyLength: API_KEY?.length || 0
+    });
     
-    if (API_KEY && API_ID) {
-      try {
-        const API_URL = 'https://hcti.io/v1/image';
-        
-        console.log('Making request to HTMLCSSTOIMAGE API...');
-        
-        // Add AbortController for timeout
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 20000); // 20 second timeout
-        
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Basic ${btoa(`${API_ID}:${API_KEY}`)}`,
-          },
-          body: JSON.stringify({
-            html: html,
-            selector: '.graphic-container',
-            device_scale: 2,
-            format: 'png'
-          }),
-          signal: controller.signal
-        });
-
-        clearTimeout(timeoutId);
-        console.log('HTMLCSSTOIMAGE API response status:', response.status);
-        
-        const result = await response.json();
-        
-        console.log('HTMLCSSTOIMAGE API response:', { 
-          success: response.ok, 
-          hasUrl: !!result.url, 
-          error: result.error,
-          message: result.message,
-          fullResponse: result
-        });
-        
-        if (response.ok && result.url) {
-          console.log('✅ Image generated successfully:', result.url);
-          return new Response(
-            JSON.stringify({ 
-              success: true, 
-              imageUrl: result.url,
-              imageId: result.id,
-              html: html
-            }),
-            { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-          );
-        } else {
-          console.log('❌ HTMLCSSTOIMAGE API failed:', result);
-        }
-      } catch (imageError) {
-        console.error('Image generation failed, falling back to HTML:', imageError);
-        if (imageError.name === 'AbortError') {
-          console.error('❌ HTMLCSSTOIMAGE API timed out after 20 seconds');
-        }
-      }
-    } else {
-      console.log('❌ Missing HTMLCSSTOIMAGE credentials:', { 
-        hasApiKey: !!API_KEY, 
-        hasApiId: !!API_ID 
-      });
+    if (!API_KEY || !API_ID) {
+      console.error('❌ Missing HTMLCSSTOIMAGE credentials');
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          html: html,
+          imageUrl: '',
+          message: 'Missing HTMLCSSTOIMAGE_API_KEY or HTMLCSSTOIMAGE_API_ID'
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
     
-    // Fallback: Return HTML for preview (when no API key or API fails)
-    return new Response(
-      JSON.stringify({ 
-        success: true, 
+    try {
+      const API_URL = 'https://hcti.io/v1/image';
+      
+      // Create Base64 encoded auth string - simplified per HTMLCSSTOIMAGE docs
+      const authString = `${API_ID}:${API_KEY}`;
+      const base64 = btoa(authString);
+      
+      console.log('📤 Sending request to HTMLCSSTOIMAGE...');
+      console.log(`   URL: ${API_URL}`);
+      console.log(`   API_ID: ${API_ID}`);
+      console.log(`   Auth (first 20 chars): Basic ${base64.substring(0, 20)}...`);
+      
+      const requestBody = {
         html: html,
-        imageUrl: null,
-        message: 'HTML generated successfully. Set HTMLCSSTOIMAGE_API_KEY for PNG generation.'
-      }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+        selector: '.graphic-container',
+        device_scale: 2,
+        format: 'png'
+      };
+      
+      console.log('   Request body keys:', Object.keys(requestBody));
+      console.log(`   HTML length: ${html.length} characters`);
+      
+      // Add AbortController for timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        console.error('⏱️  TIMEOUT: HTMLCSSTOIMAGE API took longer than 30 seconds');
+        controller.abort();
+      }, 30000); // 30 second timeout (increased from 20)
+      
+      const startTime = Date.now();
+      
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Basic ${base64}`,
+        },
+        body: JSON.stringify(requestBody),
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+      
+      const duration = Date.now() - startTime;
+      console.log(`⏱️  API response received in ${duration}ms`);
+      console.log(`📡 HTTP Status: ${response.status} ${response.statusText}`);
+      
+      const responseText = await response.text();
+      console.log(`📦 Response body length: ${responseText.length} bytes`);
+      
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('❌ Failed to parse JSON response:', parseError);
+        console.error('   Raw response:', responseText.substring(0, 500));
+        throw new Error(`Invalid JSON response from HTMLCSSTOIMAGE API`);
+      }
+      
+      console.log('📊 Parsed API response:', {
+        success: response.ok,
+        hasUrl: !!result.url,
+        hasId: !!result.id,
+        hasError: !!result.error,
+        url: result.url ? `${result.url.substring(0, 50)}...` : null,
+        errorMessage: result.error || result.message
+      });
+      
+      if (response.ok && result.url) {
+        console.log('✅ SUCCESS! Image generated successfully');
+        console.log(`   Image URL: ${result.url}`);
+        console.log(`   Image ID: ${result.id || 'N/A'}`);
+        
+        return new Response(
+          JSON.stringify({ 
+            success: true, 
+            imageUrl: result.url,
+            imageId: result.id,
+            html: html
+          }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      } else {
+        console.error('❌ HTMLCSSTOIMAGE API failed');
+        console.error(`   Status: ${response.status}`);
+        console.error(`   Full response:`, result);
+        
+        // Return empty imageUrl on failure
+        return new Response(
+          JSON.stringify({ 
+            success: true, 
+            html: html,
+            imageUrl: '',
+            message: `HTMLCSSTOIMAGE API failed: ${result.error || result.message || 'Unknown error'}`,
+            apiError: result
+          }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+    } catch (imageError) {
+      console.error('❌ Exception during image generation:', imageError);
+      console.error('   Error name:', imageError.name);
+      console.error('   Error message:', imageError.message);
+      
+      if (imageError.name === 'AbortError') {
+        console.error('   Cause: API request timed out');
+      }
+      
+      // Return empty imageUrl on exception
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          html: html,
+          imageUrl: '',
+          message: `Exception: ${imageError.message}`,
+          errorType: imageError.name
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
   } catch (error) {
+    console.error('❌ Fatal error in generate-monthly-graphic:', error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        success: false,
+        error: error.message 
+      }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
