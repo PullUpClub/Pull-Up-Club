@@ -1,0 +1,151 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://pullupclub.com/schemas/error-schema.json",
+  "title": "Error Documentation Schema",
+  "description": "Schema for documenting system errors in Pull-Up Club",
+  "type": "object",
+  "required": ["schema_version", "last_updated", "type", "error_types"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Semantic version of this schema"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO8601 timestamp of last update"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["ERROR"],
+      "description": "Document type identifier"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "project": {
+          "type": "string"
+        },
+        "maintainer": {
+          "type": "string"
+        },
+        "mcp_compatible": {
+          "type": "boolean"
+        }
+      }
+    },
+    "error_types": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "severity", "category", "description"],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Unique error code (e.g., POOL_MISMATCH)"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["CRITICAL", "ERROR", "WARNING", "INFO"],
+            "description": "Error severity level"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["SECURITY", "FINANCIAL", "PERFORMANCE", "DATA_INTEGRITY", "SYSTEM"],
+            "description": "Error category"
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable description of the error"
+          },
+          "common_causes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of common causes for this error"
+          },
+          "detection": {
+            "type": "object",
+            "properties": {
+              "function": {
+                "type": "string",
+                "description": "Database function that detects this error"
+              },
+              "schedule": {
+                "type": "string",
+                "description": "CRON schedule for detection"
+              },
+              "query": {
+                "type": "string",
+                "description": "SQL query to detect this error"
+              }
+            }
+          },
+          "resolution": {
+            "type": "object",
+            "required": ["auto_fix"],
+            "properties": {
+              "auto_fix": {
+                "type": "boolean",
+                "description": "Whether this error can be auto-fixed"
+              },
+              "function": {
+                "type": "string",
+                "description": "Database function that auto-fixes this error"
+              },
+              "manual_steps": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Manual steps to fix this error"
+              }
+            }
+          },
+          "prevention": {
+            "type": "object",
+            "properties": {
+              "atomic_updates": {
+                "type": "boolean"
+              },
+              "search_path_set": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "error_logging": {
+                "type": "boolean"
+              }
+            }
+          },
+          "related_tables": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "related_functions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "related_docs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "example_context": {
+            "type": "object",
+            "description": "Example error context"
+          }
+        }
+      }
+    }
+  }
+}
+

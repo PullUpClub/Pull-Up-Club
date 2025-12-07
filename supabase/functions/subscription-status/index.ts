@@ -60,19 +60,109 @@ serve(async (req: Request) => {
     }
 
     // Return the most recent active subscription if found
-    const subscription = subscriptions && subscriptions.length > 0 ? subscriptions[0] : null;
+    let subscription = subscriptions && subscriptions.length > 0 ? subscriptions[0] : null;
     
     // If there's a subscription and a Stripe subscription ID
-    let stripeSubscriptionData: { id: string; status: Stripe.Subscription.Status; currentPeriodEnd: Date; cancelAtPeriodEnd: boolean } | null = null;
-    if (subscription?.stripe_subscription_id) {
-      // Fetch the latest info from Stripe
+    let stripeSubscriptionData: { id: string; status: Stripe.Subscription.Status; currentPeriodEnd: Date; cancelAtPeriodEnd: boolean; payment_method_brand?: string; payment_method_last4?: string } | null = null;
+    
+    // FALLBACK: If no subscription in DB, check if user has is_paid=true and stripe_customer_id
+    if (!subscription) {
+      console.log(`[subscription-status] No subscription found in DB for user ${user.id}, checking profiles table...`);
+      
+      const { data: profile, error: profileError } = await supabaseAdmin
+        .from('profiles')
+        .select('is_paid, stripe_customer_id, created_at, role')
+        .eq('id', user.id)
+        .single();
+
+      // Skip subscription check for admins and influencers (they get free access)
+      if (!profileError && profile && (profile.role === 'admin' || profile.role === 'influencer')) {
+        console.log(`[subscription-status] User is ${profile.role}, returning null (free access, no subscription needed)`);
+        return new Response(JSON.stringify({
+          subscription: null,
+          stripeSubscription: null
+        }), {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      if (!profileError && profile?.is_paid && profile?.stripe_customer_id) {
+        console.log(`[subscription-status] User has is_paid=true and stripe_customer_id, fetching from Stripe...`);
+        
+        // Fetch active subscription from Stripe
+        const stripeSubscriptions = await stripe.subscriptions.list({
+          customer: profile.stripe_customer_id,
+          status: 'active',
+          limit: 1,
+        });
+
+        if (stripeSubscriptions.data.length > 0) {
+          const stripeSub = stripeSubscriptions.data[0];
+          console.log(`[subscription-status] Found active Stripe subscription: ${stripeSub.id}`);
+          
+          // Create a synthetic subscription object for compatibility
+          subscription = {
+            id: 'synthetic-' + user.id,
+            user_id: user.id,
+            stripe_subscription_id: stripeSub.id,
+            status: 'active',
+            current_period_start: new Date(stripeSub.current_period_start * 1000).toISOString(),
+            current_period_end: new Date(stripeSub.current_period_end * 1000).toISOString(),
+            first_paid_date: profile.created_at,
+            created_at: profile.created_at,
+            updated_at: new Date().toISOString(),
+          };
+
+          // Get payment method details
+          let paymentMethodBrand = '';
+          let paymentMethodLast4 = '';
+          
+          if (stripeSub.default_payment_method) {
+            try {
+              const pm = await stripe.paymentMethods.retrieve(stripeSub.default_payment_method as string);
+              paymentMethodBrand = pm.card?.brand || '';
+              paymentMethodLast4 = pm.card?.last4 || '';
+            } catch (pmError) {
+              console.error('[subscription-status] Error fetching payment method:', pmError);
+            }
+          }
+
+          stripeSubscriptionData = {
+            id: stripeSub.id,
+            status: stripeSub.status,
+            currentPeriodEnd: new Date(stripeSub.current_period_end * 1000),
+            cancelAtPeriodEnd: stripeSub.cancel_at_period_end,
+            payment_method_brand: paymentMethodBrand,
+            payment_method_last4: paymentMethodLast4,
+          };
+        }
+      }
+    } else if (subscription?.stripe_subscription_id) {
+      // Normal path: subscription exists in DB, fetch latest from Stripe
       const stripeSub = await stripe.subscriptions.retrieve(subscription.stripe_subscription_id);
       if (stripeSub) {
+        // Get payment method details
+        let paymentMethodBrand = '';
+        let paymentMethodLast4 = '';
+        
+        if (stripeSub.default_payment_method) {
+          try {
+            const pm = await stripe.paymentMethods.retrieve(stripeSub.default_payment_method as string);
+            paymentMethodBrand = pm.card?.brand || '';
+            paymentMethodLast4 = pm.card?.last4 || '';
+          } catch (pmError) {
+            console.error('[subscription-status] Error fetching payment method:', pmError);
+          }
+        }
+
         stripeSubscriptionData = {
           id: stripeSub.id,
           status: stripeSub.status,
           currentPeriodEnd: new Date(stripeSub.current_period_end * 1000),
           cancelAtPeriodEnd: stripeSub.cancel_at_period_end,
+          payment_method_brand: paymentMethodBrand,
+          payment_method_last4: paymentMethodLast4,
         };
       }
     }

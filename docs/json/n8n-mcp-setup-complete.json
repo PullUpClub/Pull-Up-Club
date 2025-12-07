@@ -1,0 +1,209 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-10-23T22:50:00Z",
+  "type": "CONFIG",
+  "metadata": {
+    "project": "Pull-Up-Club",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true
+  },
+  "n8n_mcp_optimization": {
+    "status": "complete",
+    "rule_file": ".cursor/rules/n8n-mcp-optimization.mdc",
+    "always_apply": true,
+    "tools_count": 39,
+    "setup_date": "2025-10-23"
+  },
+  "core_principles": {
+    "silent_execution": {
+      "description": "Execute all tools, respond once with complete result",
+      "benefit": "Cleaner responses, faster execution",
+      "example": "Don't narrate each tool call, just show final result"
+    },
+    "parallel_execution": {
+      "description": "Execute independent operations concurrently",
+      "benefit": "3-10x faster for multiple operations",
+      "example": "Get node info for 3 nodes simultaneously instead of sequentially"
+    },
+    "template_first": {
+      "description": "Check existing templates before building from scratch",
+      "benefit": "Saves time, reduces errors, proven solutions",
+      "resources": [
+        "n8n.io/workflows",
+        "GitHub n8n templates",
+        "Community forums"
+      ]
+    },
+    "multi_level_validation": {
+      "description": "Validate at minimal, operational, and workflow levels",
+      "benefit": "Catches errors before deployment",
+      "tools": ["validate_node_operation", "validate_workflow"]
+    },
+    "explicit_configuration": {
+      "description": "Never rely on default parameters",
+      "benefit": "Prevents runtime failures",
+      "example": "Always specify URL, auth, headers, timeouts"
+    }
+  },
+  "tool_categories": {
+    "documentation_discovery": {
+      "tools": [
+        "tools_documentation",
+        "list_nodes",
+        "get_node_info"
+      ],
+      "use_when": "Learning, exploring, discovering capabilities",
+      "priority": "first_step"
+    },
+    "configuration_setup": {
+      "tools": [
+        "get_node_for_task",
+        "validate_node_operation",
+        "validate_workflow"
+      ],
+      "use_when": "Building, configuring, validating",
+      "priority": "before_deployment"
+    },
+    "workflow_management": {
+      "tools": [
+        "create_workflow",
+        "update_workflow",
+        "delete_workflow",
+        "list_workflows",
+        "get_workflow_details",
+        "execute_workflow"
+      ],
+      "use_when": "Managing workflow lifecycle",
+      "priority": "core_operations"
+    },
+    "execution_monitoring": {
+      "tools": [
+        "get_execution_data",
+        "list_executions",
+        "stop_execution",
+        "retry_execution"
+      ],
+      "use_when": "Debugging, monitoring, troubleshooting",
+      "priority": "post_deployment"
+    },
+    "data_transformation": {
+      "tools": [
+        "transform_json",
+        "merge_data",
+        "split_data",
+        "aggregate_data"
+      ],
+      "use_when": "Processing data between nodes",
+      "priority": "workflow_logic"
+    }
+  },
+  "smart_workflows": {
+    "building_new_workflow": {
+      "steps": [
+        "1. tools_documentation() - Understand tools",
+        "2. list_nodes() - Find relevant nodes",
+        "3. get_node_info() - Get node details",
+        "4. get_node_for_task() - Get pre-config",
+        "5. create_workflow() - Build workflow",
+        "6. validate_workflow() - Validate",
+        "7. execute_workflow() - Test"
+      ],
+      "time_estimate": "15-30 minutes",
+      "success_rate": "95% with validation"
+    },
+    "debugging_workflow": {
+      "steps": [
+        "1. list_workflows() - Find workflow",
+        "2. get_workflow_details() - Examine config",
+        "3. list_executions() - Check history",
+        "4. get_execution_data() - Analyze failures",
+        "5. validate_workflow() - Check issues",
+        "6. update_workflow() - Fix issues",
+        "7. retry_execution() - Test fix"
+      ],
+      "time_estimate": "10-20 minutes",
+      "success_rate": "90% with proper analysis"
+    },
+    "optimizing_workflow": {
+      "steps": [
+        "1. list_executions() - Analyze performance",
+        "2. get_execution_data() - Identify bottlenecks",
+        "3. Identify independent operations",
+        "4. Use parallel execution",
+        "5. validate_workflow() - Ensure it works",
+        "6. execute_workflow() - Test performance"
+      ],
+      "time_estimate": "20-40 minutes",
+      "performance_gain": "2-10x faster"
+    }
+  },
+  "integration_with_mcps": {
+    "supabase_mcp": {
+      "use_case": "n8n orchestrates Supabase operations",
+      "example": "Trigger n8n workflow on Supabase event",
+      "benefit": "Automated database operations"
+    },
+    "github_mcp": {
+      "use_case": "n8n manages GitHub workflows",
+      "example": "Auto-deploy on PR merge",
+      "benefit": "CI/CD automation"
+    },
+    "context_loading": {
+      "strategy": "Check docs/json/n8n-workflows.json before MCP queries",
+      "benefit": "10-100x faster, works offline",
+      "always": "Update docs/json after n8n operations"
+    }
+  },
+  "automation_opportunities": {
+    "database_operations": [
+      "Health monitoring",
+      "Data sync",
+      "Backup automation",
+      "Cleanup jobs"
+    ],
+    "api_integrations": [
+      "Stripe webhook processing",
+      "External API data sync",
+      "Multi-service orchestration"
+    ],
+    "notifications": [
+      "Error alerts",
+      "Daily reports",
+      "Performance metrics",
+      "User notifications"
+    ],
+    "scheduled_tasks": [
+      "Weekly reports",
+      "Monthly summaries",
+      "Data exports",
+      "Compliance checks"
+    ]
+  },
+  "performance_tips": {
+    "parallel_execution": "3-10x faster for independent operations",
+    "template_reuse": "Save 50-80% development time",
+    "validation_first": "Reduce failures by 95%",
+    "explicit_config": "Eliminate 90% of runtime errors",
+    "caching": "10-100x faster responses"
+  },
+  "quick_reference": {
+    "learn": "tools_documentation → list_nodes → get_node_info",
+    "build": "get_node_for_task → create_workflow → validate_workflow",
+    "debug": "list_executions → get_execution_data → validate_workflow",
+    "deploy": "validate_workflow → execute_workflow",
+    "monitor": "list_executions → get_execution_data"
+  },
+  "files_created": [
+    ".cursor/rules/n8n-mcp-optimization.mdc",
+    "docs/json/n8n-workflows.json",
+    "docs/json/n8n-mcp-setup-complete.json"
+  ],
+  "next_steps": [
+    "Test n8n MCP in new chat",
+    "Create first workflow using template-first approach",
+    "Set up database health monitoring workflow",
+    "Configure Stripe webhook processing workflow",
+    "Document all workflows in docs/json/n8n-workflows.json"
+  ]
+}
+

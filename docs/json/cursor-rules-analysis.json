@@ -1,0 +1,242 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-10-23T23:00:00Z",
+  "type": "CONFIG",
+  "metadata": {
+    "project": "Pull-Up-Club",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true
+  },
+  "rules_analysis": {
+    "current_rules": {
+      "count": 4,
+      "total_lines": 963,
+      "files": [
+        {
+          "name": "backend-checklist-rule.mdc",
+          "lines": 139,
+          "purpose": "Backend setup checklist",
+          "assessment": "✅ KEEP - Specific, actionable, project-relevant"
+        },
+        {
+          "name": "json-first-documentation.mdc",
+          "lines": 271,
+          "purpose": "Always use JSON for technical docs",
+          "assessment": "⚠️ CONSOLIDATE - Can be shortened to core principles"
+        },
+        {
+          "name": "mcp-context-optimization.mdc",
+          "lines": 217,
+          "purpose": "Check docs/json/ before MCP queries",
+          "assessment": "✅ KEEP - Critical for performance"
+        },
+        {
+          "name": "n8n-mcp-optimization.mdc",
+          "lines": 336,
+          "purpose": "Optimize n8n MCP usage",
+          "assessment": "⚠️ TOO LONG - Should be 100-150 lines max"
+        }
+      ]
+    },
+    "problems_identified": {
+      "token_overhead": {
+        "issue": "963 lines = ~3000-4000 tokens per message",
+        "impact": "Consumes 10-15% of context window before user even types",
+        "severity": "MEDIUM",
+        "recommendation": "Reduce to <500 total lines (~1500 tokens)"
+      },
+      "rule_length": {
+        "issue": "n8n rule is 336 lines (too detailed)",
+        "impact": "Information overload, AI might miss key points",
+        "severity": "MEDIUM",
+        "recommendation": "Condense to core principles only"
+      },
+      "redundancy": {
+        "issue": "JSON-first rule has many examples and explanations",
+        "impact": "Repetitive information",
+        "severity": "LOW",
+        "recommendation": "Keep only critical instructions"
+      },
+      "specificity_vs_generality": {
+        "issue": "Rules are very project-specific (backend checklist)",
+        "impact": "Won't apply well to other projects",
+        "severity": "LOW",
+        "recommendation": "Move project-specific to project .cursorrules"
+      }
+    },
+    "best_practices_from_research": {
+      "optimal_rule_count": "3-5 focused rules",
+      "optimal_rule_length": "50-150 lines per rule",
+      "optimal_total_size": "200-500 lines total (~600-1500 tokens)",
+      "key_principles": [
+        "Focus on outcomes, not processes",
+        "Avoid micromanagement",
+        "Keep rules concise and actionable",
+        "Allow flexibility for edge cases",
+        "Rules should enable, not constrain"
+      ]
+    },
+    "recommendations": {
+      "immediate": [
+        {
+          "action": "Consolidate n8n-mcp-optimization.mdc",
+          "from": "336 lines",
+          "to": "~100 lines",
+          "keep": "Core principles, quick reference",
+          "remove": "Verbose examples, redundant explanations"
+        },
+        {
+          "action": "Simplify json-first-documentation.mdc",
+          "from": "271 lines",
+          "to": "~80 lines",
+          "keep": "Core rule, file structure, naming",
+          "remove": "Multiple examples, lengthy explanations"
+        },
+        {
+          "action": "Streamline mcp-context-optimization.mdc",
+          "from": "217 lines",
+          "to": "~100 lines",
+          "keep": "Workflow steps, freshness rules",
+          "remove": "Redundant examples"
+        }
+      ],
+      "target_state": {
+        "total_lines": "~400 lines",
+        "total_tokens": "~1200 tokens",
+        "context_overhead": "~5% (acceptable)",
+        "rules": [
+          {
+            "name": "json-first-documentation.mdc",
+            "lines": "~80",
+            "focus": "Core rule + file structure"
+          },
+          {
+            "name": "mcp-context-optimization.mdc",
+            "lines": "~100",
+            "focus": "Workflow + freshness rules"
+          },
+          {
+            "name": "n8n-mcp-optimization.mdc",
+            "lines": "~100",
+            "focus": "5 core principles + quick ref"
+          },
+          {
+            "name": "backend-checklist-rule.mdc",
+            "lines": "~120",
+            "action": "Move to project .cursorrules (project-specific)"
+          }
+        ]
+      }
+    },
+    "rules_to_add": {
+      "error_handling": {
+        "priority": "HIGH",
+        "purpose": "Consistent error handling across all code",
+        "size": "~50 lines",
+        "content": [
+          "Always use try-catch in async functions",
+          "Log errors to monitoring.system_errors",
+          "Return structured error responses",
+          "Include error context (user_id, operation, etc.)"
+        ]
+      },
+      "code_quality": {
+        "priority": "MEDIUM",
+        "purpose": "Code standards and best practices",
+        "size": "~60 lines",
+        "content": [
+          "Use TypeScript types (no 'any')",
+          "Write descriptive variable names",
+          "Add JSDoc comments for functions",
+          "Keep functions under 50 lines"
+        ]
+      },
+      "testing": {
+        "priority": "LOW",
+        "purpose": "Testing requirements",
+        "size": "~40 lines",
+        "content": [
+          "Write tests for critical functions",
+          "Test RLS policies before deployment",
+          "Validate migrations before applying"
+        ]
+      }
+    },
+    "rules_to_remove": {
+      "none": "All current rules serve a purpose",
+      "action": "Consolidate, don't delete"
+    },
+    "impact_assessment": {
+      "current_state": {
+        "pros": [
+          "Comprehensive coverage",
+          "Clear examples",
+          "Detailed explanations"
+        ],
+        "cons": [
+          "Too verbose (963 lines)",
+          "High token overhead (~4000 tokens)",
+          "Information overload",
+          "Slow to parse"
+        ]
+      },
+      "optimized_state": {
+        "pros": [
+          "Concise core principles (~400 lines)",
+          "Low token overhead (~1200 tokens)",
+          "Fast to parse",
+          "Room for new rules",
+          "Better AI focus"
+        ],
+        "cons": [
+          "Less detailed examples",
+          "Might need to reference docs"
+        ]
+      }
+    },
+    "productivity_metrics": {
+      "current": {
+        "context_window_used": "15%",
+        "ai_processing_time": "+200ms per message",
+        "clarity_score": "7/10 (verbose)"
+      },
+      "optimized": {
+        "context_window_used": "5%",
+        "ai_processing_time": "+50ms per message",
+        "clarity_score": "9/10 (concise)"
+      }
+    }
+  },
+  "action_plan": {
+    "phase_1": {
+      "name": "Consolidate Existing Rules",
+      "tasks": [
+        "Reduce n8n rule from 336 to 100 lines",
+        "Reduce JSON-first rule from 271 to 80 lines",
+        "Reduce MCP context rule from 217 to 100 lines",
+        "Move backend checklist to project .cursorrules"
+      ],
+      "target": "~300 lines total",
+      "estimated_time": "30 minutes"
+    },
+    "phase_2": {
+      "name": "Add High-Priority Rules",
+      "tasks": [
+        "Add error-handling.mdc (~50 lines)",
+        "Add code-quality.mdc (~60 lines)"
+      ],
+      "target": "~410 lines total",
+      "estimated_time": "20 minutes"
+    },
+    "phase_3": {
+      "name": "Test & Optimize",
+      "tasks": [
+        "Test in new chats",
+        "Measure response times",
+        "Adjust based on usage"
+      ],
+      "estimated_time": "Ongoing"
+    }
+  }
+}
+

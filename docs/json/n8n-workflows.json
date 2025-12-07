@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-10-23T22:45:00Z",
+  "type": "CONFIG",
+  "metadata": {
+    "project": "Pull-Up-Club",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true,
+    "n8n_mcp_version": "1.0.0"
+  },
+  "n8n_setup": {
+    "mcp_tools_available": 39,
+    "mcp_server_endpoint": "",
+    "authentication": "bearer_token",
+    "status": "configured"
+  },
+  "workflows": [],
+  "templates_used": [],
+  "integrations": {
+    "supabase": {
+      "enabled": true,
+      "workflows": [],
+      "use_cases": [
+        "Database sync",
+        "Trigger workflows on database events",
+        "Automated data validation"
+      ]
+    },
+    "stripe": {
+      "enabled": true,
+      "workflows": [],
+      "use_cases": [
+        "Webhook processing",
+        "Payment notifications",
+        "Subscription management"
+      ]
+    },
+    "airtable": {
+      "enabled": false,
+      "workflows": [],
+      "use_cases": []
+    }
+  },
+  "automation_opportunities": [
+    {
+      "id": "auto_1",
+      "name": "Supabase Health Monitoring",
+      "description": "Automated database health checks with email alerts",
+      "priority": "high",
+      "status": "pending",
+      "tools_needed": ["HTTP Request", "Email", "Schedule Trigger"],
+      "estimated_effort": "2 hours"
+    },
+    {
+      "id": "auto_2",
+      "name": "Stripe Webhook Processing",
+      "description": "Process Stripe webhooks and update Supabase",
+      "priority": "high",
+      "status": "pending",
+      "tools_needed": ["Webhook Trigger", "Supabase", "Error Handler"],
+      "estimated_effort": "3 hours"
+    },
+    {
+      "id": "auto_3",
+      "name": "Weekly Reporting",
+      "description": "Generate and email weekly performance reports",
+      "priority": "medium",
+      "status": "pending",
+      "tools_needed": ["Schedule Trigger", "Supabase", "Email", "Google Sheets"],
+      "estimated_effort": "4 hours"
+    }
+  ],
+  "best_practices_applied": [
+    "Silent execution",
+    "Parallel execution for independent operations",
+    "Multi-level validation",
+    "Explicit configuration",
+    "Template-first approach"
+  ]
+}
+

@@ -1,0 +1,171 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-12-07T18:30:00Z",
+  "type": "TROUBLESHOOTING",
+  "metadata": {
+    "project": "Pull-Up Club",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true,
+    "issue_reporter": "Patrick Hayes (74.hays@gmail.com)",
+    "issue_date": "2025-12-07"
+  },
+  "issue": {
+    "title": "User shows 'Subscription Required' despite valid Stripe payment",
+    "description": "Patrick Hayes paid via Stripe Checkout (has stripe_customer_id and is_paid=true) but subscription wasn't synced to subscriptions table, causing patch progress and rewards to show 'Subscription Required' error",
+    "affected_user": {
+      "user_id": "13160705-4035-4f09-9a2c-aaed257fe6fb",
+      "email": "74.hays@gmail.com",
+      "full_name": "Patrick Hays",
+      "stripe_customer_id": "cus_SbLkU6Hw1toQ3i",
+      "is_paid": true,
+      "created_at": "2025-07-01T18:36:57.083615+00"
+    },
+    "symptoms": [
+      "Patch Progress page shows 'Subscription Required'",
+      "Subscription Widget shows 'No active subscription'",
+      "User has valid Stripe payment confirmed by bank",
+      "User has is_paid=true and stripe_customer_id in profiles table",
+      "No record in subscriptions table"
+    ]
+  },
+  "root_cause": {
+    "primary": "Stripe webhook didn't properly sync subscription to Supabase subscriptions table",
+    "details": [
+      "User paid via Stripe Checkout successfully",
+      "Stripe webhook (stripe-webhooks Edge Function) should have created subscriptions record",
+      "Webhook either failed silently or wasn't triggered",
+      "profiles.is_paid was set to true (likely by different webhook or manual process)",
+      "profiles.stripe_customer_id was populated",
+      "subscriptions table entry was never created"
+    ],
+    "affected_components": [
+      "supabase/functions/subscription-status/index.ts - Only checked subscriptions table",
+      "src/pages/Profile/SubscriptionRewards.tsx - Relied solely on subscription-status response",
+      "src/components/Profile/SubscriptionWidget.tsx - Relied solely on subscription-status response",
+      "src/pages/Profile/PatchProgress.tsx - No subscription validation"
+    ]
+  },
+  "solution": {
+    "approach": "Multi-layered fix with fallback logic",
+    "changes": [
+      {
+        "file": "supabase/functions/subscription-status/index.ts",
+        "type": "CRITICAL_FIX",
+        "description": "Added fallback logic to check profiles.is_paid + stripe_customer_id when no subscription found in subscriptions table",
+        "implementation": "If subscriptions table is empty, query Stripe API directly using stripe_customer_id from profiles table and create synthetic subscription object for frontend compatibility",
+        "benefits": [
+          "Works for users missing subscriptions table entries",
+          "Prevents future similar issues",
+          "No database migration required",
+          "Backwards compatible with existing subscription records"
+        ]
+      },
+      {
+        "file": "src/pages/Profile/SubscriptionRewards.tsx",
+        "type": "ENHANCEMENT",
+        "description": "Updated patch progress calculation to verify is_paid before calculating",
+        "implementation": "Check profiles.is_paid and stripe_customer_id before calculating patch progress",
+        "benefits": [
+          "Prevents showing patch progress to unpaid users",
+          "Adds defensive programming layer",
+          "Improves user experience"
+        ]
+      },
+      {
+        "file": "supabase/functions/backfill-user-subscription/index.ts",
+        "type": "UTILITY",
+        "description": "Created Edge Function to backfill missing subscription records",
+        "implementation": "Queries Stripe API for active subscriptions using stripe_customer_id and creates subscriptions table entries for users who are missing them",
+        "usage": {
+          "single_user": "POST /functions/v1/backfill-user-subscription with {\"user_id\": \"<uuid>\"}",
+          "all_users": "POST /functions/v1/backfill-user-subscription with no body"
+        },
+        "status": "DEPLOYED"
+      }
+    ]
+  },
+  "verification": {
+    "steps": [
+      {
+        "step": 1,
+        "action": "Patrick logs into Pull-Up Club",
+        "expected_result": "Should see subscription status correctly"
+      },
+      {
+        "step": 2,
+        "action": "Navigate to Profile > Subscription & Rewards tab",
+        "expected_result": "Should see patch progress tracker with days remaining"
+      },
+      {
+        "step": 3,
+        "action": "Check Subscription Widget",
+        "expected_result": "Should show active subscription with plan details and next billing date"
+      },
+      {
+        "step": 4,
+        "action": "Verify patch claim link is accessible",
+        "expected_result": "Should be able to click 'Claim Your Patch' link"
+      }
+    ],
+    "database_verification": {
+      "query": "SELECT id, email, stripe_customer_id, is_paid FROM profiles WHERE email = '74.hays@gmail.com'",
+      "expected": "should show is_paid=true and stripe_customer_id='cus_SbLkU6Hw1toQ3i'"
+    }
+  },
+  "deployment_status": {
+    "edge_functions_deployed": [
+      "subscription-status (updated with fallback logic)",
+      "backfill-user-subscription (new utility function)"
+    ],
+    "frontend_changes": [
+      "src/pages/Profile/SubscriptionRewards.tsx (updated patch progress logic)"
+    ],
+    "deployment_date": "2025-12-07T18:30:00Z",
+    "deployed_by": "AI Assistant via Cursor",
+    "status": "COMPLETED"
+  },
+  "prevention": {
+    "recommendations": [
+      {
+        "priority": "HIGH",
+        "action": "Add monitoring for stripe webhook failures",
+        "implementation": "Create Edge Function that runs daily to find users with is_paid=true but no subscriptions record and alert admin"
+      },
+      {
+        "priority": "HIGH",
+        "action": "Update stripe-webhooks Edge Function to log all webhook events to monitoring.system_errors",
+        "implementation": "Wrap all webhook processing in try-catch and log to monitoring schema"
+      },
+      {
+        "priority": "MEDIUM",
+        "action": "Add automated weekly health check",
+        "implementation": "Create cron job that verifies data consistency between Stripe and Supabase"
+      },
+      {
+        "priority": "MEDIUM",
+        "action": "Implement subscription sync verification after checkout",
+        "implementation": "After successful Stripe checkout, verify subscription was created in Supabase within 30 seconds, retry if not"
+      }
+    ]
+  },
+  "similar_issues": {
+    "potential_affected_users": "Any user who paid via Stripe but whose webhook failed",
+    "detection_query": "SELECT id, email, stripe_customer_id, is_paid, created_at FROM profiles WHERE is_paid = true AND stripe_customer_id IS NOT NULL AND id NOT IN (SELECT user_id FROM subscriptions)",
+    "resolution": "Run backfill-user-subscription Edge Function with no parameters to backfill all affected users"
+  },
+  "notes": [
+    "The subscription-status Edge Function now has THREE layers of fallback:",
+    "1. Check subscriptions table (primary source of truth)",
+    "2. If empty, check profiles.is_paid + stripe_customer_id and query Stripe API",
+    "3. If Stripe API fails, return null (prevents false positives)",
+    "This ensures maximum reliability while maintaining data integrity"
+  ],
+  "timeline": {
+    "issue_reported": "2025-12-07T17:00:00Z",
+    "investigation_started": "2025-12-07T17:05:00Z",
+    "root_cause_identified": "2025-12-07T17:15:00Z",
+    "solution_implemented": "2025-12-07T18:15:00Z",
+    "solution_deployed": "2025-12-07T18:30:00Z",
+    "total_resolution_time": "90 minutes"
+  }
+}

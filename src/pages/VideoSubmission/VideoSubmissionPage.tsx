@@ -103,10 +103,11 @@ const EligibilityMessage: React.FC<{ status: EligibilityStatus; countdown: Count
         <div className="bg-gray-900 border border-gray-700 text-white p-6 rounded-lg mb-6">
           <h3 className="font-semibold text-lg mb-2">🎉 {t('eligibility.approved.title')}</h3>
           <p className="mb-3">{t('eligibility.approved.message')}</p>
-          <div className="bg-gray-800 p-3 rounded">
+          <div className="bg-gray-800 p-3 rounded mb-3">
             <p className="text-sm font-medium">{t('eligibility.approved.next')}</p>
             <p className="text-lg">{t('eligibility.approved.countdown', { days: countdown.days, hours: countdown.hours, minutes: countdown.minutes })}</p>
           </div>
+          <p className="text-sm text-gray-400">{t('eligibility.approved.monthlyLimit')}</p>
         </div>
       );
     case 'error':
@@ -493,8 +494,9 @@ const VideoSubmissionPage: React.FC = () => {
             <div className="bg-gray-800 rounded-lg p-6 text-center">
               <h3 className="text-xl font-semibold text-white mb-4">{t('eligibility.notAvailable.title')}</h3>
               <p className="text-gray-300 mb-4">{t('eligibility.notAvailable.message')}</p>
-              <Link 
-                href="/leaderboard" 
+              <p className="text-sm text-[#9b9b6f] mb-4">{t('eligibility.notAvailable.tip')}</p>
+              <Link
+                href="/leaderboard"
                 className="inline-block px-6 py-3 bg-[#918f6f] hover:bg-[#a19f7f] text-black font-semibold rounded-lg"
               >
                 {t('eligibility.notAvailable.viewLeaderboard')}

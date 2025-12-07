@@ -1,0 +1,153 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-10-23T23:50:00Z",
+  "type": "CONFIG",
+  "metadata": {
+    "project": "Pull-Up-Club",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true
+  },
+  "cleanup_summary": {
+    "date": "2025-10-23",
+    "action": "Archived old documentation, migrated to JSON-first strategy",
+    "files_archived": {
+      "total_count": 27,
+      "markdown_files": 10,
+      "text_files": 17,
+      "folders": 1
+    },
+    "before_structure": {
+      "root_files": 18,
+      "supabasemcp_folder": 10,
+      "json_folder": 7,
+      "schemas_folder": 2,
+      "guides_folder": 0,
+      "description": "Messy mix of .md, .txt, and .json files"
+    },
+    "after_structure": {
+      "json_folder": 8,
+      "schemas_folder": 2,
+      "guides_folder": 0,
+      "archive_folder": 28,
+      "description": "Clean, organized, MCP-optimized"
+    },
+    "archived_files": [
+      "Backend-Setup-&-Scalability-Checklist.txt",
+      "Backend-SupabaseSetup-&-Scalability-Checklist.txt",
+      "BattleBunker-CursorPrompt.txt",
+      "BattleBunker.md",
+      "BattleBunkerCSS.txt",
+      "BattleBunkerPod.txt",
+      "BattleBunkerQuickSummary.txt",
+      "claudechat7-31-1.txt",
+      "claudechat7-31-2.txt",
+      "codebase_optimization_guide.md",
+      "CRITICAL_ERRORS_FIXED.md",
+      "Frontend-Backend-Connection-Checklist.txt",
+      "lighthouse_optimization_plan.md",
+      "load-testing.md",
+      "Pullupclub-backend.txt",
+      "schema public.txt",
+      "STRIPE_PAYMENT_LINKS_SETUP.md",
+      "supabasemcp/ADVISOR_WARNINGS_FIXED.md",
+      "supabasemcp/DATABASE_ARCHITECTURE_ANALYSIS.md",
+      "supabasemcp/JSON_VS_MARKDOWN_FOR_MCP.md",
+      "supabasemcp/PHASE_4_COMPLETION_REPORT.md",
+      "supabasemcp/QUICK_REFERENCE_TROUBLESHOOTING.md",
+      "supabasemcp/RLS_TESTING_GUIDE.md",
+      "supabasemcp/SEARCH_PATH_GUIDE.md",
+      "supabasemcp/SUPABASE_MCP_ERROR_FORMATS.md",
+      "supabasemcp/SYSTEM_BREAKDOWN_ANALYSIS.md",
+      "supabasemcp/WHY_SYSTEMS_BREAK_SUMMARY.md"
+    ],
+    "active_json_docs": [
+      "cursor-rules-analysis.json",
+      "cursor-rules-complete-setup.json",
+      "cursor-rules-setup.json",
+      "mcp-context-rule-fix.json",
+      "n8n-mcp-setup-complete.json",
+      "n8n-workflows.json",
+      "optimization-complete.json",
+      "documentation-cleanup-complete.json (this file)"
+    ],
+    "next_steps": {
+      "recommended": [
+        "Create architecture.json from archived DATABASE_ARCHITECTURE_ANALYSIS.md",
+        "Create errors.json from archived SYSTEM_BREAKDOWN_ANALYSIS.md",
+        "Create rls-policies.json from archived RLS_TESTING_GUIDE.md",
+        "Create health-checks.json for system monitoring",
+        "Create migrations.json for tracking database changes",
+        "Create advisor-warnings.json from archived ADVISOR_WARNINGS_FIXED.md"
+      ],
+      "optional": [
+        "Create api-spec.json for API documentation",
+        "Create config.json for environment variables",
+        "Create testing.json for test suites"
+      ]
+    }
+  },
+  "benefits": {
+    "before": {
+      "mcp_readable": "30% (7/28 files)",
+      "queryable": "No",
+      "structured": "No",
+      "version_tracked": "Partial",
+      "context_overhead": "High (mixed formats)"
+    },
+    "after": {
+      "mcp_readable": "100% (8/8 active files)",
+      "queryable": "Yes (via jq)",
+      "structured": "Yes (JSON Schema)",
+      "version_tracked": "Yes (schema_version field)",
+      "context_overhead": "Low (consistent format)"
+    }
+  },
+  "final_structure": {
+    "docs/": {
+      "json/": {
+        "description": "Machine-readable, MCP-compatible documentation",
+        "file_count": 8,
+        "purpose": "Active technical documentation"
+      },
+      "schemas/": {
+        "description": "JSON Schema validation files",
+        "file_count": 2,
+        "purpose": "Validate JSON doc structure"
+      },
+      "guides/": {
+        "description": "Human-readable guides (rare)",
+        "file_count": 0,
+        "purpose": "User tutorials, onboarding"
+      },
+      "archive/": {
+        "description": "Historical documentation (Oct 2025)",
+        "file_count": 28,
+        "purpose": "Reference, safety net, audit trail"
+      }
+    }
+  },
+  "how_to_query": {
+    "examples": [
+      {
+        "task": "Find all cursor rule files",
+        "command": "jq 'keys' docs/json/cursor-rules-*.json"
+      },
+      {
+        "task": "Get optimization status",
+        "command": "jq '.optimization_summary.status' docs/json/optimization-complete.json"
+      },
+      {
+        "task": "List all archived files",
+        "command": "jq '.cleanup_summary.archived_files[]' docs/json/documentation-cleanup-complete.json"
+      },
+      {
+        "task": "Check last update time",
+        "command": "jq '.last_updated' docs/json/*.json"
+      }
+    ]
+  },
+  "archive_location": "docs/archive/2025-10-old-md-files/",
+  "archive_readme": "docs/archive/2025-10-old-md-files/README.md",
+  "cleanup_complete": true
+}
+

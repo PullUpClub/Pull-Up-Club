@@ -82,11 +82,23 @@ const SubscriptionRewards: React.FC = () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('created_at')
+        .select('created_at, is_paid, stripe_customer_id, role')
         .eq('id', user.id)
         .single();
 
       if (error) throw error;
+
+      // Skip patch progress for admins and influencers (they get free access)
+      if (data?.role === 'admin' || data?.role === 'influencer') {
+        console.log('[PatchProgress] Admin/Influencer detected, skipping patch progress');
+        return;
+      }
+
+      // Only calculate patch progress if user is paid
+      if (!data?.is_paid && !data?.stripe_customer_id) {
+        console.log('[PatchProgress] User is not paid, skipping patch progress calculation');
+        return;
+      }
 
       if (data?.created_at) {
         const signupDate = new Date(data.created_at);

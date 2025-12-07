@@ -1,0 +1,228 @@
+---
+description: Code Quality Standards - Best practices for clean, maintainable code
+globs: 
+alwaysApply: true
+---
+
+# CODE QUALITY STANDARDS
+
+## 1. TYPESCRIPT: NO 'ANY' ALLOWED
+
+```typescript
+// ✅ CORRECT
+interface Submission {
+  id: string;
+  user_id: string;
+  status: 'pending' | 'approved' | 'rejected';
+  pull_up_count: number;
+}
+
+async function getSubmission(id: string): Promise<Submission | null> {
+  const { data } = await supabase
+    .from('submissions')
+    .select('*')
+    .eq('id', id)
+    .single();
+  return data;
+}
+
+// ❌ WRONG
+async function getSubmission(id: any): Promise<any> {
+  const data: any = await supabase.from('submissions').select('*').eq('id', id);
+  return data;
+}
+```
+
+---
+
+## 2. DESCRIPTIVE VARIABLE NAMES
+
+```typescript
+// ✅ CORRECT
+const approvedSubmissionsCount = submissions.filter(s => s.status === 'approved').length;
+const weeklyPoolRemainingDollars = pool.total_dollars - pool.total_spent;
+const isUserEligibleForSubmission = lastSubmissionDate > thirtyDaysAgo;
+
+// ❌ WRONG
+const c = submissions.filter(s => s.status === 'approved').length;
+const amt = pool.total - pool.spent;
+const x = date > d;
+```
+
+---
+
+## 3. FUNCTIONS: KEEP UNDER 50 LINES
+
+If a function exceeds 50 lines:
+1. Break into smaller helper functions
+2. Extract complex logic
+3. Use meaningful function names
+
+```typescript
+// ✅ CORRECT - Split into smaller functions
+async function approveSubmission(submissionId: string, adminId: string) {
+  const submission = await validateSubmission(submissionId);
+  const pool = await getActivePool();
+  const earnings = await calculateEarnings(submission, pool);
+  await updateSubmissionStatus(submissionId, 'approved');
+  await createEarningRecord(earnings);
+  await notifyUser(submission.user_id, 'approved');
+  return { success: true, earnings };
+}
+
+// ❌ WRONG - 100+ line monolithic function
+async function approveSubmission(submissionId: string, adminId: string) {
+  // 100+ lines of mixed logic
+}
+```
+
+---
+
+## 4. JSDOC COMMENTS FOR FUNCTIONS
+
+```typescript
+/**
+ * Approves a submission and processes earnings
+ * @param submissionId - The UUID of the submission to approve
+ * @param adminId - The UUID of the admin approving
+ * @param pullUpCount - The verified number of pull-ups
+ * @returns Promise resolving to earning amount in dollars
+ * @throws {Error} If submission not found or pool insufficient
+ */
+async function approveSubmission(
+  submissionId: string,
+  adminId: string,
+  pullUpCount: number
+): Promise<number> {
+  // Implementation
+}
+```
+
+---
+
+## 5. CONSTANTS: USE MEANINGFUL NAMES
+
+```typescript
+// ✅ CORRECT
+const SUBMISSION_COOLDOWN_DAYS = 30;
+const WEEKLY_POOL_DOLLARS = 250;
+const DOLLAR_PER_PULLUP = 1;
+const MAX_VIDEO_SIZE_MB = 100;
+
+// ❌ WRONG
+const CD = 30;
+const POOL = 250;
+const AMT = 1;
+const MAX = 100;
+```
+
+---
+
+## 6. AVOID MAGIC NUMBERS
+
+```typescript
+// ✅ CORRECT
+const HOURS_IN_DAY = 24;
+const DAYS_IN_WEEK = 7;
+const poolStartDate = new Date(Date.now() - DAYS_IN_WEEK * HOURS_IN_DAY * 3600 * 1000);
+
+// ❌ WRONG
+const poolStartDate = new Date(Date.now() - 604800000); // What is this?
+```
+
+---
+
+## 7. EARLY RETURNS FOR VALIDATION
+
+```typescript
+// ✅ CORRECT - Early returns for clarity
+async function processSubmission(submissionId: string) {
+  if (!submissionId) {
+    return { success: false, error: 'Missing ID' };
+  }
+  
+  const submission = await getSubmission(submissionId);
+  if (!submission) {
+    return { success: false, error: 'Not found' };
+  }
+  
+  if (submission.status !== 'pending') {
+    return { success: false, error: 'Already processed' };
+  }
+  
+  // Process submission
+  return { success: true };
+}
+
+// ❌ WRONG - Nested if statements
+async function processSubmission(submissionId: string) {
+  if (submissionId) {
+    const submission = await getSubmission(submissionId);
+    if (submission) {
+      if (submission.status === 'pending') {
+        // Process
+        return { success: true };
+      }
+    }
+  }
+  return { success: false };
+}
+```
+
+---
+
+## 8. USE OPTIONAL CHAINING & NULLISH COALESCING
+
+```typescript
+// ✅ CORRECT
+const userName = user?.profile?.full_name ?? 'Unknown User';
+const submissionCount = user?.submissions?.length ?? 0;
+
+// ❌ WRONG
+const userName = user && user.profile && user.profile.full_name 
+  ? user.profile.full_name 
+  : 'Unknown User';
+```
+
+---
+
+## 9. CONSISTENT FORMATTING
+
+- Use 2-space indentation
+- Use single quotes for strings
+- Use semicolons
+- Use trailing commas in objects/arrays
+- Use `async/await` over `.then()`
+
+---
+
+## 10. DRY PRINCIPLE (Don't Repeat Yourself)
+
+```typescript
+// ✅ CORRECT - Reusable function
+function formatDollars(amount: number): string {
+  return `$${amount.toFixed(2)}`;
+}
+
+const totalEarnings = formatDollars(user.total_earnings);
+const poolRemaining = formatDollars(pool.remaining);
+
+// ❌ WRONG - Repeated logic
+const totalEarnings = `$${user.total_earnings.toFixed(2)}`;
+const poolRemaining = `$${pool.remaining.toFixed(2)}`;
+```
+
+---
+
+## CRITICAL CHECKLIST
+
+- [ ] No `any` types used
+- [ ] All variables have descriptive names
+- [ ] Functions under 50 lines
+- [ ] JSDoc comments on public functions
+- [ ] Constants defined with UPPER_SNAKE_CASE
+- [ ] No magic numbers
+- [ ] Early returns for validation
+- [ ] Optional chaining used where appropriate
+- [ ] Consistent formatting applied
+- [ ] No repeated code (DRY principle)

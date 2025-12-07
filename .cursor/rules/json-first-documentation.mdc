@@ -1,0 +1,106 @@
+---
+description: JSON-First Documentation - Always create JSON for technical docs, never Markdown
+globs: 
+alwaysApply: true
+---
+
+# JSON-FIRST DOCUMENTATION
+
+## CRITICAL RULE
+**NEVER** create Markdown (.md) files for technical/structured documentation.
+**ALWAYS** create JSON (.json) files for machine-readable data.
+
+---
+
+## USE JSON FOR (ALWAYS)
+- Error documentation
+- System architecture
+- Database schemas
+- Migration history
+- API specifications
+- Configuration files
+- Function/trigger documentation
+- RLS policy definitions
+- Health check results
+- Monitoring data
+- Backend checklists
+- Performance reports
+- Security advisories
+
+## USE MARKDOWN FOR (RARELY)
+- README.md (project overview)
+- CONTRIBUTING.md (contributor guide)
+- CHANGELOG.md (human-readable changes)
+- User tutorials/guides
+- FAQ for end users
+
+---
+
+## FILE STRUCTURE
+
+```
+docs/
+├── json/              # ALL technical docs (JSON)
+│   ├── errors.json
+│   ├── architecture.json
+│   ├── migrations.json
+│   ├── rls-policies.json
+│   ├── functions.json
+│   └── config.json
+├── schemas/           # JSON Schema definitions
+└── guides/            # Human-readable (Markdown OK)
+```
+
+---
+
+## JSON STRUCTURE (REQUIRED)
+
+Every JSON file MUST include:
+
+```json
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-10-23T22:00:00Z",
+  "type": "ERROR|ARCHITECTURE|MIGRATION|CONFIG",
+  "metadata": {
+    "project": "ProjectName",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true
+  },
+  "data": { ... }
+}
+```
+
+---
+
+## NAMING CONVENTION
+- Use kebab-case: `error-handling.json`
+- Singular for entities: `architecture.json`
+- Plural for collections: `errors.json`
+
+---
+
+## QUERYABLE BY DESIGN
+
+```bash
+# Find critical errors
+jq '.error_types[] | select(.severity=="CRITICAL")' docs/json/errors.json
+
+# Find pending migrations
+jq '.migrations[] | select(.status=="pending")' docs/json/migrations.json
+```
+
+---
+
+## ENFORCEMENT
+If you create .md when JSON is appropriate:
+1. Stop immediately
+2. Recreate as JSON
+3. Ask user if they want to delete .md
+
+---
+
+## WHY JSON WINS
+✅ Machine-readable | ✅ Queryable | ✅ Type-safe | ✅ Versionable | ✅ MCP-compatible | ✅ Automatable
+
+❌ Markdown for technical docs = Hard to parse, no structure, manual processing

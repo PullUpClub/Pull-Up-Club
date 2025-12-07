@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://pullupclub.com/schemas/migration-schema.json",
+  "title": "Migration Documentation Schema",
+  "description": "Schema for documenting database migrations in Pull-Up Club",
+  "type": "object",
+  "required": ["schema_version", "last_updated", "type", "migration_history"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["MIGRATION"]
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "project": {
+          "type": "string"
+        },
+        "database": {
+          "type": "string"
+        }
+      }
+    },
+    "migration_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "phase", "status"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[0-9]{14}$",
+            "description": "Migration timestamp ID (YYYYMMDDHHmmss)"
+          },
+          "name": {
+            "type": "string",
+            "description": "Migration name (snake_case)"
+          },
+          "phase": {
+            "type": "string",
+            "description": "Migration phase (e.g., SECURITY, PERFORMANCE, SCHEMA)"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "in_progress", "completed", "failed", "rolled_back"],
+            "description": "Migration status"
+          },
+          "applied_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when migration was applied"
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable description"
+          },
+          "changes": {
+            "type": "object",
+            "description": "Summary of changes made"
+          },
+          "verification": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "expected_results": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "rollback": {
+            "type": "object",
+            "properties": {
+              "possible": {
+                "type": "boolean"
+              },
+              "sql_file": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "roadmap": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["phase", "name", "status"],
+        "properties": {
+          "phase": {
+            "type": "integer",
+            "description": "Phase number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "in_progress", "completed", "cancelled"]
+          },
+          "estimated_duration": {
+            "type": "string"
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "risk_level": {
+            "type": "string",
+            "enum": ["low", "medium", "high", "critical"]
+          }
+        }
+      }
+    }
+  }
+}
+

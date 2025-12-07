@@ -23,7 +23,7 @@ async function findUserByEmail(customerEmail: string) {
     // Strategy 1: Look in profiles table
     const { data: profileUser, error: profileError } = await supabaseAdmin
       .from('profiles')
-      .select('id, email, stripe_customer_id')
+      .select('id, email, stripe_customer_id, role')
       .eq('email', customerEmail)
       .maybeSingle();
       
@@ -47,7 +47,7 @@ async function findUserByEmail(customerEmail: string) {
         // Check if this auth user has a profile
         const { data: authProfile, error: authProfileError } = await supabaseAdmin
           .from('profiles')
-          .select('id, email, stripe_customer_id')
+          .select('id, email, stripe_customer_id, role')
           .eq('id', matchingAuthUser.id)
           .maybeSingle();
           
@@ -61,6 +61,7 @@ async function findUserByEmail(customerEmail: string) {
             id: matchingAuthUser.id,
             email: matchingAuthUser.email,
             stripe_customer_id: null,
+            role: 'user',
             isAuthUserOnly: true
           };
         }
@@ -73,6 +74,51 @@ async function findUserByEmail(customerEmail: string) {
   } catch (error) {
     console.error('Error in findUserByEmail:', error);
     return null;
+  }
+}
+
+// Function to start grace period
+async function startGracePeriod(userId: string, customerId: string, reason: string) {
+  try {
+    console.log(`Starting ${reason} grace period for user: ${userId}`);
+    const { data, error } = await supabaseAdmin.rpc('start_grace_period', {
+      p_user_id: userId,
+      p_stripe_customer_id: customerId,
+      p_reason: reason,
+      p_grace_days: 7
+    });
+
+    if (error) {
+      console.error('Error starting grace period:', error);
+      return null;
+    }
+
+    console.log('Grace period started successfully:', data);
+    return data;
+  } catch (error) {
+    console.error('Exception starting grace period:', error);
+    return null;
+  }
+}
+
+// Function to resolve grace period (successful payment)
+async function resolveGracePeriod(userId: string) {
+  try {
+    console.log(`Resolving grace period for user: ${userId}`);
+    const { data, error } = await supabaseAdmin.rpc('resolve_grace_period', {
+      p_user_id: userId
+    });
+
+    if (error) {
+      console.error('Error resolving grace period:', error);
+      return false;
+    }
+
+    console.log('Grace period resolved successfully:', data);
+    return data;
+  } catch (error) {
+    console.error('Exception resolving grace period:', error);
+    return false;
   }
 }
 
@@ -104,7 +150,7 @@ async function updateUserPaymentStatus(userId: string, customerId: string, custo
       console.log('Successfully created profile with payment status');
       return data;
     } else {
-      // Update existing profile
+      // Update existing profile and resolve any active grace periods
       const { data, error } = await supabaseAdmin
         .from('profiles')
         .update({
@@ -121,6 +167,10 @@ async function updateUserPaymentStatus(userId: string, customerId: string, custo
       }
       
       console.log('Successfully updated profile payment status');
+      
+      // Resolve any active grace periods
+      await resolveGracePeriod(userId);
+      
       return data;
     }
   } catch (error) {
@@ -263,7 +313,7 @@ async function trackPurchaseEvent(userId: string, customerEmail: string, session
   }
 }
 
-console.log('Payment Link Compatible Stripe Webhook initialized!');
+console.log('🚀 Enhanced Stripe Webhook with 7-day Grace Period System initialized!');
 
 Deno.serve(async (req: Request) => {
   if (req.method !== 'POST') {
@@ -356,7 +406,7 @@ Deno.serve(async (req: Request) => {
             }
           }
           
-          console.log(`Successfully processed payment for user: ${user.id}`);
+          console.log(`✅ Successfully processed payment for user: ${user.id}`);
           
           // Track purchase event via Meta Conversions API
           await trackPurchaseEvent(user.id, customerEmail, session);
@@ -388,18 +438,20 @@ Deno.serve(async (req: Request) => {
           break;
         }
         
-        console.log(`Processing recurring payment for customer: ${invoice.customer}`);
+        console.log(`✅ Processing successful recurring payment for customer: ${invoice.customer}`);
         
         // For recurring payments, find user by stripe_customer_id
         const { data: user, error } = await supabaseAdmin
           .from('profiles')
-          .select('id, email')
+          .select('id, email, role')
           .eq('stripe_customer_id', invoice.customer)
           .maybeSingle();
         
         if (user) {
           try {
             const subscription = await stripe.subscriptions.retrieve(invoice.subscription);
+            
+            // Update subscription record
             await supabaseAdmin
               .from('subscriptions')
               .update({
@@ -409,7 +461,10 @@ Deno.serve(async (req: Request) => {
               })
               .eq('stripe_subscription_id', subscription.id);
               
-            console.log('Updated subscription for recurring payment');
+            // Resolve any active grace periods and mark user as paid
+            await resolveGracePeriod(user.id);
+            
+            console.log('✅ Updated subscription and resolved grace periods for recurring payment');
           } catch (error) {
             console.error('Error updating subscription:', error);
           }
@@ -430,18 +485,20 @@ Deno.serve(async (req: Request) => {
           break;
         }
         
-        console.log(`Payment failed for customer: ${invoice.customer}`);
+        console.log(`❌ Payment failed for customer: ${invoice.customer}`);
         
         // For failed payments, find user by stripe_customer_id
         const { data: user, error } = await supabaseAdmin
           .from('profiles')
-          .select('id, email')
+          .select('id, email, role')
           .eq('stripe_customer_id', invoice.customer)
           .maybeSingle();
         
         if (user) {
           try {
             const subscription = await stripe.subscriptions.retrieve(invoice.subscription);
+            
+            // Update subscription status
             await supabaseAdmin
               .from('subscriptions')
               .update({
@@ -451,9 +508,15 @@ Deno.serve(async (req: Request) => {
               })
               .eq('stripe_subscription_id', subscription.id);
               
-            console.log('Updated subscription for failed payment');
+            // Start 7-day grace period (only for regular users, not admin/influencer)
+            if (user.role === 'user') {
+              await startGracePeriod(user.id, invoice.customer, 'payment_failed');
+              console.log('⏰ Started 7-day grace period for failed payment');
+            } else {
+              console.log(`⚠️ User has role '${user.role}', skipping grace period`);
+            }
           } catch (error) {
-            console.error('Error updating subscription:', error);
+            console.error('Error handling failed payment:', error);
           }
         } else {
           console.log('User not found for failed payment customer:', invoice.customer);
@@ -463,6 +526,7 @@ Deno.serve(async (req: Request) => {
 
       case 'customer.subscription.deleted': {
         const subscription = event.data.object as Stripe.Subscription;
+        console.log(`❌ Subscription canceled: ${subscription.id}`);
         
         // Update subscription status
         await supabaseAdmin
@@ -470,11 +534,11 @@ Deno.serve(async (req: Request) => {
           .update({ status: 'canceled' })
           .eq('stripe_subscription_id', subscription.id);
         
-        // Check if user should be marked as unpaid
+        // Check if user should be marked as unpaid or start grace period
         if (subscription.customer && typeof subscription.customer === 'string') {
           const { data: user } = await supabaseAdmin
             .from('profiles')
-            .select('id')
+            .select('id, role')
             .eq('stripe_customer_id', subscription.customer)
             .maybeSingle();
           
@@ -486,12 +550,17 @@ Deno.serve(async (req: Request) => {
               .eq('status', 'active');
               
             if (!activeSubscriptions?.length) {
-              await supabaseAdmin
-                .from('profiles')
-                .update({ is_paid: false })
-                .eq('id', user.id);
-                
-              console.log('Marked user as unpaid due to subscription cancellation');
+              // No more active subscriptions
+              if (user.role === 'user') {
+                await startGracePeriod(user.id, subscription.customer, 'subscription_canceled');
+                console.log('⏰ Started 7-day grace period for subscription cancellation');
+              } else {
+                console.log(`⚠️ User has role '${user.role}', skipping grace period`);
+                await supabaseAdmin
+                  .from('profiles')
+                  .update({ is_paid: false })
+                  .eq('id', user.id);
+              }
             }
           }
         }
@@ -537,7 +606,11 @@ Deno.serve(async (req: Request) => {
         console.log(`Unhandled event: ${event.type}`);
     }
 
-    return new Response(JSON.stringify({ received: true, eventId: event.id }), {
+    return new Response(JSON.stringify({ 
+      received: true, 
+      eventId: event.id,
+      gracePeriodSystem: 'active'
+    }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });

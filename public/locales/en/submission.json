@@ -27,14 +27,16 @@
     },
     "approved": {
       "title": "🎉 Submission Approved!",
-      "message": "Congratulations! Your submission was approved and is on the leaderboard.",
+      "message": "Congratulations! Your submission was approved and is on the leaderboard. You can only submit once per month.",
       "next": "Next submission available in:",
-      "countdown": "{{days}} days, {{hours}} hours, {{minutes}} minutes"
+      "countdown": "{{days}} days, {{hours}} hours, {{minutes}} minutes",
+      "monthlyLimit": "Remember: You get one submission per month. Submit early to secure your spot in the weekly payout pool!"
     },
     "notAvailable": {
       "title": "Submission Not Available",
-      "message": "You cannot submit a video at this time. Check your eligibility status above.",
-      "viewLeaderboard": "View Leaderboard"
+      "message": "You've already submitted for this month. Each member can submit one video per calendar month.",
+      "viewLeaderboard": "View Leaderboard",
+      "tip": "Pro tip: Submit early in the month to secure your payout while funds are available!"
     }
   },
   "form": {

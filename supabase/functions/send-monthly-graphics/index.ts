@@ -99,8 +99,17 @@ Deno.serve(async (req) => {
         console.log(`Attempting to send email to ${graphic.email} via Resend...`);
         const resendResponse = await resend.emails.send(emailPayload);
 
-        if (resendResponse.data?.id) {
-          console.log(`✅ Email sent successfully to ${graphic.email}. Resend ID: ${resendResponse.data.id}`);
+        // Check for successful response - Resend can return success without data.id in some cases
+        console.log(`Resend response for ${graphic.email}:`, {
+          success: !!resendResponse.data,
+          hasId: !!resendResponse.data?.id,
+          error: resendResponse.error,
+          data: resendResponse.data
+        });
+
+        if (resendResponse.data && !resendResponse.error) {
+          const emailId = resendResponse.data.id || `resend-${Date.now()}`;
+          console.log(`✅ Email sent successfully to ${graphic.email}. Resend ID: ${emailId}`);
           sentCount++;
 
           // Update monthly_graphics table to mark as sent
@@ -116,7 +125,7 @@ Deno.serve(async (req) => {
             console.error(`Failed to update monthly_graphics status for ID ${graphicId}:`, updateError);
             errors.push(`Warning: Email sent to ${graphic.full_name} but failed to update status: ${updateError.message}`);
           } else {
-            console.log(`✓ Updated monthly_graphics table for ${graphic.full_name} (ID: ${graphicId})`);
+            console.log(`✅ Successfully updated monthly_graphics status for ${graphic.full_name} (ID: ${graphicId})`);
           }
 
           // Also log to email_notifications for record-keeping
@@ -127,7 +136,7 @@ Deno.serve(async (req) => {
             subject: emailPayload.subject,
             message: emailHtml,
             sent_at: new Date().toISOString(),
-            resend_id: resendResponse.data.id,
+            resend_id: emailId,
             status: 'sent',
             metadata: {
               graphic_id: graphic.id,

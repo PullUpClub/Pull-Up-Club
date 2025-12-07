@@ -1,9 +1,9 @@
----
-description: 
-globs: 
-alwaysApply: true
----
-Backend Setup & Scalability Checklist for Pull-Up Club
+# ============================================
+# CURSOR AI RULES: PULL-UP CLUB PROJECT
+# ============================================
+
+# PROJECT-SPECIFIC BACKEND CHECKLIST
+## Backend Setup & Scalability Checklist for Pull-Up Club
 I. Foundational Setup (Supabase, Stripe, Project Structure)
 [ ] Supabase Project: Confirm Supabase project is fully set up, accessible, and appropriate instance type selected for anticipated load.
 [ ] Stripe Account: Confirm Stripe account is active, accessible, and API keys (publishable and secret) are securely configured as environment variables.
@@ -135,5 +135,294 @@ X. Testing & Deployment
 [ ] Integration tests for flows involving multiple components (e.g., API -> Supabase Function -> DB).
 [ ] CI/CD Pipeline: Automate testing and deployments for Supabase schema migrations, functions, and any other backend code.
 [ ] Staging Environment: Maintain a staging environment that mirrors production for testing new features and changes.
-
 [ ] Backup & Recovery Plan: Understand Supabase's backup capabilities and have a recovery plan.
+
+# ============================================
+# JSON-FIRST DOCUMENTATION (from global rules)
+# ============================================
+
+# CRITICAL RULE: Documentation Format
+NEVER create Markdown (.md) files for technical/structured documentation.
+ALWAYS create JSON (.json) files for machine-readable data.
+
+# When to use JSON (ALWAYS):
+- Error documentation
+- System architecture
+- Database schemas
+- Migration history
+- API specifications
+- Configuration files
+- Function/trigger documentation
+- RLS policy definitions
+- Health check results
+- Monitoring data
+- Backend setup checklists
+- Performance reports
+- Security advisories
+
+# When to use Markdown (RARELY):
+- README.md (project overview)
+- CONTRIBUTING.md (contributor guide)  
+- CHANGELOG.md (human-readable changes)
+- User tutorials/guides
+- Onboarding documentation
+- FAQ for end users
+
+# File Structure:
+docs/
+├── json/              # ALL technical docs (JSON)
+│   ├── errors.json
+│   ├── architecture.json
+│   ├── migrations.json
+│   ├── rls-policies.json
+│   ├── functions.json
+│   ├── triggers.json
+│   ├── tables.json
+│   ├── health-checks.json
+│   ├── backend-checklist.json
+│   └── advisor-warnings.json
+├── schemas/           # JSON Schema definitions
+│   ├── error-schema.json
+│   ├── migration-schema.json
+│   └── architecture-schema.json
+└── guides/            # Human-readable (Markdown OK)
+    ├── TROUBLESHOOTING.md
+    └── GETTING_STARTED.md
+
+# JSON Structure Requirements:
+Every JSON file MUST include:
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-10-23T22:00:00Z",
+  "type": "ERROR|ARCHITECTURE|MIGRATION|CONFIG|CHECKLIST",
+  "metadata": {
+    "project": "Pull-Up-Club",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true
+  },
+  "data": { ... }
+}
+
+# Naming Convention:
+- Use kebab-case for multi-word files: error-handling.json
+- Use singular for single-entity docs: architecture.json
+- Use plural for collections: errors.json, migrations.json
+- Prefix with category if needed: supabase-errors.json, stripe-config.json
+
+# MCP Integration:
+All JSON docs must be:
+- Parseable by Supabase MCP
+- Queryable via jq: `jq '.error_types[] | select(.severity=="CRITICAL")' docs/json/errors.json`
+- Structured consistently across all files
+- Versioned with schema_version field
+- Include timestamps in ISO8601 format
+
+# Example Workflow:
+User: "Document the error system"
+
+✅ CORRECT Response:
+```json
+// docs/json/errors.json
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-10-23T22:00:00Z",
+  "type": "ERROR",
+  "metadata": {
+    "project": "Pull-Up-Club",
+    "mcp_compatible": true
+  },
+  "error_types": [
+    {
+      "code": "POOL_MISMATCH",
+      "severity": "WARNING",
+      "category": "FINANCIAL",
+      "description": "Weekly pool remaining amount does not match calculated value",
+      "common_causes": ["Pool update failed", "Race condition"],
+      "detection": {
+        "function": "monitoring.check_pool_consistency()",
+        "schedule": "Daily CRON at 00:00 UTC"
+      },
+      "resolution": {
+        "auto_fix": true,
+        "function": "monitoring.auto_fix_pool_mismatch()",
+        "manual_steps": ["Run: SELECT monitoring.check_pool_consistency();"]
+      },
+      "example_context": {
+        "pool_id": "fa57482c-6a12-4a72-9238-695949261c2e",
+        "expected": 250,
+        "actual": 232,
+        "difference": -18
+      }
+    }
+  ]
+}
+```
+
+❌ INCORRECT Response:
+```markdown
+# Error System Documentation
+## Pool Mismatch Error
+Description: Weekly pool remaining amount does not match calculated value
+```
+
+# Backend Setup Checklist:
+For backend documentation, always use:
+- docs/json/backend-checklist.json (NOT backend-checklist.md)
+- Include status tracking: "completed", "in_progress", "pending", "blocked"
+- Include timestamps for each item: started_at, completed_at
+- Include dependencies between tasks
+- Include verification queries for each completed item
+
+Example:
+```json
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-10-23T22:00:00Z",
+  "type": "CHECKLIST",
+  "phases": [
+    {
+      "id": "phase_1",
+      "name": "Foundational Setup",
+      "status": "completed",
+      "tasks": [
+        {
+          "id": "task_1_1",
+          "name": "Supabase Project Setup",
+          "status": "completed",
+          "completed_at": "2025-10-20T10:00:00Z",
+          "verification": "SELECT current_database();"
+        }
+      ]
+    }
+  ]
+}
+```
+
+# Migration Documentation:
+- Store in docs/json/migrations.json
+- Include: id, name, phase, status, applied_at, changes, verification, rollback
+- Link to actual SQL files in supabase/migrations/
+- Track dependencies between migrations
+
+Example:
+```json
+{
+  "schema_version": "1.0.0",
+  "migration_history": [
+    {
+      "id": "20251023000006",
+      "name": "fix_critical_security_errors",
+      "phase": "SECURITY",
+      "status": "completed",
+      "applied_at": "2025-10-23T21:45:00Z",
+      "changes": {
+        "rls_enabled": ["monitoring.system_errors"],
+        "views_recreated": ["public_leaderboard"],
+        "indexes_created": 8
+      },
+      "verification": {
+        "queries": ["SELECT rowsecurity FROM pg_tables WHERE..."],
+        "expected_results": [{"rowsecurity": true}]
+      }
+    }
+  ]
+}
+```
+
+# Error Tracking:
+- Store in docs/json/errors.json
+- Include: code, severity, category, description, common_causes, detection, resolution, prevention
+- Keep examples in context field as JSON (not strings)
+- Link to related tables, functions, triggers
+- Include query examples for detection
+
+# Architecture Documentation:
+- Store in docs/json/architecture.json
+- Include complete database schema
+- Document all tables, views, functions, triggers
+- Include RLS policies for each table
+- Document foreign key relationships
+- Include index definitions
+- Document search_path for all functions
+
+# RLS Policy Documentation:
+- Store in docs/json/rls-policies.json
+- Group by table
+- Include policy name, command (SELECT/INSERT/UPDATE/DELETE), roles, using clause, with check clause
+- Document performance optimizations (e.g., auth.uid() wrapping)
+- Include test queries for verification
+
+# Health Check Reports:
+- Store in docs/json/health-checks.json
+- Include timestamp, health_score, error_count, warnings, critical_issues
+- Include verification queries and expected results
+- Track historical health scores
+
+# Supabase Advisor Warnings:
+- Store in docs/json/advisor-warnings.json
+- Preserve exact JSON format from Supabase
+- Include: name, title, level, categories, description, detail, remediation, metadata
+- Track fix status and applied_at timestamp
+
+# Code Examples in JSON:
+When including code examples in JSON, use strings with proper escaping:
+```json
+{
+  "example_query": "SELECT * FROM profiles WHERE id = (SELECT auth.uid());",
+  "example_function": "CREATE FUNCTION my_func() RETURNS void AS $$\nBEGIN\n  -- code here\nEND;\n$$ LANGUAGE plpgsql;"
+}
+```
+
+# Querying JSON Documentation:
+Users and MCPs should be able to query docs like:
+```bash
+# Find all critical errors
+jq '.error_types[] | select(.severity=="CRITICAL")' docs/json/errors.json
+
+# Find completed migrations
+jq '.migration_history[] | select(.status=="completed")' docs/json/migrations.json
+
+# Find tables with RLS disabled
+jq '.schemas[].tables[] | select(.rls_enabled==false)' docs/json/architecture.json
+
+# Get health score
+jq '.health_score' docs/json/health-checks.json
+```
+
+# Enforcement:
+If you catch me creating a .md file when JSON is appropriate:
+1. Stop me immediately
+2. Remind me of this .cursorrules file
+3. Ask me to recreate as JSON
+4. Delete the .md file
+
+# Converting Existing Docs:
+When asked to convert existing .md files to JSON:
+1. Read the .md file
+2. Extract structured data
+3. Create proper JSON with schema_version
+4. Save to docs/json/
+5. Ask user if they want to delete the .md file
+
+# Remember:
+- JSON = Machine-readable = Queryable = Automatable = GOOD ✅
+- Markdown = Human-readable = Static = Manual parsing = BAD ❌ (for technical docs)
+- Supabase MCP can parse JSON natively = FAST 🚀
+- JSON enables automated monitoring, alerting, and fixes
+- Consistent schema_version allows for migrations of documentation itself
+
+# Special Case: This Project (Pull-Up-Club)
+- Backend checklist: docs/json/backend-checklist.json
+- Error types: docs/json/errors.json
+- Migration history: docs/json/migrations.json
+- Database architecture: docs/json/architecture.json
+- RLS policies: docs/json/rls-policies.json
+- Health checks: docs/json/health-checks.json
+- Advisor warnings: docs/json/advisor-warnings.json
+
+# Version Control:
+- Commit JSON docs with descriptive messages
+- Track schema_version changes in git
+- Document breaking changes to JSON structure
+- Keep old schema versions for backwards compatibility
+

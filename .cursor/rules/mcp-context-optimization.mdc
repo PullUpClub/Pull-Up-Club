@@ -1,0 +1,105 @@
+---
+description: MCP Context Optimization - Always check docs/json/ before querying MCPs
+globs: 
+alwaysApply: true
+---
+
+# MCP CONTEXT OPTIMIZATION
+
+## GOLDEN RULE
+**ALWAYS load `docs/json/` context BEFORE querying MCPs to enable smarter decisions**
+
+---
+
+## MANDATORY WORKFLOW
+
+1. User asks question
+2. **Identify relevant `docs/json/` files**
+3. **Load those files into context** (show user what you're loading)
+4. **Check `last_updated` timestamp**
+5. **Query MCP with loaded context** for smarter, informed queries
+6. **Update `docs/json/` with fresh MCP data**
+7. Answer with **combined context** (historical patterns + fresh data)
+
+---
+
+## CONTEXT PRIORITY
+
+1. **`docs/json/`** (ALWAYS check first) - 50ms, offline-capable
+2. **Project files** (.cursorrules, package.json) - Project context
+3. **MCP queries** - Only when local data stale/missing
+4. **Web search** - Last resort
+
+---
+
+## SMART LOADING BY TOPIC
+
+| User asks about | Load these files |
+|-----------------|------------------|
+| **errors** | `errors.json` + `health-checks.json` |
+| **database** | `architecture.json` + `tables.json` + `rls-policies.json` |
+| **migrations** | `migrations.json` + scan `supabase/migrations/` |
+| **security** | `rls-policies.json` + `advisor-warnings.json` |
+| **functions** | `functions.json` + `triggers.json` |
+| **API** | `api-spec.json` + `config.json` |
+
+---
+
+## WHEN TO QUERY MCP
+
+- **Always load local context first** - Even if fresh, provides patterns/history
+- **Fresh (< 1h)**: Load context → Query MCP for real-time data if needed
+- **Recent (1-24h)**: Load context → Query MCP for verification/updates
+- **Stale (> 24h)**: Load context → Query MCP and update JSON 🔄
+- **Missing**: Query MCP and create JSON 📝
+
+**KEY**: Local docs = **context**, MCP = **fresh data**. Combine for best results.
+
+---
+
+## ALWAYS SHOW USER
+
+```
+Loading docs/json/errors.json... ✅ (15 known error types)
+Loading docs/json/rls-policies.json... ✅ (32 policies)
+Querying Supabase MCP with context... 🔍
+Found 2 new issues + matched 3 known patterns 🎯
+Updated docs/json/health-checks.json with fresh data 📝
+```
+
+---
+
+## AFTER EVERY MCP QUERY
+
+1. Extract structured data
+2. Create/update `docs/json/[file].json`
+3. Include: `schema_version`, `last_updated`, `type`, `metadata`
+4. Tell user: "Updated docs/json/[file].json"
+
+---
+
+## AUTO-LOAD RELATED FILES
+
+- `errors.json` → Also load `health-checks.json`
+- `tables.json` → Also load `architecture.json`, `rls-policies.json`
+- `functions.json` → Also load `triggers.json`
+
+---
+
+## BENEFITS
+
+🧠 **Smarter MCP queries** (context-aware, pattern-matching)
+⚡ **Faster responses** (local context loads in 50ms)
+💰 **Fewer redundant queries** (know what to ask)
+📊 **Historical patterns** (spot trends, anomalies)
+🎯 **Better decisions** (combine fresh + historical data)
+
+---
+
+## THINK: CONTEXT ENGINE
+
+1. Load context from `docs/json/` (patterns, history, known issues)
+2. Query MCP with context (smarter, targeted questions)
+3. Combine fresh MCP data + historical context
+4. Update `docs/json/` with new learnings
+5. Deliver intelligent, context-aware response

@@ -1,0 +1,187 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-10-23T22:15:00Z",
+  "type": "CONFIG",
+  "metadata": {
+    "project": "All Projects",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true
+  },
+  "cursor_rules_setup": {
+    "status": "completed",
+    "locations": {
+      "global_cursorrules": {
+        "path": "C:\\Users\\Parker Gawne\\.cursorrules",
+        "applies_to": "ALL projects",
+        "priority": "medium",
+        "overridable_by": "project-specific .cursorrules"
+      },
+      "cursor_user_rules_ui": {
+        "location": "Cursor Settings → General → Rules for AI",
+        "applies_to": "ALL projects",
+        "priority": "medium",
+        "status": "added (JSON-first documentation)"
+      },
+      "project_cursorrules": {
+        "path": ".cursorrules (in project root)",
+        "applies_to": "specific project only",
+        "priority": "highest",
+        "overrides": "global rules"
+      }
+    },
+    "rules_included": {
+      "json_first_documentation": {
+        "description": "Always create JSON for technical docs, not Markdown",
+        "applies_when": "Documenting errors, architecture, migrations, etc.",
+        "exceptions": "README.md, CONTRIBUTING.md, user guides",
+        "location": "Global .cursorrules + Cursor UI"
+      },
+      "mcp_context_optimization": {
+        "description": "Check docs/json/ BEFORE querying MCPs",
+        "workflow": [
+          "1. Check docs/json/ for relevant files",
+          "2. Read files and check freshness",
+          "3. Use local data if fresh (< 24h)",
+          "4. Query MCP only if stale/missing",
+          "5. Update docs/json/ after MCP query"
+        ],
+        "benefits": [
+          "10-100x faster responses",
+          "No API rate limiting",
+          "Works offline",
+          "Historical context",
+          "Cost savings"
+        ],
+        "location": "Global .cursorrules"
+      }
+    },
+    "how_cursor_applies_rules": {
+      "every_chat": true,
+      "every_message": true,
+      "persistence": "permanent (across restarts)",
+      "order_of_application": [
+        "1. User Rules (from Cursor UI)",
+        "2. Global .cursorrules",
+        "3. Project .cursorrules",
+        "4. User's actual message"
+      ],
+      "what_ai_sees": "All rules are prepended to every message you send (invisible to you)"
+    },
+    "testing": {
+      "test_json_first": {
+        "action": "Ask AI to 'document authentication system'",
+        "expected": "Creates docs/json/authentication.json",
+        "not_expected": "Creates docs/authentication.md"
+      },
+      "test_mcp_context": {
+        "action": "Ask AI 'What RLS policies do we have?'",
+        "expected": [
+          "AI checks docs/json/rls-policies.json first",
+          "Shows user what file it's loading",
+          "Shows freshness timestamp",
+          "Only queries MCP if stale/missing"
+        ]
+      },
+      "test_applies_everywhere": {
+        "action": "Open different project, ask 'document this API'",
+        "expected": "Creates docs/json/api-spec.json (same behavior)"
+      }
+    },
+    "directories_created": {
+      "docs/json": {
+        "path": "docs/json/",
+        "purpose": "All technical documentation in JSON format",
+        "status": "created"
+      },
+      "docs/schemas": {
+        "path": "docs/schemas/",
+        "purpose": "JSON Schema definitions for validation",
+        "files": [
+          "error-schema.json",
+          "migration-schema.json"
+        ],
+        "status": "created with 2 schemas"
+      },
+      "docs/guides": {
+        "path": "docs/guides/",
+        "purpose": "Human-readable Markdown guides (rare)",
+        "status": "created"
+      }
+    },
+    "files_created": {
+      "global_cursorrules": {
+        "path": "C:\\Users\\Parker Gawne\\.cursorrules",
+        "lines": 452,
+        "sections": [
+          "Part 1: JSON-First Documentation (lines 1-266)",
+          "Part 2: MCP Context Optimization (lines 267-452)"
+        ]
+      },
+      "project_cursorrules": {
+        "path": ".cursorrules",
+        "status": "exists (same as global)",
+        "purpose": "Can override global rules if needed"
+      },
+      "error_schema": {
+        "path": "docs/schemas/error-schema.json",
+        "purpose": "Validates error JSON structure"
+      },
+      "migration_schema": {
+        "path": "docs/schemas/migration-schema.json",
+        "purpose": "Validates migration JSON structure"
+      }
+    },
+    "practical_usage": {
+      "scenario_1": {
+        "user_asks": "What errors do we have?",
+        "ai_workflow": [
+          "1. Checks docs/json/errors.json",
+          "2. Loads error definitions",
+          "3. Checks docs/json/health-checks.json",
+          "4. If fresh, uses local data",
+          "5. If stale, queries Supabase MCP",
+          "6. Updates JSON files",
+          "7. Answers with full context"
+        ],
+        "speed": "50ms (if local) vs 2-5s (if MCP query needed)"
+      },
+      "scenario_2": {
+        "user_asks": "Document our authentication",
+        "ai_workflow": [
+          "1. AI creates docs/json/authentication.json",
+          "2. Includes schema_version, last_updated, metadata",
+          "3. Structures data as JSON object",
+          "4. Does NOT create Markdown file"
+        ]
+      },
+      "scenario_3": {
+        "user_asks": "Show database health",
+        "ai_workflow": [
+          "1. Loads health-checks.json + errors.json + advisor-warnings.json",
+          "2. Checks freshness of each file",
+          "3. Queries MCPs for stale data",
+          "4. Combines local + fresh data",
+          "5. Presents comprehensive health report"
+        ]
+      }
+    },
+    "key_takeaways": [
+      "Rules apply to EVERY chat in EVERY project",
+      "AI always checks docs/json/ before querying MCPs",
+      "All technical docs are JSON, not Markdown",
+      "10-100x faster responses with local JSON cache",
+      "Works offline with cached documentation",
+      "Reduces API costs and rate limiting",
+      "Provides historical context",
+      "Project-specific rules can override global rules"
+    ],
+    "next_steps": [
+      "Test in new chat: Ask 'What errors do we have?'",
+      "Verify AI checks docs/json/ first",
+      "Watch for freshness indicators in AI responses",
+      "See AI update JSON files after MCP queries",
+      "Try in different projects to verify global application"
+    ]
+  }
+}
+

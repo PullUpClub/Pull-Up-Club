@@ -1,0 +1,218 @@
+---
+description: Error Handling Standards - Consistent error handling across all code
+globs: 
+alwaysApply: true
+---
+
+# ERROR HANDLING STANDARDS
+
+## GOLDEN RULE
+**NEVER let errors fail silently. Log everything to `monitoring.system_errors`.**
+
+---
+
+## ASYNC FUNCTIONS: ALWAYS USE TRY-CATCH
+
+```typescript
+// ✅ CORRECT
+async function processSubmission(submissionId: string) {
+  try {
+    const result = await supabase
+      .from('submissions')
+      .update({ status: 'approved' })
+      .eq('id', submissionId);
+    
+    if (result.error) throw result.error;
+    return { success: true, data: result.data };
+  } catch (error) {
+    await logError('processSubmission', error, { submissionId });
+    return { success: false, error: error.message };
+  }
+}
+
+// ❌ WRONG - No error handling
+async function processSubmission(submissionId: string) {
+  const result = await supabase
+    .from('submissions')
+    .update({ status: 'approved' })
+    .eq('id', submissionId);
+  return result.data;
+}
+```
+
+---
+
+## DATABASE FUNCTIONS: LOG TO monitoring.system_errors
+
+```sql
+-- ✅ CORRECT
+CREATE OR REPLACE FUNCTION process_submission_earnings()
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path TO 'public', 'monitoring', 'pg_temp'
+AS $$
+BEGIN
+  -- Your logic here
+EXCEPTION
+  WHEN OTHERS THEN
+    INSERT INTO monitoring.system_errors (
+      error_code,
+      error_message,
+      error_context,
+      severity
+    ) VALUES (
+      SQLSTATE,
+      SQLERRM,
+      jsonb_build_object(
+        'function', 'process_submission_earnings',
+        'user_id', NEW.user_id,
+        'submission_id', NEW.id
+      ),
+      'ERROR'
+    );
+    RAISE; -- Re-raise to prevent silent failures
+END;
+$$;
+
+-- ❌ WRONG - Silent failure
+CREATE OR REPLACE FUNCTION process_submission_earnings()
+RETURNS void AS $$
+BEGIN
+  -- Logic
+EXCEPTION
+  WHEN OTHERS THEN
+    RETURN; -- Swallows error!
+END;
+$$;
+```
+
+---
+
+## STRUCTURED ERROR RESPONSES
+
+Always return structured error objects:
+
+```typescript
+// ✅ CORRECT
+return {
+  success: false,
+  error: {
+    code: 'SUBMISSION_NOT_FOUND',
+    message: 'Submission not found',
+    context: { submissionId, userId },
+    timestamp: new Date().toISOString()
+  }
+};
+
+// ❌ WRONG
+throw new Error('Not found');
+```
+
+---
+
+## INCLUDE ERROR CONTEXT
+
+Always include:
+1. **Operation** - What was being done
+2. **User ID** - Who triggered it
+3. **Entity ID** - What entity (submission_id, pool_id, etc.)
+4. **Timestamp** - When it occurred
+5. **Stack trace** - For debugging (if available)
+
+```typescript
+await logError('approve_submission', error, {
+  operation: 'approve_submission',
+  user_id: userId,
+  submission_id: submissionId,
+  admin_id: adminId,
+  timestamp: new Date().toISOString(),
+  stack: error.stack
+});
+```
+
+---
+
+## LOG FUNCTION (Helper)
+
+```typescript
+async function logError(
+  operation: string,
+  error: Error,
+  context: Record<string, any>
+) {
+  await supabase.from('monitoring.system_errors').insert({
+    error_code: 'APP_ERROR',
+    error_message: error.message,
+    error_context: {
+      operation,
+      ...context,
+      stack: error.stack
+    },
+    severity: 'ERROR',
+    created_at: new Date().toISOString()
+  });
+}
+```
+
+---
+
+## VALIDATION ERRORS
+
+```typescript
+// ✅ CORRECT - Validate before processing
+if (!submissionId) {
+  return {
+    success: false,
+    error: {
+      code: 'VALIDATION_ERROR',
+      message: 'Submission ID is required',
+      field: 'submissionId'
+    }
+  };
+}
+
+// ❌ WRONG - Assume inputs are valid
+const result = await processSubmission(submissionId);
+```
+
+---
+
+## EDGE FUNCTION ERROR HANDLING
+
+```typescript
+// ✅ CORRECT
+Deno.serve(async (req) => {
+  try {
+    const body = await req.json();
+    const result = await processRequest(body);
+    
+    return new Response(JSON.stringify(result), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch (error) {
+    await logError('edge_function', error, { url: req.url });
+    
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: error.message
+      }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+});
+```
+
+---
+
+## CRITICAL CHECKLIST
+
+- [ ] All async functions wrapped in try-catch
+- [ ] All database functions log to `monitoring.system_errors`
+- [ ] All functions have `search_path` set correctly
+- [ ] All errors include operation, user_id, entity_id
+- [ ] All errors are logged, NEVER swallowed
+- [ ] Validation happens before processing
+- [ ] Structured error responses returned

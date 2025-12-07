@@ -1,0 +1,229 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-10-23T22:30:00Z",
+  "type": "CONFIG",
+  "metadata": {
+    "project": "Pull-Up-Club",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true
+  },
+  "cursor_rules_setup": {
+    "status": "complete",
+    "setup_date": "2025-10-23",
+    "locations": {
+      "cursor_rules_directory": {
+        "path": ".cursor/rules/",
+        "description": "Project-specific rules that Cursor can apply intelligently",
+        "priority": "highest",
+        "apply_mode": "Always Apply (alwaysApply: true)",
+        "files": [
+          "backend-checklist-rule.mdc",
+          "json-first-documentation.mdc",
+          "mcp-context-optimization.mdc"
+        ]
+      },
+      "global_cursorrules": {
+        "path": "C:\\Users\\Parker Gawne\\.cursorrules",
+        "description": "Global rules that apply to ALL projects",
+        "priority": "medium",
+        "applies_to": "all projects",
+        "sections": [
+          "JSON-First Documentation (lines 1-266)",
+          "MCP Context Optimization (lines 267-452)"
+        ]
+      },
+      "cursor_user_rules_ui": {
+        "location": "Cursor Settings → General → Rules for AI",
+        "description": "User rules configured via Cursor UI",
+        "priority": "medium",
+        "status": "JSON-first documentation added"
+      },
+      "project_cursorrules": {
+        "path": ".cursorrules",
+        "description": "Project-specific .cursorrules file",
+        "priority": "high",
+        "status": "exists"
+      }
+    },
+    "rules_created": {
+      "json_first_documentation": {
+        "file": ".cursor/rules/json-first-documentation.mdc",
+        "alwaysApply": true,
+        "description": "Always create JSON for technical docs, never Markdown",
+        "key_points": [
+          "NEVER create .md for technical documentation",
+          "ALWAYS create .json with schema_version, last_updated, type, metadata",
+          "Use Markdown only for README, CONTRIBUTING, user guides",
+          "All JSON must be MCP-compatible and queryable via jq"
+        ]
+      },
+      "mcp_context_optimization": {
+        "file": ".cursor/rules/mcp-context-optimization.mdc",
+        "alwaysApply": true,
+        "description": "Check docs/json/ BEFORE querying MCPs for 10-100x faster responses",
+        "workflow": [
+          "1. User asks question",
+          "2. Identify relevant docs/json/ files",
+          "3. Read files and check freshness",
+          "4. Use local data if fresh (< 24h)",
+          "5. Query MCP only if stale/missing",
+          "6. Update docs/json/ after MCP query",
+          "7. Answer with combined context"
+        ],
+        "key_points": [
+          "ALWAYS check docs/json/ before MCP queries",
+          "Show user what files you're loading",
+          "Check freshness timestamps",
+          "Update docs after every MCP query",
+          "Load related files together"
+        ]
+      },
+      "backend_checklist": {
+        "file": ".cursor/rules/backend-checklist-rule.mdc",
+        "alwaysApply": true,
+        "description": "Backend setup and scalability checklist for Pull-Up Club",
+        "status": "pre-existing"
+      }
+    },
+    "how_cursor_applies_rules": {
+      "priority_order": [
+        "1. Cursor Rules (.cursor/rules/*.mdc) - HIGHEST",
+        "2. Project .cursorrules file",
+        "3. Global .cursorrules file",
+        "4. User Rules (Cursor UI)",
+        "5. User's actual message"
+      ],
+      "alwaysApply_true": {
+        "description": "Rules with alwaysApply: true are loaded into EVERY chat",
+        "applies_to": "All three rules in .cursor/rules/",
+        "visible_to_user": false,
+        "visible_to_ai": true
+      },
+      "intelligent_application": {
+        "description": "Cursor can choose when to apply rules based on context",
+        "globs": "Can specify file patterns to match",
+        "our_setup": "alwaysApply: true (always active)"
+      }
+    },
+    "testing": {
+      "test_json_first": {
+        "action": "In new chat: 'Document our authentication system'",
+        "expected": "AI creates docs/json/authentication.json",
+        "not_expected": "AI creates docs/authentication.md"
+      },
+      "test_mcp_context": {
+        "action": "In new chat: 'What RLS policies do we have?'",
+        "expected": [
+          "AI says: 'Checking docs/json/rls-policies.json...'",
+          "AI shows freshness timestamp",
+          "AI uses local data if fresh",
+          "AI only queries Supabase MCP if stale"
+        ]
+      },
+      "test_always_applied": {
+        "action": "Open ANY chat in this project",
+        "expected": "All 3 rules are active (JSON-first, MCP context, backend checklist)"
+      }
+    },
+    "directories_structure": {
+      "cursor_rules": {
+        "path": ".cursor/rules/",
+        "files": 3,
+        "purpose": "Cursor-managed rules for intelligent application",
+        "format": ".mdc (Markdown with frontmatter)"
+      },
+      "docs_json": {
+        "path": "docs/json/",
+        "purpose": "All technical documentation in JSON format",
+        "status": "created"
+      },
+      "docs_schemas": {
+        "path": "docs/schemas/",
+        "purpose": "JSON Schema definitions for validation",
+        "files": [
+          "error-schema.json",
+          "migration-schema.json"
+        ]
+      },
+      "docs_guides": {
+        "path": "docs/guides/",
+        "purpose": "Human-readable Markdown guides (rare)",
+        "status": "created"
+      }
+    },
+    "benefits": {
+      "speed": "10-100x faster (local docs vs MCP queries)",
+      "cost": "Significant savings (fewer API calls)",
+      "offline": "Works without internet connection",
+      "context": "Historical + current data combined",
+      "reliability": "Not dependent on API availability",
+      "automation": "JSON is queryable, parseable, automatable",
+      "consistency": "Same behavior across all projects"
+    },
+    "key_features": {
+      "always_active": "alwaysApply: true means rules are ALWAYS loaded",
+      "project_specific": ".cursor/rules/ applies only to this project",
+      "highest_priority": "Rules in .cursor/rules/ override global rules",
+      "intelligent": "Cursor can apply rules based on context",
+      "transparent": "AI sees rules, you see results"
+    },
+    "practical_usage": {
+      "scenario_1": {
+        "user_message": "What errors do we have?",
+        "ai_behavior": [
+          "1. JSON-first rule: Knows to check docs/json/",
+          "2. MCP context rule: Checks docs/json/errors.json first",
+          "3. Shows user: 'Checking docs/json/errors.json... ✅ (updated 2h ago)'",
+          "4. Uses local data if fresh",
+          "5. Updates JSON if needed",
+          "6. Responds with full context"
+        ]
+      },
+      "scenario_2": {
+        "user_message": "Document our database schema",
+        "ai_behavior": [
+          "1. JSON-first rule: Creates docs/json/database-schema.json",
+          "2. NOT docs/database-schema.md",
+          "3. Includes schema_version, last_updated, metadata",
+          "4. Structures data as JSON objects"
+        ]
+      },
+      "scenario_3": {
+        "user_message": "Show me all RLS policies",
+        "ai_behavior": [
+          "1. MCP context rule: Checks docs/json/rls-policies.json",
+          "2. If stale, queries Supabase MCP",
+          "3. Updates docs/json/rls-policies.json",
+          "4. Shows freshness indicator",
+          "5. Responds with policies + context"
+        ]
+      }
+    },
+    "next_steps": [
+      "Test in new chat: 'What errors do we have?'",
+      "Verify AI checks docs/json/ first",
+      "Watch for freshness indicators",
+      "See AI create JSON files (not Markdown)",
+      "Confirm rules apply to EVERY chat automatically"
+    ]
+  },
+  "verification": {
+    "files_created": [
+      ".cursor/rules/json-first-documentation.mdc",
+      ".cursor/rules/mcp-context-optimization.mdc",
+      "docs/json/cursor-rules-setup.json (this file)",
+      "docs/json/cursor-rules-complete-setup.json",
+      "docs/schemas/error-schema.json",
+      "docs/schemas/migration-schema.json"
+    ],
+    "files_updated": [
+      "C:\\Users\\Parker Gawne\\.cursorrules (added MCP context rules)"
+    ],
+    "directories_created": [
+      "docs/json/",
+      "docs/schemas/",
+      "docs/guides/"
+    ]
+  }
+}
+

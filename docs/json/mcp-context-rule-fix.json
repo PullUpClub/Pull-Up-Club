@@ -1,0 +1,168 @@
+{
+  "schema_version": "1.0.0",
+  "last_updated": "2025-10-23T23:45:00Z",
+  "type": "CONFIG",
+  "metadata": {
+    "project": "Pull-Up-Club",
+    "maintainer": "Parker Gawne",
+    "mcp_compatible": true
+  },
+  "rule_fix_summary": {
+    "issue": "MCP Context Optimization rule was too restrictive",
+    "problem": {
+      "old_golden_rule": "NEVER query an MCP without FIRST checking if the answer exists in docs/json/",
+      "implication": [
+        "Suggested MCPs as last resort",
+        "Local docs as replacement instead of context",
+        "Prevented smart, context-aware MCP queries",
+        "Didn't align with user's goal of 'smarter decisions'"
+      ]
+    },
+    "fix": {
+      "new_golden_rule": "ALWAYS load docs/json/ context BEFORE querying MCPs to enable smarter decisions",
+      "implication": [
+        "MCPs use local docs as context",
+        "Smarter, more informed MCP queries",
+        "Combine fresh data + historical patterns",
+        "Aligns with user's goal perfectly"
+      ]
+    },
+    "workflow_change": {
+      "before": [
+        "Check if answer exists locally",
+        "If yes → use local (stop)",
+        "If no → query MCP"
+      ],
+      "after": [
+        "Load local context (patterns, history)",
+        "Query MCP with context (smarter)",
+        "Combine fresh + historical",
+        "Update local docs",
+        "Deliver intelligent response"
+      ]
+    },
+    "example_scenarios": {
+      "scenario_1": {
+        "question": "Why did Luis's submission fail?",
+        "old_approach": [
+          "Check docs/json/errors.json → found error types",
+          "Check docs/json/submissions.json → has Luis's record",
+          "STOP - don't query MCP (we have data)",
+          "Answer based on potentially stale local data"
+        ],
+        "new_approach": [
+          "Load docs/json/errors.json (15 known error patterns)",
+          "Load docs/json/submissions.json (Luis's history)",
+          "Query Supabase MCP: 'Check Luis's submission for these known patterns...'",
+          "MCP finds: matches pattern #7 (RLS policy issue) + new issue (pool drain)",
+          "Update docs with new finding",
+          "Answer: 'Luis's submission failed due to RLS policy issue (known pattern) + newly discovered pool drain bug'"
+        ],
+        "benefit": "Caught NEW issue by querying MCP with context, not just using stale local data"
+      },
+      "scenario_2": {
+        "question": "Are there any critical errors?",
+        "old_approach": [
+          "Check docs/json/health-checks.json → last updated 2 hours ago",
+          "Answer: 'No critical errors based on last check'",
+          "WRONG: Missed 3 new critical errors from last 2 hours"
+        ],
+        "new_approach": [
+          "Load docs/json/health-checks.json (baseline: 0 critical errors 2 hours ago)",
+          "Query Supabase MCP: 'Check for new errors since 2 hours ago...'",
+          "MCP finds: 3 new CRITICAL errors",
+          "Compare: 0 → 3 (spike detected!)",
+          "Update docs/json/health-checks.json",
+          "Answer: 'YES - 3 new CRITICAL errors detected in last 2 hours (sudden spike from 0)'"
+        ],
+        "benefit": "Real-time data + historical context = smarter insight (detected spike)"
+      },
+      "scenario_3": {
+        "question": "How should I structure this new feature?",
+        "old_approach": [
+          "Check docs/json/architecture.json → has existing patterns",
+          "Answer based only on local patterns",
+          "May miss new best practices or updated standards"
+        ],
+        "new_approach": [
+          "Load docs/json/architecture.json (existing patterns: RLS, triggers, functions)",
+          "Load docs/json/code-quality.json (standards: TypeScript, functions <50 lines)",
+          "Query Supabase MCP: 'What's the current schema? Any new conventions?'",
+          "Query n8n MCP: 'What's the best workflow pattern for this feature?'",
+          "Combine: Existing patterns + current state + new conventions",
+          "Answer: Comprehensive architecture recommendation using all knowledge"
+        ],
+        "benefit": "Holistic recommendation combining historical + current + best practices"
+      }
+    },
+    "key_changes": {
+      "mindset_shift": {
+        "from": "Local docs = answer source, MCPs = backup",
+        "to": "Local docs = context engine, MCPs = fresh data source, Combined = intelligence"
+      },
+      "freshness_rules": {
+        "from": "Fresh (<1h): Use local, no MCP",
+        "to": "Fresh (<1h): Load context → Query MCP if needed for real-time data"
+      },
+      "benefits": {
+        "from": [
+          "10-100x faster (50ms vs 2-5s)",
+          "Zero API costs",
+          "Offline-capable"
+        ],
+        "to": [
+          "Smarter MCP queries (context-aware)",
+          "Faster responses (local context in 50ms)",
+          "Fewer redundant queries",
+          "Historical patterns (spot trends)",
+          "Better decisions (fresh + historical)"
+        ]
+      },
+      "messaging": {
+        "from": "Checking docs/json/errors.json... ✅ (updated 2 hours ago)\nLocal docs stale, querying Supabase MCP... 🔄",
+        "to": "Loading docs/json/errors.json... ✅ (15 known error types)\nQuerying Supabase MCP with context... 🔍\nFound 2 new issues + matched 3 known patterns 🎯"
+      }
+    },
+    "user_goal_alignment": {
+      "user_wants": [
+        "MCPs to have context",
+        "Make smarter decisions",
+        "Make smarter implementations"
+      ],
+      "old_rule": {
+        "alignment": "❌ POOR",
+        "reason": "Discouraged MCP queries, used local docs as replacement"
+      },
+      "new_rule": {
+        "alignment": "✅ PERFECT",
+        "reason": "MCPs get full context, make informed decisions, combine knowledge"
+      }
+    }
+  },
+  "technical_details": {
+    "file_changed": ".cursor/rules/mcp-context-optimization.mdc",
+    "lines_changed": 7,
+    "sections_updated": [
+      "GOLDEN RULE",
+      "MANDATORY WORKFLOW",
+      "WHEN TO QUERY MCP (renamed from FRESHNESS RULES)",
+      "ALWAYS SHOW USER",
+      "BENEFITS",
+      "THINK: CONTEXT ENGINE (renamed from SMART CACHE)"
+    ],
+    "total_lines": 106,
+    "philosophy": "Context-first, not cache-first"
+  },
+  "final_approach": {
+    "name": "Context Engine (not Cache)",
+    "flow": [
+      "1. Load historical context from docs/json/",
+      "2. Query MCP with context for smarter questions",
+      "3. Combine fresh MCP data + historical patterns",
+      "4. Update docs/json/ with learnings",
+      "5. Deliver intelligent, context-aware response"
+    ],
+    "result": "MCPs make SMARTER decisions with FULL context"
+  }
+}
+

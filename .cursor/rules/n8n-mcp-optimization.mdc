@@ -1,0 +1,75 @@
+---
+description: n8n MCP Optimization - Smart usage of all 39 n8n MCP tools
+globs: 
+alwaysApply: true
+---
+
+# N8N MCP: 5 CORE PRINCIPLES
+
+## 1. Silent Execution
+Execute all tools → respond once with complete result. No running commentary.
+
+## 2. Parallel Execution
+Run independent operations concurrently for 3-10x faster execution.
+
+## 3. Template-First
+Check n8n.io/workflows before building from scratch. Save 50-80% time.
+
+## 4. Multi-Level Validation
+Always validate before deployment:
+- Minimal: Check node existence, required parameters
+- Operational: Test credentials, validate data formats
+- Workflow: `validate_workflow()` before deploying
+
+## 5. Explicit Configuration
+NEVER rely on defaults. Always specify: URL, auth, headers, timeouts, error handling.
+
+---
+
+## SMART TOOL SELECTION
+
+| Task | Tool Sequence |
+|------|---------------|
+| **Learn** | `tools_documentation` → `list_nodes` → `get_node_info` |
+| **Build** | `get_node_for_task` → `create_workflow` → `validate_workflow` |
+| **Debug** | `list_executions` → `get_execution_data` → `validate_workflow` |
+| **Deploy** | `validate_workflow` → `execute_workflow` |
+| **Monitor** | `list_executions` → `get_execution_data` |
+
+---
+
+## WORKFLOW: BUILD NEW AUTOMATION
+
+1. `tools_documentation()` - Learn available tools
+2. `list_nodes(filter="type")` - Find relevant nodes
+3. `get_node_info("NodeName")` - Get details (parallel for multiple)
+4. `get_node_for_task("task")` - Get pre-configured settings
+5. `create_workflow(config)` - Build with explicit config
+6. `validate_workflow(id)` - Validate before deploy ✅
+7. `execute_workflow(id)` - Test execution
+
+---
+
+## INTEGRATION WITH OTHER MCPS
+
+**Check docs/json/ first:**
+- `docs/json/n8n-workflows.json` for existing workflows
+- `docs/json/n8n-integrations.json` for integrations
+- Update after changes
+
+**Use n8n to orchestrate:**
+- Supabase operations
+- Stripe webhooks
+- GitHub workflows
+- API integrations
+
+---
+
+## QUICK REFERENCE: 39 TOOLS
+
+**Discovery:** `tools_documentation`, `list_nodes`, `get_node_info`
+**Configuration:** `get_node_for_task`, `validate_node_operation`, `validate_workflow`
+**Workflow:** `create_workflow`, `update_workflow`, `delete_workflow`, `list_workflows`, `get_workflow_details`, `execute_workflow`
+**Execution:** `get_execution_data`, `list_executions`, `stop_execution`, `retry_execution`
+**Credentials:** `list_credentials`, `validate_credentials`, `update_credentials`
+**Transform:** `transform_json`, `merge_data`, `split_data`, `aggregate_data`
