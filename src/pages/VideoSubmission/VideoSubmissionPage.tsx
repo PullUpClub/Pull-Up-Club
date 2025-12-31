@@ -104,8 +104,8 @@ const EligibilityMessage: React.FC<{ status: EligibilityStatus; countdown: Count
           <h3 className="font-semibold text-lg mb-2">🎉 {t('eligibility.approved.title')}</h3>
           <p className="mb-3">{t('eligibility.approved.message')}</p>
           <div className="bg-gray-800 p-3 rounded">
-            <p className="text-sm font-medium">{t('eligibility.approved.nextSubmission')}</p>
-            <p className="text-lg">{t('eligibility.approved.remaining', { days: countdown.days, hours: countdown.hours, minutes: countdown.minutes })}</p>
+            <p className="text-sm font-medium">{t('eligibility.approved.next')}</p>
+            <p className="text-lg">{t('eligibility.approved.countdown', { days: countdown.days, hours: countdown.hours, minutes: countdown.minutes })}</p>
           </div>
         </div>
       );
