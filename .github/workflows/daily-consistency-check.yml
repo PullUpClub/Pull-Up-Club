@@ -1,0 +1,89 @@
+name: Daily System Health Check
+
+on:
+  schedule:
+    # Run daily at 6:00 AM UTC (1:00 AM EST / 10:00 PM PST)
+    - cron: '0 6 * * *'
+    # Also run at noon UTC to catch issues faster
+    - cron: '0 12 * * *'
+
+  # Allow manual trigger from GitHub Actions UI
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (report only, no fixes)'
+        required: false
+        default: 'false'
+        type: boolean
+      check_type:
+        description: 'Which check to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - health
+          - consistency
+
+env:
+  SUPABASE_URL: https://yqnikgupiaghgjtsaypr.supabase.co
+
+jobs:
+  system-health-check:
+    name: System Health Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: scripts/automations/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          pip install -r scripts/automations/requirements.txt
+
+      - name: Run system health check
+        id: health
+        if: ${{ github.event.inputs.check_type == 'all' || github.event.inputs.check_type == 'health' || github.event.inputs.check_type == '' }}
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          cd scripts/automations
+          python system_health_check.py ${{ github.event.inputs.dry_run == 'true' && '--dry-run' || '' }} 2>&1 | tee health_output.txt
+          echo "health_exit_code=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
+
+      - name: Run consistency check
+        id: consistency
+        if: ${{ github.event.inputs.check_type == 'all' || github.event.inputs.check_type == 'consistency' || github.event.inputs.check_type == '' }}
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          cd scripts/automations
+          python daily_consistency_check.py 2>&1 | tee consistency_output.txt
+          echo "consistency_exit_code=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
+
+      - name: Upload health check results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: health-check-results-${{ github.run_number }}
+          path: |
+            scripts/automations/health_output.txt
+            scripts/automations/consistency_output.txt
+          retention-days: 30
+
+      - name: Check for failures
+        if: always()
+        run: |
+          if [ "${{ steps.health.outputs.health_exit_code }}" != "0" ] || [ "${{ steps.consistency.outputs.consistency_exit_code }}" != "0" ]; then
+            echo "::error::System health check found issues! Review the artifacts."
+            exit 1
+          fi
+          echo "All checks passed!"
